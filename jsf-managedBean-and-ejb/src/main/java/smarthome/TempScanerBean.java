@@ -52,7 +52,7 @@ import smarthome.owfs.OwfsServerStarter;
       }
     }
     
-    @Schedule(minute="30", hour="*", persistent=false)
+    @Schedule(minute = "*/30", hour = "*", persistent = false)
     private void scanTemps()
     {
       this.logger.info("Сканирование температур.");

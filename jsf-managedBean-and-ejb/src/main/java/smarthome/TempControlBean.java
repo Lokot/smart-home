@@ -31,7 +31,7 @@
     }
     
     
-   @Schedule(minute="5", hour="*", persistent=false)
+    @Schedule(minute = "*/5", hour = "*", persistent = false)
     private void controlTemps()
     {
       try
