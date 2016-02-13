@@ -133,12 +133,12 @@
 		<dependency>
 			<groupId>org.owfs</groupId>
 			<artifactId>jowfsclient</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.3.1</version>
+			<version>2.6.1</version>
 		</dependency>
 	</dependencies>
 

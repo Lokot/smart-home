@@ -3,10 +3,12 @@ package smarthome;
 import smarthome.gpio.GpioPins;
 
 public enum Sensors {
-	Bathroom(0, "28.BC8533040000", "Ванная", new GpioPins[] { GpioPins.Bathroom }), Hallway(1, "28.76E830040000",
-			"Коридор", new GpioPins[] { GpioPins.Hallway }), Livingroom(2, "28.8AF530040000", "Зал", new GpioPins[] {
-			GpioPins.Livingroom, GpioPins.Badroom }), Balcony(3, "28.F4E330040000", "Балкон",
-			new GpioPins[] { GpioPins.Balcony });
+	Bathroom(0, "28.BC8533040000", "Ванная",
+			new GpioPins[] { GpioPins.Bathroom }), Hallway(1,
+			"28.76E830040000", "Коридор", new GpioPins[] { GpioPins.Hallway }), Livingroom(
+			2, "28.8AF530040000", "Зал", new GpioPins[] { GpioPins.Livingroom,
+					GpioPins.Badroom }), Balcony(3, "28.F4E330040000",
+			"Балкон", new GpioPins[] { GpioPins.Balcony });
 
 	private final int index;
 	private final String id;
