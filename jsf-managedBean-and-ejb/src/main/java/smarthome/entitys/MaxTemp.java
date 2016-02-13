@@ -1,13 +1,21 @@
 package smarthome.entitys;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+
 import smarthome.Sensors;
 
 @Entity
 public class MaxTemp implements Serializable {
+	
+	private static final long serialVersionUID = 3490330696232256823L;
+	
 	@Id
+	@Enumerated(EnumType.STRING)
 	private Sensors sensor;
 	private float temp;
 
@@ -27,11 +35,3 @@ public class MaxTemp implements Serializable {
 		this.sensor = sensor;
 	}
 }
-
-/*
- * Location: E:\classes\
- * 
- * Qualified Name: smarthome.entitys.MaxTemp
- * 
- * JD-Core Version: 0.7.0.1
- */

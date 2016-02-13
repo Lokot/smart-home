@@ -14,6 +14,9 @@ import smarthome.Sensors;
 
 @Entity
 public class Temp implements Serializable {
+	
+	private static final long serialVersionUID = -928474898602043274L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -62,11 +65,3 @@ public class Temp implements Serializable {
 		this.date = date;
 	}
 }
-
-/*
- * Location: E:\classes\
- * 
- * Qualified Name: smarthome.entitys.Temp
- * 
- * JD-Core Version: 0.7.0.1
- */
