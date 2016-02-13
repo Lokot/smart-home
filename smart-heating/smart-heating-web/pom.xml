@@ -79,7 +79,13 @@
 			<url>http://repository.apache.org/snapshots</url>
 		</repository>
 	</repositories>
+
 	<dependencies>
+		<dependency>
+			<groupId>ru.skysoftlab.smarthome.heating</groupId>
+			<artifactId>smart-heating-persistence</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>

@@ -10,11 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * Показания датчика.
+ * 
+ * @author Loktionov Artem
+ *
+ */
 @Entity
 public class Temp implements Serializable {
-	
+
 	private static final long serialVersionUID = -928474898602043274L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

@@ -8,11 +8,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Датчик.
+ * 
+ * @author Loktionov Artem
+ *
+ */
 @Entity
 public class Sensor implements Serializable {
 
 	private static final long serialVersionUID = 1836369034208284654L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
