@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Датчик.
@@ -24,7 +25,9 @@ public class Sensor implements Serializable {
 	private long id;
 	private String sensorId;
 	private String name;
+	@OneToMany
 	private Set<GpioPin> gpioPin;
+	private float maxTemp;
 
 	public String getSensorId() {
 		return sensorId;
@@ -56,5 +59,13 @@ public class Sensor implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public float getMaxTemp() {
+		return maxTemp;
+	}
+
+	public void setMaxTemp(float maxTemp) {
+		this.maxTemp = maxTemp;
 	}
 }

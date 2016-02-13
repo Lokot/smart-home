@@ -13,6 +13,13 @@
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
+				<configuration>
+					<!-- For TomEE -->
+					<packagingExcludes>
+						WEB-INF/lib/hibernate-validator-*.jar,
+						WEB-INF/lib/validation-api-*.jar,
+					</packagingExcludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -31,6 +38,7 @@
 				<version>${vaadin.plugin.version}</version>
 				<configuration>
 					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+<!-- 					<extraJvmArgs>-Xms1024M -Xmx2048M</extraJvmArgs> -->
 					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
 					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
 					<persistentunitcachedir>${project.build.directory}</persistentunitcachedir>
@@ -64,10 +72,14 @@
 			<plugin>
 				<groupId>org.apache.openejb.maven</groupId>
 				<artifactId>tomee-maven-plugin</artifactId>
-				<version>1.0.1</version>
+				<version>1.7.1</version>
 				<configuration>
-					<!-- <systemVariables> <java.security.auth.login.config>${project.build.directory}/tomee/conf/login.config</java.security.auth.login.config> 
-						</systemVariables> -->
+					<url>http://localhost:8080/manager/text</url>
+					<server>TomcatServer</server>
+					<path>/smart-home</path>
+					<!-- <systemVariables> -->
+					<!-- <java.security.auth.login.config>${project.build.directory}/tomee/conf/login.config</java.security.auth.login.config> -->
+					<!-- </systemVariables> -->
 				</configuration>
 			</plugin>
 		</plugins>
