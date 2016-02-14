@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 /**
  * Датчик.
  * 
@@ -16,18 +18,26 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity
-public class Sensor implements Serializable {
+public class Sensor implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1836369034208284654L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	private String sensorId;
 	private String name;
 	@OneToMany
 	private Set<GpioPin> gpioPin;
-	private float maxTemp;
+	private Float maxTemp;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getSensorId() {
 		return sensorId;
@@ -53,19 +63,27 @@ public class Sensor implements Serializable {
 		this.gpioPin = gpioPin;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public float getMaxTemp() {
+	public Float getMaxTemp() {
 		return maxTemp;
 	}
 
-	public void setMaxTemp(float maxTemp) {
+	public void setMaxTemp(Float maxTemp) {
 		this.maxTemp = maxTemp;
 	}
+
+	@Override
+	public Sensor clone() throws CloneNotSupportedException {
+		try {
+			return (Sensor) BeanUtils.cloneBean(this);
+		} catch (Exception ex) {
+			throw new CloneNotSupportedException();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Sensor [sensorId=" + sensorId + ", name=" + name + ", maxTemp="
+				+ maxTemp + "]";
+	}
+
 }

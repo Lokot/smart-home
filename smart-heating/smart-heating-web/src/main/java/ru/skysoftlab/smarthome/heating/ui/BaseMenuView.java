@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -26,6 +27,11 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 		layout.setMargin(true);
 		layout.addComponent(barmenu);
 		createMenu();
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		
 	}
 
 	/**

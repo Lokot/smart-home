@@ -15,7 +15,11 @@ public enum MenuItems {
 	/** Заказ-наряд */
 	Orders("Заказ-наряд", null, new MenuItem[] {
 			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+			new MenuItem("Датчики", SensorsUI.NAME, SensorsUI.class),
+			new MenuItem("Датчики_2", OrdersView.NAME, OrdersView.class)
+			
+	}, null),
+			
 	/** Шаблоны ЗН */
 	Templates("Шаблоны ЗН", null, new MenuItem[] {
 			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
