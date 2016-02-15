@@ -1,14 +1,22 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
+import javax.servlet.http.HttpServletRequest;
+
+import ru.skysoftlab.smarthome.heating.MainUI;
+import ru.skysoftlab.smarthome.heating.MenuItems;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 
 /**
- * Базовый класс для страниц.
+ * Базовый класс для всех страниц для гавного меню.
  * 
  * @author Артём
  *
@@ -23,10 +31,14 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 	public BaseMenuView() {
 		super();
+		setSizeFull();
 		setCompositionRoot(layout);
 		layout.setMargin(true);
 		layout.addComponent(barmenu);
 		createMenu();
+		
+		layout.setSizeFull();
+		layout.setStyleName(Reindeer.LAYOUT_BLACK);
 	}
 	
 	@Override
@@ -39,10 +51,14 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 	 */
 	private void createMenu() {
 		for (MenuItems myMenu : MenuItems.values()) {
-			MenuItem item = barmenu.addItem(myMenu.getName(), null, null);
-			for (MenuItems.MenuItem myItem : myMenu.getItems()) {
-				item.addItem(myItem.getName(),
-						new NavigationCommand(myItem.getUrl()));
+			if(myMenu.equals(MenuItems.Logout)){
+				barmenu.addItem(myMenu.getName(), null, new LogOutCommand());
+			} else {
+				MenuItem item = barmenu.addItem(myMenu.getName(), null, null);
+				for (MenuItems.MenuItem myItem : myMenu.getItems()) {
+					item.addItem(myItem.getName(),
+							new NavigationCommand(myItem.getUrl()));
+				}	
 			}
 		}
 	}
@@ -67,6 +83,26 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
 			getUI().getNavigator().navigateTo(view);
+		}
+
+	}
+	
+	/**
+	 * Комнда для навигации.
+	 * 
+	 * @author Артём
+	 *
+	 */
+	public class LogOutCommand implements MenuBar.Command {
+
+		private static final long serialVersionUID = -2959468243274000189L;
+
+		@Override
+		public void menuSelected(MenuItem selectedItem) {
+			MainUI mainUI = (MainUI) UI.getCurrent();
+			mainUI.getAuthenticator().logout((HttpServletRequest) VaadinService.getCurrentRequest());
+            getSession().setAttribute("user", null);
+            getUI().getNavigator().navigateTo(MainView.NAME);
 		}
 
 	}

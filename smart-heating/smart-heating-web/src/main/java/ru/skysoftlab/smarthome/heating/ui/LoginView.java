@@ -1,9 +1,9 @@
-package org.psa.vaadinauth.ui;
+package ru.skysoftlab.smarthome.heating.ui;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.psa.vaadinauth.MainUI;
+import ru.skysoftlab.smarthome.heating.MainUI;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -74,7 +74,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			MainUI mainUI = (MainUI) getUI();
 			mainUI.getAuthenticator().login(username, password, (HttpServletRequest) VaadinService.getCurrentRequest());
 			getSession().setAttribute("user", username);
-//			getUI().getNavigator().navigateTo(MainView.NAME);
 			getUI().getNavigator().navigateTo(HeatingMaivView.NAME);
 		} catch (ServletException e) {
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);

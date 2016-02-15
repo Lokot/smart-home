@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
 import ru.skysoftlab.smarthome.heating.ejb.MyEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.services.SensorService;
 import ru.skysoftlab.smarthome.heating.ui.forms.SensorsForm;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -20,15 +19,14 @@ import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class SensorsUI extends BaseMenuView {
+public class SensorsView extends BaseMenuView {
 
 	private static final long serialVersionUID = 6698245813955647506L;
 
@@ -38,12 +36,11 @@ public class SensorsUI extends BaseMenuView {
 	public Grid contactList = new Grid();
 	Button newContact = new Button("New contact");
 	SensorsForm contactForm = new SensorsForm(this);
-	// public SensorService service = SensorService.createDemoService();
 
 	private JPAContainer<Sensor> sensors;
 	private EntityManager em;
 
-	public SensorsUI() {
+	public SensorsView() {
 		super();
 		configureComponents();
 		buildLayout();

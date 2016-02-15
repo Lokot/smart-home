@@ -1,30 +1,27 @@
-package org.psa.vaadinauth.ui;
+package ru.skysoftlab.smarthome.heating.ui;
 
 import javax.ejb.EJBAccessException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.psa.vaadinauth.MainUI;
-import org.psa.vaadinauth.ejb.TestBean;
+import ru.skysoftlab.smarthome.heating.MainUI;
+import ru.skysoftlab.smarthome.heating.ejb.TestBean;
 
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.themes.Reindeer;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
-public class MainView extends CustomComponent implements View {
+public class MainView extends BaseMenuView {
+	
 	private static final long serialVersionUID = 4030871317601600678L;
 
 	public static final String NAME = "";
@@ -56,18 +53,18 @@ public class MainView extends CustomComponent implements View {
     });
     
     public MainView() {
-		setSizeFull();
-
-    	HorizontalLayout fields = new HorizontalLayout(text, protectedinfo, logout);
+    	super();
+		HorizontalLayout fields = new HorizontalLayout(text, protectedinfo, logout);
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
-
-		VerticalLayout viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
-		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
-		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
-        setCompositionRoot(viewLayout);
+		layout.addComponent(fields);
+		layout.setComponentAlignment(fields, Alignment.TOP_CENTER);
+//		VerticalLayout viewLayout = new VerticalLayout(fields);
+//		viewLayout.setSizeFull();
+//		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+//		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
+//      setCompositionRoot(viewLayout);
     }
 
 	@Override

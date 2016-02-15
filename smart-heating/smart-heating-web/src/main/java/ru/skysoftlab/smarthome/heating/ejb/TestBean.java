@@ -1,4 +1,4 @@
-package org.psa.vaadinauth.ejb;
+package ru.skysoftlab.smarthome.heating.ejb;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;

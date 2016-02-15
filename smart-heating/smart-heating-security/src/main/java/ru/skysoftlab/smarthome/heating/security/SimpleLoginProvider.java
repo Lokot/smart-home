@@ -1,4 +1,4 @@
-package org.psa.vaadinauth.secure;
+package ru.skysoftlab.smarthome.heating.security;
 
 import java.util.Arrays;
 import java.util.List;

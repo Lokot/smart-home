@@ -1,7 +1,11 @@
-package ru.skysoftlab.smarthome.heating.ui;
+package ru.skysoftlab.smarthome.heating;
 
-import org.psa.vaadinauth.ui.HeatingMaivView;
+import ru.skysoftlab.smarthome.heating.ui.HeatingMaivView;
+import ru.skysoftlab.smarthome.heating.ui.LoginView;
+import ru.skysoftlab.smarthome.heating.ui.OrdersView;
+import ru.skysoftlab.smarthome.heating.ui.SensorsView;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 
 /**
@@ -15,7 +19,7 @@ public enum MenuItems {
 	/** Заказ-наряд */
 	Orders("Заказ-наряд", null, new MenuItem[] {
 			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Датчики", SensorsUI.NAME, SensorsUI.class),
+			new MenuItem("Датчики", SensorsView.NAME, SensorsView.class),
 			new MenuItem("Датчики_2", OrdersView.NAME, OrdersView.class)
 			
 	}, null),
@@ -31,7 +35,9 @@ public enum MenuItems {
 	/** Виды работ */
 	Works("Виды работ", null, new MenuItem[] {
 			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null);
+			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+			 
+	Logout("Выход", LoginView.NAME, null, LoginView.class);
 
 	private String name;
 
@@ -66,6 +72,23 @@ public enum MenuItems {
 
 	public void setViewClass(Class<? extends View> viewClass) {
 		this.viewClass = viewClass;
+	}
+	
+	/**
+	 * Регистрируем страницы.
+	 */
+	public static void registrateNavigationViews(Navigator navigator) {
+		for (MenuItems mainItem : MenuItems.values()) {
+			if (mainItem.getUrl() != null && mainItem.getViewClass() != null) {
+				navigator.addView(mainItem.getUrl(),
+						mainItem.getViewClass());
+			}
+			if (mainItem.getItems() != null) {
+				for (MenuItem item : mainItem.getItems()) {
+					navigator.addView(item.getUrl(), item.getViewClass());
+				}
+			}
+		}
 	}
 
 	public static class MenuItem {

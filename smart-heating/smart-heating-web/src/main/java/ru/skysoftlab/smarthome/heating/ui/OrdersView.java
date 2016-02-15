@@ -9,10 +9,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.ejb.EntityManagerFactoryImpl;
-import org.psa.vaadinauth.ejb.TestBean;
 
 import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
 import ru.skysoftlab.smarthome.heating.ejb.MyEntityProviderBean;
+import ru.skysoftlab.smarthome.heating.ejb.TestBean;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;

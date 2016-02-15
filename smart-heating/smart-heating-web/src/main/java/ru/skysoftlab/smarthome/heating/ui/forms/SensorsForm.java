@@ -1,7 +1,7 @@
 package ru.skysoftlab.smarthome.heating.ui.forms;
 
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.ui.SensorsUI;
+import ru.skysoftlab.smarthome.heating.ui.SensorsView;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -25,7 +25,7 @@ public class SensorsForm extends FormLayout {
 
 	private static final long serialVersionUID = 2372643403143137631L;
 	
-	private SensorsUI sensorsView;
+	private SensorsView sensorsView;
 
 	Button save = new Button("Save", new Button.ClickListener() {
 
@@ -74,7 +74,7 @@ public class SensorsForm extends FormLayout {
 	// Easily bind forms to beans and manage validation and buffering
 	BeanFieldGroup<Sensor> formFieldBindings;
 
-	public SensorsForm(SensorsUI sensorsView) {
+	public SensorsForm(SensorsView sensorsView) {
 		this.sensorsView = sensorsView;
 		configureComponents();
 		buildLayout();
