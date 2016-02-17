@@ -52,21 +52,5 @@ public class MainUI extends UI {
 	public Authenticator getAuthenticator() {
 		return authenticator;
 	}
-
-	// /**
-	// * Регистрируем страницы.
-	// */
-	// public void registrateNavigationViews() {
-	// for (MenuItems mainItem : MenuItems.values()) {
-	// if (mainItem.getUrl() != null && mainItem.getViewClass() != null) {
-	// getNavigator().addView(mainItem.getUrl(),
-	// mainItem.getViewClass());
-	// }
-	// if (mainItem.getItems() != null) {
-	// for (MenuItem item : mainItem.getItems()) {
-	// getNavigator().addView(item.getUrl(), item.getViewClass());
-	// }
-	// }
-	// }
-	// }
+	
 }

@@ -10,10 +10,9 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 
 /**
  * Базовый класс для всех страниц для гавного меню.
@@ -31,14 +30,14 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 	public BaseMenuView() {
 		super();
-		setSizeFull();
+//		setSizeFull();
 		setCompositionRoot(layout);
 		layout.setMargin(true);
 		layout.addComponent(barmenu);
 		createMenu();
 		
-		layout.setSizeFull();
-		layout.setStyleName(Reindeer.LAYOUT_BLACK);
+//		layout.setSizeFull();
+//		layout.setStyleName(Reindeer.LAYOUT_BLACK);
 	}
 	
 	@Override

@@ -1,8 +1,7 @@
 package ru.skysoftlab.smarthome.heating;
 
-import ru.skysoftlab.smarthome.heating.ui.HeatingMaivView;
+import ru.skysoftlab.smarthome.heating.ui.GpioView;
 import ru.skysoftlab.smarthome.heating.ui.LoginView;
-import ru.skysoftlab.smarthome.heating.ui.OrdersView;
 import ru.skysoftlab.smarthome.heating.ui.SensorsView;
 
 import com.vaadin.navigator.Navigator;
@@ -11,31 +10,29 @@ import com.vaadin.navigator.View;
 /**
  * Список меню.
  * 
- * @author Артём
+ * @author Loktionov Artem
  *
  */
 public enum MenuItems {
 
 	/** Заказ-наряд */
 	Orders("Заказ-наряд", null, new MenuItem[] {
-			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
 			new MenuItem("Датчики", SensorsView.NAME, SensorsView.class),
-			new MenuItem("Датчики_2", OrdersView.NAME, OrdersView.class)
-			
+			new MenuItem("Пины", GpioView.NAME, GpioView.class),
 	}, null),
 			
 	/** Шаблоны ЗН */
-	Templates("Шаблоны ЗН", null, new MenuItem[] {
-			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+//	Templates("Шаблоны ЗН", null, new MenuItem[] {
+//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
+//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
 	/** Блоки ЗН */
-	TemplateBlocks("Блоки ЗН", null, new MenuItem[] {
-			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+//	TemplateBlocks("Блоки ЗН", null, new MenuItem[] {
+//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
+//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
 	/** Виды работ */
-	Works("Виды работ", null, new MenuItem[] {
-			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+//	Works("Виды работ", null, new MenuItem[] {
+//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
+//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
 			 
 	Logout("Выход", LoginView.NAME, null, LoginView.class);
 

@@ -74,7 +74,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			MainUI mainUI = (MainUI) getUI();
 			mainUI.getAuthenticator().login(username, password, (HttpServletRequest) VaadinService.getCurrentRequest());
 			getSession().setAttribute("user", username);
-			getUI().getNavigator().navigateTo(HeatingMaivView.NAME);
+			getUI().getNavigator().navigateTo(MainView.NAME);
 		} catch (ServletException e) {
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 		} 

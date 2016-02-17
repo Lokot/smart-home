@@ -1,19 +1,14 @@
 package ru.skysoftlab.smarthome.heating.ui.forms;
 
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.ui.SensorsView;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+
+import com.vaadin.shared.ui.slider.SliderOrientation;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Slider;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Форма датчиков.
@@ -21,97 +16,30 @@ import com.vaadin.ui.themes.ValoTheme;
  * @author Loktionov Artem
  *
  */
-public class SensorsForm extends FormLayout {
+public class SensorsForm extends AbstractForm<Sensor> {
 
 	private static final long serialVersionUID = 2372643403143137631L;
-	
-	private SensorsView sensorsView;
 
-	Button save = new Button("Save", new Button.ClickListener() {
+	private TextField sensorId;
+	private TextField name;
+	private Slider maxTemp;
 
-		private static final long serialVersionUID = 4489078023605774389L;
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			try {
-				
-				// TODO продумать про обновление 41 и 44 строки
-				
-				// Commit the fields from UI to DAO
-				formFieldBindings.commit();
-
-				// Save DAO to backend with direct synchronous service API
-				sensorsView.getSensors().addEntity(contact);
-
-				String msg = String.format("Saved '%s %s'.", contact.getName(),
-						contact.getMaxTemp());
-				Notification.show(msg, Type.TRAY_NOTIFICATION);
-				sensorsView.refreshContacts();
-			} catch (FieldGroup.CommitException e) {
-				// Validation exceptions could be shown here
-			}
-
-		}
-	});
-
-	Button cancel = new Button("Cancel", new Button.ClickListener() {
-
-		private static final long serialVersionUID = -5244857856527344654L;
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			// Place to call business logic.
-			Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
-			sensorsView.contactList.select(null);
-		}
-	});
-	TextField sensorId = new TextField("sensorId");
-	TextField name = new TextField("name");
-	TextField maxTemp = new TextField("maxTemp");
-
-	Sensor contact;
-
-	// Easily bind forms to beans and manage validation and buffering
-	BeanFieldGroup<Sensor> formFieldBindings;
-
-	public SensorsForm(SensorsView sensorsView) {
-		this.sensorsView = sensorsView;
-		configureComponents();
-		buildLayout();
+	@Override
+	protected Collection<? extends Component> getInputs() {
+		sensorId = new TextField("Идентификатор");
+		name = new TextField("Помещение");
+		maxTemp = new Slider("Максимальная температура (C)", 5, 30);
+		maxTemp.setOrientation(SliderOrientation.HORIZONTAL);
+		Collection<Component> rv = new ArrayList<>();
+		rv.add(sensorId);
+		rv.add(name);
+		rv.add(maxTemp);
+		return rv;
 	}
 
-	private void configureComponents() {
-		save.setStyleName(ValoTheme.BUTTON_PRIMARY);
-		save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-		setVisible(false);
+	@Override
+	protected void setFocus() {
+		sensorId.focus();
 	}
-
-	private void buildLayout() {
-		setSizeUndefined();
-		setMargin(true);
-
-		HorizontalLayout actions = new HorizontalLayout(save, cancel);
-		actions.setSpacing(true);
-		
-		
-
-		addComponents(actions, sensorId, name, maxTemp);
-	}
-
-	public void edit(Sensor contact) {
-		this.contact = contact;
-		if (contact != null) {
-			// Bind the properties of the contact POJO to fiels in this form
-			formFieldBindings = BeanFieldGroup
-					.bindFieldsBuffered(contact, this);
-			sensorId.focus();
-		}
-		setVisible(contact != null);
-	}
-
-	// @Override
-	// public SensorsUI getUI() {
-	// return (SensorsUI) super.getUI();
-	// }
 
 }
