@@ -4,6 +4,7 @@
 .settings/
 .classpath
 .tern-project
+.metadata/
 
 target
 
