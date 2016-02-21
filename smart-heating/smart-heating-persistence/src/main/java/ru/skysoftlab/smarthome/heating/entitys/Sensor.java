@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.entitys;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -8,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.apache.commons.beanutils.BeanUtils;
+
+import ru.skysoftlab.smarthome.heating.owfs.IDs18bConfig;
 
 /**
  * Датчик.
@@ -18,7 +22,7 @@ import org.apache.commons.beanutils.BeanUtils;
  *
  */
 @Entity
-public class Sensor implements Serializable, Cloneable {
+public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1836369034208284654L;
 
@@ -28,8 +32,19 @@ public class Sensor implements Serializable, Cloneable {
 	private String sensorId;
 	private String name;
 	@OneToMany
-	private Set<GpioPin> gpioPin;
-	private Float maxTemp;
+	private Set<GpioPin> gpioPin = new HashSet<>();
+	private Float low;
+	private Float top;
+
+	public Sensor() {
+
+	}
+
+	public Sensor(String sensorId, Float low, Float top) {
+		this.sensorId = sensorId;
+		this.low = low;
+		this.top = top;
+	}
 
 	public Long getId() {
 		return id;
@@ -55,6 +70,7 @@ public class Sensor implements Serializable, Cloneable {
 		this.name = name;
 	}
 
+	@Override
 	public Set<GpioPin> getGpioPin() {
 		return gpioPin;
 	}
@@ -63,12 +79,28 @@ public class Sensor implements Serializable, Cloneable {
 		this.gpioPin = gpioPin;
 	}
 
-	public Float getMaxTemp() {
-		return maxTemp;
+	public void setLow(Float low) {
+		this.low = low;
 	}
 
-	public void setMaxTemp(Float maxTemp) {
-		this.maxTemp = maxTemp;
+	public void setTop(Float top) {
+		this.top = top;
+	}
+
+	@Override
+	@Transient
+	public String getDeviceName() {
+		return sensorId;
+	}
+
+	@Override
+	public Float getTop() {
+		return top;
+	}
+
+	@Override
+	public Float getLow() {
+		return low;
 	}
 
 	@Override
@@ -82,8 +114,9 @@ public class Sensor implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return "Sensor [sensorId=" + sensorId + ", name=" + name + ", maxTemp="
-				+ maxTemp + "]";
+		return "Sensor [id=" + id + ", sensorId=" + sensorId + ", name=" + name
+				+ ", gpioPin=" + gpioPin + ", low=" + low + ", top=" + top
+				+ "]";
 	}
 
 }

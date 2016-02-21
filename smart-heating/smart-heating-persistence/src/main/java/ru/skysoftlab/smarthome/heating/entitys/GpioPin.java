@@ -3,9 +3,15 @@ package ru.skysoftlab.smarthome.heating.entitys;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
 
 /**
  * Пин на плате.
@@ -14,18 +20,23 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class GpioPin implements Serializable {
+public class GpioPin implements IGpioPin, Serializable {
 
 	private static final long serialVersionUID = -7517168275011878703L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private int gpio;
-	private int pin;
+	/** Виртуальный пин. */
+	private Integer gpio;
+	/** Пин на материнской плате. */
+	private Integer pin;
+	/** Идентификационный номер на плате. */
 	private String def;
 	private String name;
-	private boolean normaliClosed;
+	private Boolean normaliClosed;
+	@Enumerated(EnumType.STRING)
+	private GpioPinType type;
 
 	public Long getId() {
 		return id;
@@ -35,19 +46,19 @@ public class GpioPin implements Serializable {
 		this.id = id;
 	}
 
-	public int getGpio() {
+	public Integer getGpio() {
 		return gpio;
 	}
 
-	public void setGpio(int gpio) {
+	public void setGpio(Integer gpio) {
 		this.gpio = gpio;
 	}
 
-	public int getPin() {
+	public Integer getPin() {
 		return pin;
 	}
 
-	public void setPin(int pin) {
+	public void setPin(Integer pin) {
 		this.pin = pin;
 	}
 
@@ -67,11 +78,32 @@ public class GpioPin implements Serializable {
 		this.name = name;
 	}
 
-	public boolean isNormaliClosed() {
+	public Boolean getNormaliClosed() {
 		return normaliClosed;
 	}
 
-	public void setNormaliClosed(boolean normaliClosed) {
+	public void setNormaliClosed(Boolean normaliClosed) {
 		this.normaliClosed = normaliClosed;
 	}
+
+	@Override
+	@Transient
+	public Boolean isNormaliClosed() {
+		return normaliClosed;
+	}
+
+	@Override
+	public GpioPinType getType() {
+		return this.type;
+	}
+
+	public void setType(GpioPinType type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "GpioPin [name=" + name + ", type=" + type + "]";
+	}
+
 }

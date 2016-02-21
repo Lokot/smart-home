@@ -25,7 +25,7 @@ public class Temp implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private float temp;
+	private Float temp;
 	@OneToOne
 	private Sensor sensor;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -34,16 +34,16 @@ public class Temp implements Serializable {
 	public Temp() {
 	}
 
-	public Temp(Long id, float temp) {
+	public Temp(Long id, Float temp) {
 		this.id = id;
 		this.temp = temp;
 	}
 
-	public float getTemp() {
+	public Float getTemp() {
 		return this.temp;
 	}
 
-	public void setTemp(float temp) {
+	public void setTemp(Float temp) {
 		this.temp = temp;
 	}
 
