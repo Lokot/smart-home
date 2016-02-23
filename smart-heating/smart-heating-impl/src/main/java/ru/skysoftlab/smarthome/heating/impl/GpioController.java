@@ -10,7 +10,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.gpio.IGpioController;
 import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
@@ -24,7 +26,7 @@ import ru.skysoftlab.smarthome.heating.util.PinsUtil;
  *
  */
 public class GpioController implements IGpioController {
-	
+
 	private EntityManager em;
 
 	/*
@@ -111,8 +113,8 @@ public class GpioController implements IGpioController {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Sensor> criteriaQuery = builder.createQuery(Sensor.class);
 		Root<Sensor> s = criteriaQuery.from(Sensor.class);
-		// TODO заменить на SingularAttribute
-		criteriaQuery.select(s).where(builder.equal(s.get("sensorId"), id));
+		criteriaQuery.select(s).where(
+				builder.equal(s.get(Sensor_.sensorId), id));
 		TypedQuery<Sensor> query = em.createQuery(criteriaQuery);
 		Sensor sensor = query.getSingleResult();
 		return sensor;
@@ -123,10 +125,11 @@ public class GpioController implements IGpioController {
 	 */
 	private IGpioPin getBoilerGpioPin() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder.createQuery(GpioPin.class);
+		CriteriaQuery<GpioPin> criteriaQuery = builder
+				.createQuery(GpioPin.class);
 		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		// TODO заменить на SingularAttribute
-		criteriaQuery.select(s).where(builder.equal(s.get("type"), GpioPinType.BOILER));
+		criteriaQuery.select(s).where(
+				builder.equal(s.get(GpioPin_.type), GpioPinType.BOILER));
 		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
 		GpioPin gpioPin = query.getSingleResult();
 		return gpioPin;
@@ -137,10 +140,11 @@ public class GpioController implements IGpioController {
 	 */
 	private List<? extends IGpioPin> getAllKonturs() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder.createQuery(GpioPin.class);
+		CriteriaQuery<GpioPin> criteriaQuery = builder
+				.createQuery(GpioPin.class);
 		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		// TODO заменить на SingularAttribute
-		criteriaQuery.select(s).where(builder.equal(s.get("type"), GpioPinType.KONTUR));
+		criteriaQuery.select(s).where(
+				builder.equal(s.get(GpioPin_.type), GpioPinType.KONTUR));
 		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
 		List<GpioPin> rv = query.getResultList();
 		return rv;

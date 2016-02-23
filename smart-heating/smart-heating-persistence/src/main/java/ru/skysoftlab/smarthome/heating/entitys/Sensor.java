@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +33,7 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	private Long id;
 	private String sensorId;
 	private String name;
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
 	private Set<GpioPin> gpioPin = new HashSet<>();
 	private Float low;
 	private Float top;
@@ -77,6 +79,14 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 
 	public void setGpioPin(Set<GpioPin> gpioPin) {
 		this.gpioPin = gpioPin;
+	}
+
+	@Transient
+	public void addGpioPin(GpioPin pin) {
+		this.gpioPin.add(pin);
+		if (pin.getOwner() != this) {
+			pin.setOwner(this);
+		}
 	}
 
 	public void setLow(Float low) {

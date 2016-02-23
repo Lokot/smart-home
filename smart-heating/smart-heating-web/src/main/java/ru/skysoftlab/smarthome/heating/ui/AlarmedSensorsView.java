@@ -1,0 +1,84 @@
+package ru.skysoftlab.smarthome.heating.ui;
+
+import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
+import ru.skysoftlab.smarthome.heating.services.AlarmedSensorsService;
+
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
+
+/**
+ * Отображает датчики в состоянии сигнализации.
+ * 
+ * @author Артём
+ *
+ */
+public class AlarmedSensorsView extends BaseMenuView {
+
+	private static final long serialVersionUID = -6977338109883974310L;
+	
+	public static final String NAME = "alarm";
+
+	private Grid grid = new Grid();
+	private AlarmedSensorsService service = new AlarmedSensorsService();
+
+	public AlarmedSensorsView() {
+		super();
+		configureComponents();
+		buildLayout();
+	}
+
+	private void configureComponents() {
+		
+		grid.setContainerDataSource(new BeanItemContainer<>(
+				AlarmedSensorDto.class));
+		grid.setColumnOrder("name", "sensorId", "fastTemp", "low", "top");
+		grid.getColumn("name").setHeaderCaption("Датчик");
+		grid.getColumn("sensorId").setHeaderCaption("Идентификатор");
+		grid.getColumn("fastTemp").setHeaderCaption("Примерно (C)");
+		grid.getColumn("low").setHeaderCaption("Минимум (C)");
+		grid.getColumn("top").setHeaderCaption("Максимум (C)");
+		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+		// grid.addSelectionListener(new SelectionListener() {
+		//
+		// private static final long serialVersionUID = -1852701286958204444L;
+		//
+		// @Override
+		// public void select(SelectionEvent event) {
+		// Long itemId = (Long) grid.getSelectedRow();
+		// if (itemId != null) {
+		// entityForm.edit(jpaContainer.getItem(itemId).getEntity());
+		// } else {
+		// entityForm.edit(null);
+		// }
+		// // contactForm.edit((Sensor) contactList.getSelectedRow());
+		// }
+		// });
+		refreshData();
+	}
+
+	private void buildLayout() {
+		Label title = new Label("Датчики в сигнализации");
+		VerticalLayout left = new VerticalLayout(title, grid);
+		left.setSizeFull();
+		grid.setSizeFull();
+		left.setExpandRatio(grid, 1);
+
+		HorizontalLayout mainLayout = new HorizontalLayout(left);
+		mainLayout.setSizeFull();
+		mainLayout.setExpandRatio(left, 1);
+
+		// Split and allow resizing
+		// setContent(mainLayout);
+		layout.addComponent(mainLayout);
+		// layout.setComponentAlignment(mainLayout, Alignment.TOP_CENTER);
+	}
+
+	public void refreshData() {
+		grid.setContainerDataSource(new BeanItemContainer<>(
+				AlarmedSensorDto.class, service.findAll()));
+	}
+
+}

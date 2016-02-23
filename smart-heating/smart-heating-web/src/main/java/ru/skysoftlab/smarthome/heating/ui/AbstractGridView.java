@@ -1,7 +1,8 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.persistence.EntityManager;
 
 import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
@@ -20,28 +21,44 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Вид с гридом и формой ввода.
+ * 
+ * @author Артём
+ *
+ * @param <T>
+ *            класс сущности
+ * @param <F>
+ *            класс формы сущности
+ * @param <P>
+ *            провайдер
+ */
 public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends EntityProvider<T>>
 		extends BaseMenuView {
 
 	private static final long serialVersionUID = 4734617922366685803L;
 
+	/** класс сущности */
 	private Class<T> clazz;
 	private Class<P> entityProviderClass;
+	/** класс формы сущности */
 	private Class<F> formClass;
+	/** Форма. */
+	private F entityForm;
+	private EntityManager em;
+	private JPAContainer<T> jpaContainer;
 
 	private TextField filter = new TextField();
 	private Grid grid = new Grid();
 	private Button newEntityButton = new Button(getNewButtonLabel());
-	private F entityForm;
-
-	private JPAContainer<T> jpaContainer;
-	private EntityManager em;
 
 	public AbstractGridView(Class<T> clazz, Class<F> formClass,
 			Class<P> entityProviderClass) {
@@ -51,16 +68,6 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 		this.formClass = formClass;
 		configureComponents();
 		buildLayout();
-	}
-
-	protected abstract String getNewButtonLabel();
-
-	public JPAContainer<T> getJpaContainer() {
-		return jpaContainer;
-	}
-
-	public Grid getGrid() {
-		return grid;
 	}
 
 	private void configureComponents() {
@@ -73,6 +80,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 			jpaContainer
 					.setEntityProvider(lookupBean(this.entityProviderClass));
 		} catch (Exception e) {
+			e.printStackTrace();
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 		}
 
@@ -101,10 +109,15 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 			}
 		});
 
+		// TODO не понятно зачем это здесь
 		grid.setContainerDataSource(new BeanItemContainer<>(clazz));
 		grid.setColumnOrder(getColumnOrder());
 		for (Object columnId : getRemoveColumn()) {
 			grid.removeColumn(columnId);
+		}
+		for (Entry<String, String> columnEnrty : getColumnsNames().entrySet()) {
+			Column bornColumn = grid.getColumn(columnEnrty.getKey());
+			bornColumn.setHeaderCaption(columnEnrty.getValue());
 		}
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		grid.addSelectionListener(new SelectionListener() {
@@ -125,20 +138,6 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 		refreshData();
 	}
 
-	/**
-	 * Колонки для скрытия.
-	 * 
-	 * @return
-	 */
-	protected abstract Object[] getRemoveColumn();
-
-	/**
-	 * Идентификаторы колонок.
-	 * 
-	 * @return
-	 */
-	protected abstract Object[] getColumnOrder();
-
 	private void buildLayout() {
 		HorizontalLayout actions = new HorizontalLayout(filter, newEntityButton);
 		actions.setSpacing(true);
@@ -148,7 +147,8 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 		filter.setWidth("100%");
 		actions.setExpandRatio(filter, 1);
 
-		VerticalLayout left = new VerticalLayout(actions, grid);
+		Label title = new Label(getTitle());
+		VerticalLayout left = new VerticalLayout(title, actions, grid);
 		left.setSizeFull();
 		grid.setSizeFull();
 		left.setExpandRatio(grid, 1);
@@ -168,11 +168,33 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 		entityForm.setVisible(false);
 	}
 
+	public JPAContainer<T> getJpaContainer() {
+		return jpaContainer;
+	}
+
+	public Grid getGrid() {
+		return grid;
+	}
+
 	protected abstract Indexed refreshData(String value);
 
-	@SuppressWarnings("unchecked")
-	protected <B> B lookupBean(Class<B> beanClass) throws NamingException {
-		return (B) new InitialContext().lookup("java:module/"
-				+ beanClass.getSimpleName());
-	}
+	protected abstract String getTitle();
+
+	protected abstract Map<String, String> getColumnsNames();
+
+	protected abstract String getNewButtonLabel();
+
+	/**
+	 * Колонки для скрытия.
+	 * 
+	 * @return
+	 */
+	protected abstract Object[] getRemoveColumn();
+
+	/**
+	 * Идентификаторы колонок.
+	 * 
+	 * @return
+	 */
+	protected abstract Object[] getColumnOrder();
 }

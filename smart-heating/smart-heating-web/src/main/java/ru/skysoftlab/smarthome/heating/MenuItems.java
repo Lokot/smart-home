@@ -1,5 +1,6 @@
 package ru.skysoftlab.smarthome.heating;
 
+import ru.skysoftlab.smarthome.heating.ui.AlarmedSensorsView;
 import ru.skysoftlab.smarthome.heating.ui.GpioView;
 import ru.skysoftlab.smarthome.heating.ui.LoginView;
 import ru.skysoftlab.smarthome.heating.ui.SensorsView;
@@ -16,15 +17,15 @@ import com.vaadin.navigator.View;
 public enum MenuItems {
 
 	/** Заказ-наряд */
-	Orders("Заказ-наряд", null, new MenuItem[] {
-			new MenuItem("Датчики", SensorsView.NAME, SensorsView.class),
+	OPTIONS("Настройки", null, new MenuItem[] {
 			new MenuItem("Пины", GpioView.NAME, GpioView.class),
+			new MenuItem("Датчики", SensorsView.NAME, SensorsView.class)
 	}, null),
 			
-	/** Шаблоны ЗН */
-//	Templates("Шаблоны ЗН", null, new MenuItem[] {
-//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
+	ALARMS("Сигнализация", null, new MenuItem[] {
+			new MenuItem("Датчики", AlarmedSensorsView.NAME, AlarmedSensorsView.class)
+	}, null),
+	
 	/** Блоки ЗН */
 //	TemplateBlocks("Блоки ЗН", null, new MenuItem[] {
 //			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),

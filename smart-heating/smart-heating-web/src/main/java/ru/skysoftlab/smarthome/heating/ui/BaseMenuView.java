@@ -1,5 +1,7 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
 import ru.skysoftlab.smarthome.heating.MainUI;
@@ -30,19 +32,19 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 	public BaseMenuView() {
 		super();
-//		setSizeFull();
+		// setSizeFull();
 		setCompositionRoot(layout);
 		layout.setMargin(true);
 		layout.addComponent(barmenu);
 		createMenu();
-		
-//		layout.setSizeFull();
-//		layout.setStyleName(Reindeer.LAYOUT_BLACK);
+
+		// layout.setSizeFull();
+		// layout.setStyleName(Reindeer.LAYOUT_BLACK);
 	}
-	
+
 	@Override
 	public void enter(ViewChangeEvent event) {
-		
+
 	}
 
 	/**
@@ -50,16 +52,24 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 	 */
 	private void createMenu() {
 		for (MenuItems myMenu : MenuItems.values()) {
-			if(myMenu.equals(MenuItems.Logout)){
+			if (myMenu.equals(MenuItems.Logout)) {
 				barmenu.addItem(myMenu.getName(), null, new LogOutCommand());
 			} else {
 				MenuItem item = barmenu.addItem(myMenu.getName(), null, null);
-				for (MenuItems.MenuItem myItem : myMenu.getItems()) {
-					item.addItem(myItem.getName(),
-							new NavigationCommand(myItem.getUrl()));
-				}	
+				if (myMenu.getItems() != null) {
+					for (MenuItems.MenuItem myItem : myMenu.getItems()) {
+						item.addItem(myItem.getName(), new NavigationCommand(
+								myItem.getUrl()));
+					}
+				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <B> B lookupBean(Class<B> beanClass) throws NamingException {
+		return (B) new InitialContext().lookup("java:module/"
+				+ beanClass.getSimpleName());
 	}
 
 	/**
@@ -85,7 +95,7 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 		}
 
 	}
-	
+
 	/**
 	 * Комнда для навигации.
 	 * 
@@ -99,9 +109,10 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
 			MainUI mainUI = (MainUI) UI.getCurrent();
-			mainUI.getAuthenticator().logout((HttpServletRequest) VaadinService.getCurrentRequest());
-            getSession().setAttribute("user", null);
-            getUI().getNavigator().navigateTo(MainView.NAME);
+			mainUI.getAuthenticator().logout(
+					(HttpServletRequest) VaadinService.getCurrentRequest());
+			getSession().setAttribute("user", null);
+			getUI().getNavigator().navigateTo(MainView.NAME);
 		}
 
 	}

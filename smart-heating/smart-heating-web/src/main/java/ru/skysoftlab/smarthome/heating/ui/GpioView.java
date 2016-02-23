@@ -1,5 +1,8 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ru.skysoftlab.smarthome.heating.ejb.GpioPinEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.ui.forms.GpioForm;
@@ -24,17 +27,35 @@ public class GpioView extends
 
 	@Override
 	protected Object[] getRemoveColumn() {
-		return new String[] { "id" };
+		return new String[] { "id", "owner" };
 	}
 
 	@Override
 	protected Object[] getColumnOrder() {
-		return new String[] { "gpio", "pin", "def", "name", "normaliClosed" };
+		return new String[] { "gpio", "pin", "def", "name", "normaliClosed",
+				"type" };
 	}
 
 	@Override
 	protected Indexed refreshData(String value) {
 		return getJpaContainer();
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Список устройств";
+	}
+
+	@Override
+	protected Map<String, String> getColumnsNames() {
+		Map<String, String> rv = new HashMap<>();
+		rv.put("gpio", "Виртуальный пин");
+		rv.put("pin", "Пин на материнской плате");
+		rv.put("def", "Идентификационный номер на плате");
+		rv.put("name", "Наименование");
+		rv.put("normaliClosed", "Нормально закрытый");
+		rv.put("type", "Тип устройства");
+		return rv;
 	}
 
 }
