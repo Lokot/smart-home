@@ -8,6 +8,7 @@ import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -54,8 +55,11 @@ public class AlarmedSensorsService {
 		criteriaQuery.select(s).where(
 				builder.equal(s.get(Sensor_.sensorId), id));
 		TypedQuery<Sensor> query = em.createQuery(criteriaQuery);
-		Sensor sensor = query.getSingleResult();
-		return sensor;
+		try{
+			return query.getSingleResult();
+		} catch (NoResultException e){
+			return null;
+		}
 	}
 
 	// TODO переделать создание коннекции
@@ -72,9 +76,13 @@ public class AlarmedSensorsService {
 				dto.setSensorId(sensorId);
 				dto.setFastTemp(OwsfUtilDS18B.getFasttemp(client, sensorId));
 				Sensor sensor = getDs18bConfig(sensorId);
-				dto.setName(sensor.getName());
-				dto.setLow(sensor.getLow());
-				dto.setTop(sensor.getTop());
+				if (sensor != null) {
+					dto.setName(sensor.getName());
+					dto.setLow(sensor.getLow());
+					dto.setTop(sensor.getTop());
+				} else {
+					dto.setName("Не задан");
+				}
 				rv.add(dto);
 			}
 		} catch (OwfsException | IOException e) {

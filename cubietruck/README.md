@@ -30,3 +30,8 @@ Convert the edited script.fex back into .bin file
 Turn of the cubieboard
 
 shutdown Цh now
+
+
+Настройка:
+http://docs.cubieboard.org/tutorials/common/gpio_on_lubuntu
+http://docs.cubieboard.org/tutorials/cubietruck/start
