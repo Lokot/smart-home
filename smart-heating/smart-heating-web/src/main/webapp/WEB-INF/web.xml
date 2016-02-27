@@ -34,4 +34,10 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	<env-entry>
+		<description>Адрес OWFS сервера.</description>
+		<env-entry-name>owfsServerUrl</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>192.168.0.14:3000</env-entry-value>
+	</env-entry>
 </web-app>

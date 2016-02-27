@@ -31,8 +31,6 @@ import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
@@ -60,19 +58,16 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	private TextField top;
 	/** Контура. */
 	private ListSelect gpioPin;
-//	private BeanItemContainer<GpioPin> gpioPinContainer;
 	private ComboBox gpioBox;
 
 	private void clearComponents() {
 		sensorId.removeAllItems();
 		gpioBox.removeAllItems();
-//		gpioPinContainer.removeAllItems();
 		gpioPin.removeAllItems();
 	}
 
 	private void setUpComponents() {
 		if (this.entity != null) {
-//			gpioPinContainer.addAll(this.entity.getGpioPin());
 			gpioPin.addItems(this.entity.getGpioPin());
 		}
 		try {
@@ -85,7 +80,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		OwfsConnection client = null;
 		try {
 			OwfsConnectionConfig connectionConfig = new OwfsConnectionConfig(
-					"192.168.0.86", 3000);
+					"192.168.0.14", 3000);
 			client = OwfsConnectionFactory.newOwfsClient(connectionConfig);
 			List<String> sensorsIds = OwsfUtilDS18B.getIdsDS18B(client);
 			sensorsIds.removeAll(getNoFreeSensorsIds());
@@ -113,37 +108,11 @@ public class SensorsForm extends AbstractForm<Sensor> {
 
 	@Override
 	protected Collection<? extends Component> getInputs() {
-
-		// OwfsConnectionConfig connectionConfig = new OwfsConnectionConfig(
-		// "192.168.0.86", 3000);
-		// OwfsConnection client = OwfsConnectionFactory
-		// .newOwfsClient(connectionConfig);
-		//
-		// try {
-		// List<String> sensorsIds = OwsfUtilDS18B.getIdsDS18B(client);
-		// client.disconnect();
-		// sensorsIds.removeAll(getNoFreeSensorsIds());
-		// sensorId = new ComboBox("Идентификатор", sensorsIds);
-		// } catch (OwfsException | IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		// } catch (NamingException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		// }
 		sensorId = new ComboBox("Идентификатор");
 		name = new TextField("Помещение");
 		low = new TextField("Минимальная температура (C)");
 		top = new TextField("Максимальная температура (C)");
-		
-//		gpioPinContainer = new BeanItemContainer<GpioPin>(GpioPin.class);
-//		gpioPin = new ListSelect("Контура", gpioPinContainer);
 		gpioPin = new ListSelect("Контура");
-//		gpioPin.setItemCaptionMode(ItemCaptionMode.PROPERTY);
-//		gpioPin.setItemCaptionPropertyId("name");
-				
 		gpioPin.setNullSelectionAllowed(false);
 		// Show 5 items and a scrollbar if there are more
 		gpioPin.setRows(5);
@@ -159,7 +128,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					public void buttonClick(ClickEvent event) {
 						GpioPin value = (GpioPin) gpioBox.getValue();
 						// Add some items (here by the item ID as the caption)
-//						gpioPinContainer.addItem(value);
 						gpioPin.addItems(value);
 					}
 				});
@@ -251,7 +219,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					HashSet<GpioPin> rr = new HashSet<>();
 					for (GpioPin component : (Collection<GpioPin>) gpioPin
 							.getItemIds()) {
-//					for (GpioPin component : gpioPinContainer.getItemIds()) {
 						component.setOwner(entity);
 						rr.add(component);
 					}
@@ -264,8 +231,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					gridView.refreshData();
 					// чистим
 					clearComponents();
-					// gpioPin.removeAllItems();
-					// gpioBox.removeAllItems();
 				} catch (FieldGroup.CommitException e) {
 					// Validation exceptions could be shown here
 					e.printStackTrace();
@@ -287,7 +252,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 				gridView.getGrid().select(null);
 				// чистим
 				clearComponents();
-				// gpioPin.removeAllItems();
 				setVisible(false);
 			}
 		};

@@ -52,9 +52,4 @@ public class GpioForm extends AbstractForm<GpioPin> {
 		gpio.focus();
 	}
 
-//	@Override
-//	public void init() {
-//				
-//	}
-
 }

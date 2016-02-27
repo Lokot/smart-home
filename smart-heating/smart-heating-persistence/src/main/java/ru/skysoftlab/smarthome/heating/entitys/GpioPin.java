@@ -109,7 +109,8 @@ public class GpioPin implements IGpioPin, Serializable {
 
 	@Override
 	public String toString() {
-		return "GpioPin [name=" + name + ", type=" + type + "]";
+		return name;
+//		return "GpioPin [name=" + name + ", type=" + type + "]";
 	}
 
 	public Sensor getOwner() {

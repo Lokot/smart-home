@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.services;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +35,9 @@ import com.vaadin.ui.Notification.Type;
  * @author Артём
  *
  */
-public class AlarmedSensorsService {
+public class AlarmedSensorsService implements Serializable {
+
+	private static final long serialVersionUID = -620019230850598972L;
 
 	private EntityManager em;
 
@@ -55,21 +58,35 @@ public class AlarmedSensorsService {
 		criteriaQuery.select(s).where(
 				builder.equal(s.get(Sensor_.sensorId), id));
 		TypedQuery<Sensor> query = em.createQuery(criteriaQuery);
-		try{
+		try {
 			return query.getSingleResult();
-		} catch (NoResultException e){
+		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	private OwfsConnectionConfig getOwfsConfig() {
+		OwfsConnectionConfig rv = null;
+		String url;
+		try {
+			url = (String) (new InitialContext())
+					.lookup("java:comp/env/owfsServerUrl");
+			String[] urlParams = url.split(":");
+			rv = new OwfsConnectionConfig(urlParams[0],
+					Integer.valueOf(urlParams[1]));
+		} catch (NamingException e) {
+			e.printStackTrace();
+			rv = new OwfsConnectionConfig("localhost", 3000);
+		}
+		return rv;
 	}
 
 	// TODO переделать создание коннекции
 	public Collection<AlarmedSensorDto> findAll() {
 		Collection<AlarmedSensorDto> rv = new ArrayList<>();
-		OwfsConnection client = null;
+		OwfsConnection client = OwfsConnectionFactory
+				.newOwfsClient(getOwfsConfig());
 		try {
-			OwfsConnectionConfig connectionConfig = new OwfsConnectionConfig(
-					"192.168.0.86", 3000);
-			client = OwfsConnectionFactory.newOwfsClient(connectionConfig);
 			List<String> alarmedSensorsIds = OwsfUtilDS18B.getAlarmed(client);
 			for (String sensorId : alarmedSensorsIds) {
 				AlarmedSensorDto dto = new AlarmedSensorDto();
