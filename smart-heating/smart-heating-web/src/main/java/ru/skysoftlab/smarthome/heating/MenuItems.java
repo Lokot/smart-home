@@ -1,13 +1,5 @@
 package ru.skysoftlab.smarthome.heating;
 
-import ru.skysoftlab.smarthome.heating.ui.AlarmedSensorsView;
-import ru.skysoftlab.smarthome.heating.ui.GpioView;
-import ru.skysoftlab.smarthome.heating.ui.LoginView;
-import ru.skysoftlab.smarthome.heating.ui.SensorsView;
-
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.View;
-
 /**
  * Список меню.
  * 
@@ -18,24 +10,13 @@ public enum MenuItems {
 
 	/** Заказ-наряд */
 	OPTIONS("Настройки", null, new MenuItem[] {
-			new MenuItem("Пины", GpioView.NAME, GpioView.class),
-			new MenuItem("Датчики", SensorsView.NAME, SensorsView.class)
-	}, null),
-			
-	ALARMS("Сигнализация", null, new MenuItem[] {
-			new MenuItem("Датчики", AlarmedSensorsView.NAME, AlarmedSensorsView.class)
-	}, null),
-	
-	/** Блоки ЗН */
-//	TemplateBlocks("Блоки ЗН", null, new MenuItem[] {
-//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
-	/** Виды работ */
-//	Works("Виды работ", null, new MenuItem[] {
-//			new MenuItem("Список", HeatingMaivView.NAME, HeatingMaivView.class),
-//			new MenuItem("Создать", HeatingMaivView.NAME, HeatingMaivView.class) }, null),
-			 
-	Logout("Выход", LoginView.NAME, null, LoginView.class);
+			new MenuItem("Пины", NavigationService.GPIO),
+			new MenuItem("Датчики", NavigationService.SENSORS) }),
+
+	ALARMS("Сигнализация", null, new MenuItem[] { new MenuItem(
+			"Датчики в сигнализации", NavigationService.ALARMS) }),
+
+	Logout("Выход", NavigationService.LOGIN, null);
 
 	private String name;
 
@@ -43,10 +24,9 @@ public enum MenuItems {
 
 	private MenuItem[] items;
 
-	private Class<? extends View> viewClass;
+	// private Class<? extends View> viewClass;
 
-	private MenuItems(String name, String url, MenuItem[] items,
-			Class<? extends View> viewClass) {
+	private MenuItems(String name, String url, MenuItem[] items) {
 		this.name = name;
 		this.url = url;
 		this.items = items;
@@ -64,30 +44,30 @@ public enum MenuItems {
 		return items;
 	}
 
-	public Class<? extends View> getViewClass() {
-		return viewClass;
-	}
+	// public Class<? extends View> getViewClass() {
+	// return viewClass;
+	// }
+	//
+	// public void setViewClass(Class<? extends View> viewClass) {
+	// this.viewClass = viewClass;
+	// }
 
-	public void setViewClass(Class<? extends View> viewClass) {
-		this.viewClass = viewClass;
-	}
-	
 	/**
 	 * Регистрируем страницы.
 	 */
-	public static void registrateNavigationViews(Navigator navigator) {
-		for (MenuItems mainItem : MenuItems.values()) {
-			if (mainItem.getUrl() != null && mainItem.getViewClass() != null) {
-				navigator.addView(mainItem.getUrl(),
-						mainItem.getViewClass());
-			}
-			if (mainItem.getItems() != null) {
-				for (MenuItem item : mainItem.getItems()) {
-					navigator.addView(item.getUrl(), item.getViewClass());
-				}
-			}
-		}
-	}
+	// public static void registrateNavigationViews(Navigator navigator) {
+	// for (MenuItems mainItem : MenuItems.values()) {
+	// if (mainItem.getUrl() != null && mainItem.getViewClass() != null) {
+	// navigator.addView(mainItem.getUrl(),
+	// mainItem.getViewClass());
+	// }
+	// if (mainItem.getItems() != null) {
+	// for (MenuItem item : mainItem.getItems()) {
+	// navigator.addView(item.getUrl(), item.getViewClass());
+	// }
+	// }
+	// }
+	// }
 
 	public static class MenuItem {
 
@@ -95,13 +75,12 @@ public enum MenuItems {
 
 		private String url;
 
-		private Class<? extends View> viewClass;
+		// private Class<? extends View> viewClass;
 
-		private MenuItem(String name, String url,
-				Class<? extends View> viewClass) {
+		private MenuItem(String name, String url) {
 			this.name = name;
 			this.url = url;
-			this.setViewClass(viewClass);
+			// this.setViewClass(viewClass);
 		}
 
 		public String getName() {
@@ -120,13 +99,13 @@ public enum MenuItems {
 			this.url = url;
 		}
 
-		public Class<? extends View> getViewClass() {
-			return viewClass;
-		}
-
-		public void setViewClass(Class<? extends View> viewClass) {
-			this.viewClass = viewClass;
-		}
+		// public Class<? extends View> getViewClass() {
+		// return viewClass;
+		// }
+		//
+		// public void setViewClass(Class<? extends View> viewClass) {
+		// this.viewClass = viewClass;
+		// }
 	}
 
 }

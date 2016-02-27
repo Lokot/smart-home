@@ -1,10 +1,15 @@
-package ru.skysoftlab.smarthome.heating.ui;
+package ru.skysoftlab.smarthome.heating.ui.impl;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import ru.skysoftlab.smarthome.heating.MainUI;
+import ru.skysoftlab.smarthome.heating.NavigationEvent;
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
+import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
@@ -21,35 +26,37 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-public class LoginView extends CustomComponent implements View, Button.ClickListener {
+@CDIView(NavigationService.LOGIN)
+public class LoginView extends CustomComponent implements View,
+		Button.ClickListener {
 	private static final long serialVersionUID = 7457479619765665383L;
 
-	public static final String NAME = "login";
+	@Inject
+	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
-	private final TextField user;
+	@Inject
+	private Authenticator authenticator;
 
-	private final PasswordField password;
+	private TextField user = new TextField("User:");
+	private PasswordField password = new PasswordField("Password:");
+	private Button loginButton = new Button("Login", this);
 
-	private final Button loginButton;
-
-	public LoginView() {
+	@Override
+	public void enter(ViewChangeEvent event) {
 		setSizeFull();
 
-		user = new TextField("User:");
 		user.setWidth("300px");
 		user.setRequired(true);
 		user.setInvalidAllowed(false);
 
-		password = new PasswordField("Password:");
 		password.setWidth("300px");
 		password.setRequired(true);
 		password.setValue("");
 		password.setNullRepresentation("");
 
-		loginButton = new Button("Login", this);
-
-		VerticalLayout fields = new VerticalLayout(user, password, loginButton, new Label("Username/password for admin: admin/admin" ),
-				                                                                new Label("and for simple user: user/user" ));
+		VerticalLayout fields = new VerticalLayout(user, password, loginButton,
+				new Label("Username/password for admin: admin/admin"),
+				new Label("and for simple user: user/user"));
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -59,24 +66,21 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
 		setCompositionRoot(viewLayout);
-	}
-
-	@Override
-	public void enter(ViewChangeEvent event) {
 		user.focus();
 	}
-	
+
 	@Override
 	public void buttonClick(ClickEvent event) {
 		String username = user.getValue();
 		String password = this.password.getValue();
 		try {
-			MainUI mainUI = (MainUI) getUI();
-			mainUI.getAuthenticator().login(username, password, (HttpServletRequest) VaadinService.getCurrentRequest());
+//			JaasAccessControl.login(username, password);
+			authenticator.login(username, password,
+					(HttpServletRequest) VaadinService.getCurrentRequest());
 			getSession().setAttribute("user", username);
-			getUI().getNavigator().navigateTo(MainView.NAME);
+			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));
 		} catch (ServletException e) {
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		} 
+		}
 	}
 }

@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -21,11 +20,11 @@ import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.OwfsException;
 
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
-import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
 import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
@@ -35,20 +34,16 @@ import com.vaadin.ui.Notification.Type;
  * @author Артём
  *
  */
+@UIScoped
 public class AlarmedSensorsService implements Serializable {
 
 	private static final long serialVersionUID = -620019230850598972L;
 
+	@Inject
 	private EntityManager em;
-
-	public AlarmedSensorsService() {
-		try {
-			em = lookupBean(EmProducer.class).getEM();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		}
-	}
+	
+	@Inject
+	private OwfsConnectionConfig config;
 
 	// TODO перекинуть (повторяется в GpioController)
 	private Sensor getDs18bConfig(String id) {
@@ -65,27 +60,11 @@ public class AlarmedSensorsService implements Serializable {
 		}
 	}
 
-	private OwfsConnectionConfig getOwfsConfig() {
-		OwfsConnectionConfig rv = null;
-		String url;
-		try {
-			url = (String) (new InitialContext())
-					.lookup("java:comp/env/owfsServerUrl");
-			String[] urlParams = url.split(":");
-			rv = new OwfsConnectionConfig(urlParams[0],
-					Integer.valueOf(urlParams[1]));
-		} catch (NamingException e) {
-			e.printStackTrace();
-			rv = new OwfsConnectionConfig("localhost", 3000);
-		}
-		return rv;
-	}
-
 	// TODO переделать создание коннекции
 	public Collection<AlarmedSensorDto> findAll() {
 		Collection<AlarmedSensorDto> rv = new ArrayList<>();
 		OwfsConnection client = OwfsConnectionFactory
-				.newOwfsClient(getOwfsConfig());
+				.newOwfsClient(config);
 		try {
 			List<String> alarmedSensorsIds = OwsfUtilDS18B.getAlarmed(client);
 			for (String sensorId : alarmedSensorsIds) {
@@ -118,12 +97,6 @@ public class AlarmedSensorsService implements Serializable {
 			}
 		}
 		return rv;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <B> B lookupBean(Class<B> beanClass) throws NamingException {
-		return (B) new InitialContext().lookup("java:module/"
-				+ beanClass.getSimpleName());
 	}
 
 }

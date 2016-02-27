@@ -1,10 +1,10 @@
-package ru.skysoftlab.smarthome.heating.ui.forms;
+package ru.skysoftlab.smarthome.heating.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
+import javax.annotation.PostConstruct;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -34,12 +34,13 @@ public abstract class AbstractForm<T> extends FormLayout {
 	protected T entity;
 	// Easily bind forms to beans and manage validation and buffering
 	protected BeanFieldGroup<T> formFieldBindings;
-	protected AbstractGridView<T, ? extends AbstractForm<T>, ?> gridView;
+	protected AbstractGridView<T, ? extends AbstractForm<T>> gridView;
 
 	protected Button save = new Button("Сохранить", getSaveClickListener());
 	protected Button cancel = new Button("Cancel", getCancelClickListener());
 
-	public AbstractForm() {
+	@PostConstruct
+	public void initForm() {
 		configureComponents();
 		buildLayout();
 	}
@@ -74,7 +75,7 @@ public abstract class AbstractForm<T> extends FormLayout {
 	}
 
 	public void setGridView(
-			AbstractGridView<T, ? extends AbstractForm<T>, ?> gridView) {
+			AbstractGridView<T, ? extends AbstractForm<T>> gridView) {
 		this.gridView = gridView;
 	}
 

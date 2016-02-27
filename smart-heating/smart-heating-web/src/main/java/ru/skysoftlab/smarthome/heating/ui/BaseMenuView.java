@@ -1,19 +1,18 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import ru.skysoftlab.smarthome.heating.MainUI;
 import ru.skysoftlab.smarthome.heating.MenuItems;
+import ru.skysoftlab.smarthome.heating.NavigationEvent;
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -25,6 +24,12 @@ import com.vaadin.ui.VerticalLayout;
 public abstract class BaseMenuView extends CustomComponent implements View {
 
 	private static final long serialVersionUID = 6006817026658320555L;
+
+	@Inject
+	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
+
+	@Inject
+	private Authenticator authenticator;
 
 	protected final VerticalLayout layout = new VerticalLayout();
 
@@ -40,11 +45,6 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 		// layout.setSizeFull();
 		// layout.setStyleName(Reindeer.LAYOUT_BLACK);
-	}
-
-	@Override
-	public void enter(ViewChangeEvent event) {
-
 	}
 
 	/**
@@ -66,12 +66,6 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected <B> B lookupBean(Class<B> beanClass) throws NamingException {
-		return (B) new InitialContext().lookup("java:module/"
-				+ beanClass.getSimpleName());
-	}
-
 	/**
 	 * Комнда для навигации.
 	 * 
@@ -91,7 +85,7 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			getUI().getNavigator().navigateTo(view);
+			navigationEvent.fire(new NavigationEvent(view));
 		}
 
 	}
@@ -108,11 +102,10 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			MainUI mainUI = (MainUI) UI.getCurrent();
-			mainUI.getAuthenticator().logout(
-					(HttpServletRequest) VaadinService.getCurrentRequest());
+			authenticator.logout((HttpServletRequest) VaadinService
+					.getCurrentRequest());
 			getSession().setAttribute("user", null);
-			getUI().getNavigator().navigateTo(MainView.NAME);
+			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));
 		}
 
 	}

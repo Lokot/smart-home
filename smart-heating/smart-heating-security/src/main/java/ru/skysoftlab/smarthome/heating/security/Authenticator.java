@@ -2,9 +2,11 @@ package ru.skysoftlab.smarthome.heating.security;
 
 import java.io.Serializable;
 
+import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+@Singleton
 public class Authenticator implements Serializable {
 
 	private static final long serialVersionUID = -8775780572051229559L;

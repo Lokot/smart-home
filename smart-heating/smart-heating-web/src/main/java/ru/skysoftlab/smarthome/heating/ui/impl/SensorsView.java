@@ -1,12 +1,18 @@
-package ru.skysoftlab.smarthome.heating.ui;
+package ru.skysoftlab.smarthome.heating.ui.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.skysoftlab.smarthome.heating.ejb.SensorEntityProviderBean;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.ui.forms.SensorsForm;
+import javax.inject.Inject;
 
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.cdi.SensorEntityProviderBean;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
+import ru.skysoftlab.smarthome.heating.ui.impl.forms.SensorsForm;
+
+import com.vaadin.addon.jpacontainer.EntityProvider;
+import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Container.Indexed;
 
 /**
@@ -14,15 +20,20 @@ import com.vaadin.data.Container.Indexed;
  * @author Loktionov Artem
  *
  */
+@CDIView(NavigationService.SENSORS)
 public class SensorsView extends
-		AbstractGridView<Sensor, SensorsForm, SensorEntityProviderBean> {
+		AbstractGridView<Sensor, SensorsForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;
 
-	public static final String NAME = "sensors";
+	@Inject
+	private SensorEntityProviderBean entityProvider;
+	
+	@Inject
+	private SensorsForm form;
 
 	public SensorsView() {
-		super(Sensor.class, SensorsForm.class, SensorEntityProviderBean.class);
+		super(Sensor.class);
 	}
 
 	@Override
@@ -61,6 +72,16 @@ public class SensorsView extends
 		rv.put("low", "Минимум (C)");
 		rv.put("top", "Максимум (C)");
 		return rv;
+	}
+
+	@Override
+	protected EntityProvider<Sensor> getEntityProvider() {
+		return entityProvider;
+	}
+	
+	@Override
+	protected SensorsForm getEntityForm() {
+		return form;
 	}
 
 }

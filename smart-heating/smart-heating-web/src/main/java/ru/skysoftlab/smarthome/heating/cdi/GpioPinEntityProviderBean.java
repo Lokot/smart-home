@@ -1,12 +1,12 @@
-package ru.skysoftlab.smarthome.heating.ejb;
+package ru.skysoftlab.smarthome.heating.cdi;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -14,22 +14,22 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 
 import com.vaadin.addon.jpacontainer.provider.MutableLocalEntityProvider;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SensorEntityProviderBean extends MutableLocalEntityProvider<Sensor> {
+public class GpioPinEntityProviderBean extends MutableLocalEntityProvider<GpioPin> {
 
-	@PersistenceContext(unitName = "smartHeating-pu")
+	@Inject
 	private EntityManager em;
 
 	@Resource
 	private UserTransaction utx;
 
-	public SensorEntityProviderBean() {
-		super(Sensor.class);
+	public GpioPinEntityProviderBean() {
+		super(GpioPin.class);
 		setTransactionsHandledByProvider(true);
 	}
 

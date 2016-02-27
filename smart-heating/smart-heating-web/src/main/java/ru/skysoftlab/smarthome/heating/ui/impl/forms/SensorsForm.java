@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.ui.forms;
+package ru.skysoftlab.smarthome.heating.ui.impl.forms;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.naming.InitialContext;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
@@ -21,12 +21,12 @@ import org.owfs.jowfsclient.OwfsConnectionConfig;
 import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.OwfsException;
 
-import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -51,6 +51,9 @@ import com.vaadin.ui.VerticalLayout;
 public class SensorsForm extends AbstractForm<Sensor> {
 
 	private static final long serialVersionUID = 2372643403143137631L;
+	
+	@Inject
+	private EntityManager em;
 
 	private ComboBox sensorId;
 	private TextField name;
@@ -150,7 +153,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 
 	private List<String> getNoFreeSensorsIds() throws NamingException {
 		List<String> rv = new ArrayList<>();
-		EntityManager em = lookupBean(EmProducer.class).getEM();
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Tuple> criteria = builder.createTupleQuery();
 		Root<Sensor> personRoot = criteria.from(Sensor.class);
@@ -164,7 +166,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	}
 
 	private List<GpioPin> getFreeGpioPin() throws NamingException {
-		EntityManager em = lookupBean(EmProducer.class).getEM();
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<GpioPin> criteriaQuery = builder
 				.createQuery(GpioPin.class);
@@ -179,12 +180,6 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	@Override
 	protected void setFocus() {
 		sensorId.focus();
-	}
-
-	@SuppressWarnings("unchecked")
-	private <B> B lookupBean(Class<B> beanClass) throws NamingException {
-		return (B) new InitialContext().lookup("java:module/"
-				+ beanClass.getSimpleName());
 	}
 
 	@Override

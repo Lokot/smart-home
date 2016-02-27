@@ -3,10 +3,8 @@ package ru.skysoftlab.smarthome.heating.ui;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import ru.skysoftlab.smarthome.heating.ejb.EmProducer;
-import ru.skysoftlab.smarthome.heating.ui.forms.AbstractForm;
 
 import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -17,6 +15,7 @@ import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.SelectionEvent.SelectionListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -41,18 +40,14 @@ import com.vaadin.ui.VerticalLayout;
  * @param <P>
  *            провайдер
  */
-public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends EntityProvider<T>>
+public abstract class AbstractGridView<T, F extends AbstractForm<T>>
 		extends BaseMenuView {
 
 	private static final long serialVersionUID = 4734617922366685803L;
 
 	/** класс сущности */
 	private Class<T> clazz;
-	private Class<P> entityProviderClass;
-	/** класс формы сущности */
-	private Class<F> formClass;
-	/** Форма. */
-	private F entityForm;
+	@Inject
 	private EntityManager em;
 	private JPAContainer<T> jpaContainer;
 
@@ -60,25 +55,28 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 	private Grid grid = new Grid();
 	private Button newEntityButton = new Button(getNewButtonLabel());
 
-	public AbstractGridView(Class<T> clazz, Class<F> formClass,
-			Class<P> entityProviderClass) {
+	public AbstractGridView(Class<T> clazz) {
 		super();
 		this.clazz = clazz;
-		this.entityProviderClass = entityProviderClass;
-		this.formClass = formClass;
+	}
+
+//	@PostConstruct
+//	public void initView(){
+//		
+//	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
 		configureComponents();
-		buildLayout();
+		buildLayout();		
 	}
 
 	private void configureComponents() {
 		try {
-			entityForm = this.formClass.newInstance();
-			entityForm.setGridView(this);
-			em = lookupBean(EmProducer.class).getEM();
+			getEntityForm().setGridView(this);
 			// Create a persistent person container
 			jpaContainer = JPAContainerFactory.make(clazz, em);
-			jpaContainer
-					.setEntityProvider(lookupBean(this.entityProviderClass));
+			jpaContainer.setEntityProvider(getEntityProvider());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
@@ -91,7 +89,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 			@Override
 			public void buttonClick(ClickEvent event) {
 				try {
-					entityForm.edit(clazz.newInstance());
+					getEntityForm().edit(clazz.newInstance());
 				} catch (InstantiationException | IllegalAccessException e) {
 					Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 				}
@@ -128,15 +126,19 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 			public void select(SelectionEvent event) {
 				Long itemId = (Long) grid.getSelectedRow();
 				if (itemId != null) {
-					entityForm.edit(jpaContainer.getItem(itemId).getEntity());
+					getEntityForm().edit(jpaContainer.getItem(itemId).getEntity());
 				} else {
-					entityForm.edit(null);
+					getEntityForm().edit(null);
 				}
 				// contactForm.edit((Sensor) contactList.getSelectedRow());
 			}
 		});
 		refreshData();
 	}
+
+	protected abstract F getEntityForm();
+
+	protected abstract EntityProvider<T> getEntityProvider();
 
 	private void buildLayout() {
 		HorizontalLayout actions = new HorizontalLayout(filter, newEntityButton);
@@ -153,7 +155,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 		grid.setSizeFull();
 		left.setExpandRatio(grid, 1);
 
-		HorizontalLayout mainLayout = new HorizontalLayout(left, entityForm);
+		HorizontalLayout mainLayout = new HorizontalLayout(left, getEntityForm());
 		mainLayout.setSizeFull();
 		mainLayout.setExpandRatio(left, 1);
 
@@ -165,7 +167,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>, P extends E
 
 	public void refreshData() {
 		grid.setContainerDataSource(refreshData(filter.getValue()));
-		entityForm.setVisible(false);
+		getEntityForm().setVisible(false);
 	}
 
 	public JPAContainer<T> getJpaContainer() {

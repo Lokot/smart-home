@@ -1,9 +1,14 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
+import javax.inject.Inject;
+
+import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
 import ru.skysoftlab.smarthome.heating.services.AlarmedSensorsService;
 
+import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -15,23 +20,29 @@ import com.vaadin.ui.VerticalLayout;
  * @author Артём
  *
  */
+@CDIView(NavigationService.ALARMS)
 public class AlarmedSensorsView extends BaseMenuView {
 
 	private static final long serialVersionUID = -6977338109883974310L;
-	
-	public static final String NAME = "alarm";
 
 	private Grid grid = new Grid();
-	private AlarmedSensorsService service = new AlarmedSensorsService();
 
-	public AlarmedSensorsView() {
-		super();
+	@Inject
+	private AlarmedSensorsService service;
+
+	public void refreshData() {
+		grid.setContainerDataSource(new BeanItemContainer<>(
+				AlarmedSensorDto.class, service.findAll()));
+	}
+
+	@Override
+	public void enter(ViewChangeEvent event) {
 		configureComponents();
 		buildLayout();
 	}
 
 	private void configureComponents() {
-		
+
 		grid.setContainerDataSource(new BeanItemContainer<>(
 				AlarmedSensorDto.class));
 		grid.setColumnOrder("name", "sensorId", "fastTemp", "low", "top");
@@ -74,11 +85,6 @@ public class AlarmedSensorsView extends BaseMenuView {
 		// setContent(mainLayout);
 		layout.addComponent(mainLayout);
 		// layout.setComponentAlignment(mainLayout, Alignment.TOP_CENTER);
-	}
-
-	public void refreshData() {
-		grid.setContainerDataSource(new BeanItemContainer<>(
-				AlarmedSensorDto.class, service.findAll()));
 	}
 
 }

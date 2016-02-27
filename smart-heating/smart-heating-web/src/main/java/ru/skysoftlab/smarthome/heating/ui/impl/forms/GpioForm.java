@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.ui.forms;
+package ru.skysoftlab.smarthome.heating.ui.impl.forms;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.EnumSet;
 
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
