@@ -37,7 +37,7 @@ public abstract class AbstractForm<T> extends FormLayout {
 	protected AbstractGridView<T, ? extends AbstractForm<T>> gridView;
 
 	protected Button save = new Button("Сохранить", getSaveClickListener());
-	protected Button cancel = new Button("Cancel", getCancelClickListener());
+	protected Button cancel = new Button("Отмена", getCancelClickListener());
 
 	@PostConstruct
 	public void initForm() {

@@ -2,41 +2,58 @@ package ru.skysoftlab.smarthome.heating.impl;
 
 import java.io.IOException;
 
-import org.owfs.jowfsclient.OwfsConnectionFactory;
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Destroyed;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
 import org.owfs.jowfsclient.OwfsException;
 import org.owfs.jowfsclient.alarm.AlarmingDevicesScanner;
 
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.owfs.Ds18bAlarmingDeviceListener;
+import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
 import ru.skysoftlab.smarthome.heating.owfs.IDs18bConfig;
 import ru.skysoftlab.smarthome.heating.owfs.ITempAlarmHandler;
-import ru.skysoftlab.smarthome.heating.owfs.TempAlarmingEvent;
 
-public class AlarmScannerBean implements ITempAlarmHandler {
+/**
+ * Сканер датчиков.
+ * 
+ * @author Артём
+ *
+ */
+@Singleton
+@Startup
+// @ApplicationScoped
+// @Singleton
+public class AlarmScannerBean implements IAlarmScanner {
 
-	private int interval;
-	private String hostName;
-	private int portNumber;
+	private static final long serialVersionUID = 4027430659678255880L;
+
+	@Inject
 	private AlarmingDevicesScanner scanner;
 
-	/**
-	 * @param hostName
-	 * @param portNumber
-	 * @param interval
-	 */
-	public AlarmScannerBean(String hostName, int portNumber, int interval) {
-		this.interval = interval;
-		this.hostName = hostName;
-		this.portNumber = portNumber;
-	}
+	@Inject
+	private SensorsAndGpioProvider sensorsProvider;
 
+	@Inject
+	private TempAlarmHandler tempAlarmHandler;
+
+	@PostConstruct
 	public void init() {
-		OwfsConnectionFactory owfsConnectionFactory = new OwfsConnectionFactory(
-				hostName, portNumber);
-		scanner = owfsConnectionFactory.getAlarmingScanner();
-		scanner.setPeriodInterval(interval);
+		System.out
+				.println("*****************************************************");
+		System.out.println("*INIT*");
+		System.out.println("*" + scanner + "*");
+		System.out.println("*" + sensorsProvider + "*");
+		System.out.println("*" + tempAlarmHandler + "*");
+		System.out
+				.println("*****************************************************");
 		try {
-			for (IDs18bConfig config : getDs18bConfigs()) {
+			for (IDs18bConfig config : sensorsProvider.getDs18bConfigs()) {
 				setAlarmingDeviceHandler(config);
 			}
 		} catch (IOException | OwfsException e) {
@@ -44,43 +61,28 @@ public class AlarmScannerBean implements ITempAlarmHandler {
 		}
 	}
 
+	// public void init(@Observes @Initialized(ApplicationScoped.class) Object
+	// init) {
+	// System.out.println("*init(@Observes @Initialized(ApplicationScoped.class)*");
+	// }
+	//
+	// public void destroy(@Observes @Destroyed(ApplicationScoped.class) Object
+	// init) {
+	// System.out.println("*destroy(@Observes @Destroyed(ApplicationScoped.class)*");
+	// }
+
+	@Override
 	public void setAlarmingDeviceHandler(IDs18bConfig config)
 			throws IOException, OwfsException {
 		if (scanner.isAlarmingDeviceOnList(config.getDeviceName())) {
 			scanner.removeAlarmingDeviceHandler(config.getDeviceName());
 		}
 		scanner.addAlarmingDeviceHandler(new Ds18bAlarmingDeviceListener(
-				config, this));
-	}
-
-	/**
-	 * Заглушка.
-	 * 
-	 * @return
-	 */
-	private IDs18bConfig[] getDs18bConfigs() {
-		return new IDs18bConfig[] {
-				new Sensor("28.8AF530040000", 20F, 25F),
-				new Sensor("28.F4E330040000", 20F, 25F),
-				new Sensor("28.76E830040000", 20F, 25F),
-				new Sensor("28.BC8533040000", 20F, 25F) };
-	}
-
-	public static void main(String[] args) {
-		AlarmScannerBean scannerBean = new AlarmScannerBean("192.168.0.86",
-				3000, 1000 * 15);
-		scannerBean.init();
+				config, tempAlarmHandler));
 	}
 
 	@Override
-	public void handleAlarm(TempAlarmingEvent event) {
-		System.out.println(event.getDeviceName() + " = " + event.getType()
-				+ " = " + event.getFastTemp());
-		
-	}
-
 	public void setInterval(int interval) {
-		this.interval = interval;
 		scanner.setPeriodInterval(interval);
 	}
 

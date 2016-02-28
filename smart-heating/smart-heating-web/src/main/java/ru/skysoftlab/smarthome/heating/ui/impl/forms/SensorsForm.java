@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
@@ -21,11 +23,15 @@ import org.owfs.jowfsclient.OwfsConnectionConfig;
 import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.OwfsException;
 
+import ru.skysoftlab.smarthome.heating.annatations.EJBBean;
+import ru.skysoftlab.smarthome.heating.ejb.TestBean;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
+import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
@@ -51,9 +57,13 @@ import com.vaadin.ui.VerticalLayout;
 public class SensorsForm extends AbstractForm<Sensor> {
 
 	private static final long serialVersionUID = 2372643403143137631L;
-	
+
 	@Inject
 	private EntityManager em;
+
+	// @Inject
+	// @EJB()
+	// private AlarmScannerBean scanner;
 
 	private ComboBox sensorId;
 	private TextField name;
@@ -226,6 +236,17 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					gridView.refreshData();
 					// чистим
 					clearComponents();
+					// обновляем сканнер
+					try {
+						IAlarmScanner scanner = (IAlarmScanner) new InitialContext()
+								.lookup("java:module/"
+										+ AlarmScannerBean.class
+												.getSimpleName());
+						scanner.setAlarmingDeviceHandler(entity);
+					} catch (NamingException | IOException | OwfsException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} catch (FieldGroup.CommitException e) {
 					// Validation exceptions could be shown here
 					e.printStackTrace();

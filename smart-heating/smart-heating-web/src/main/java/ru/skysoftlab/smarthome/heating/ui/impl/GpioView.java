@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.cdi.GpioPinEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
+import ru.skysoftlab.smarthome.heating.jpa.GpioPinEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
 import ru.skysoftlab.smarthome.heating.ui.impl.forms.GpioForm;
 

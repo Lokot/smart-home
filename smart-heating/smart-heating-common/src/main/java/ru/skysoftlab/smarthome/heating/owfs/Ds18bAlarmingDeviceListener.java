@@ -8,6 +8,12 @@ import org.owfs.jowfsclient.alarm.AlarmingDeviceListener;
 
 import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
+/**
+ * Слушатель изменения температуры.
+ * 
+ * @author Артём
+ *
+ */
 public class Ds18bAlarmingDeviceListener implements AlarmingDeviceListener {
 
 	private IDs18bConfig config;

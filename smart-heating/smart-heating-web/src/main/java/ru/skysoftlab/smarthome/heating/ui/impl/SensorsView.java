@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.cdi.SensorEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.jpa.SensorEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
 import ru.skysoftlab.smarthome.heating.ui.impl.forms.SensorsForm;
 
@@ -25,7 +25,7 @@ public class SensorsView extends
 		AbstractGridView<Sensor, SensorsForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;
-
+	
 	@Inject
 	private SensorEntityProviderBean entityProvider;
 	

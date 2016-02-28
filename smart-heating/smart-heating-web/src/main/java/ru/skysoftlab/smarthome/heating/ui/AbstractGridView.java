@@ -60,11 +60,6 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>>
 		this.clazz = clazz;
 	}
 
-//	@PostConstruct
-//	public void initView(){
-//		
-//	}
-	
 	@Override
 	public void enter(ViewChangeEvent event) {
 		configureComponents();

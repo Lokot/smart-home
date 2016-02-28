@@ -7,12 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.owfs.jowfsclient.OwfsConnection;
 import org.owfs.jowfsclient.OwfsConnectionConfig;
@@ -21,10 +15,9 @@ import org.owfs.jowfsclient.OwfsException;
 
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
+import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
 import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
-import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
@@ -34,31 +27,15 @@ import com.vaadin.ui.Notification.Type;
  * @author Артём
  *
  */
-@UIScoped
 public class AlarmedSensorsService implements Serializable {
 
 	private static final long serialVersionUID = -620019230850598972L;
 
 	@Inject
-	private EntityManager em;
+	private OwfsConnectionConfig config;
 	
 	@Inject
-	private OwfsConnectionConfig config;
-
-	// TODO перекинуть (повторяется в GpioController)
-	private Sensor getDs18bConfig(String id) {
-		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<Sensor> criteriaQuery = builder.createQuery(Sensor.class);
-		Root<Sensor> s = criteriaQuery.from(Sensor.class);
-		criteriaQuery.select(s).where(
-				builder.equal(s.get(Sensor_.sensorId), id));
-		TypedQuery<Sensor> query = em.createQuery(criteriaQuery);
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
+	private SensorsAndGpioProvider sensorsProvider;
 
 	// TODO переделать создание коннекции
 	public Collection<AlarmedSensorDto> findAll() {
@@ -71,7 +48,7 @@ public class AlarmedSensorsService implements Serializable {
 				AlarmedSensorDto dto = new AlarmedSensorDto();
 				dto.setSensorId(sensorId);
 				dto.setFastTemp(OwsfUtilDS18B.getFasttemp(client, sensorId));
-				Sensor sensor = getDs18bConfig(sensorId);
+				Sensor sensor = sensorsProvider.getDs18bConfig(sensorId);
 				if (sensor != null) {
 					dto.setName(sensor.getName());
 					dto.setLow(sensor.getLow());

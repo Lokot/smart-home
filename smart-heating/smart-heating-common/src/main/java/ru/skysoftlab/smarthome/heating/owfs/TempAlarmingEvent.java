@@ -56,6 +56,12 @@ public class TempAlarmingEvent {
 	public Float getFastTemp() {
 		return fastTemp;
 	}
+	
+	@Override
+	public String toString() {
+		return "TempAlarmingEvent [type=" + type + ", deviceName=" + deviceName
+				+ ", fastTemp=" + fastTemp + "]";
+	}
 
 	/**
 	 * Тип события.

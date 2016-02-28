@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.cdi;
+package ru.skysoftlab.smarthome.heating.jpa;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
