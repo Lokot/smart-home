@@ -65,7 +65,8 @@ public final class PinsUtil {
 		}
 	}
 
-	public static boolean isEnabledPin(IGpioPin gpioPin) throws IOException {
+	// TODO подумать про нормально-открытые и закрытые
+	public static Boolean isEnabledPin(IGpioPin gpioPin) throws IOException {
 		boolean rv = false;
 		File gpioValue = new File(gpio_path + "/gpio" + gpioPin.getGpio()
 				+ "/value");

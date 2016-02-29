@@ -13,8 +13,9 @@ public enum MenuItems {
 			new MenuItem("Пины", NavigationService.GPIO),
 			new MenuItem("Датчики", NavigationService.SENSORS) }),
 
-	ALARMS("Сигнализация", null, new MenuItem[] { new MenuItem(
-			"Датчики в сигнализации", NavigationService.ALARMS) }),
+	ALARMS("Сигнализация", null, new MenuItem[] {
+			new MenuItem("Датчики в сигнализации", NavigationService.ALARMS),
+			new MenuItem("Статистика", NavigationService.STATISTIC) }),
 
 	Logout("Выход", NavigationService.LOGIN, null);
 
@@ -23,8 +24,6 @@ public enum MenuItems {
 	private String url;
 
 	private MenuItem[] items;
-
-	// private Class<? extends View> viewClass;
 
 	private MenuItems(String name, String url, MenuItem[] items) {
 		this.name = name;
@@ -44,43 +43,15 @@ public enum MenuItems {
 		return items;
 	}
 
-	// public Class<? extends View> getViewClass() {
-	// return viewClass;
-	// }
-	//
-	// public void setViewClass(Class<? extends View> viewClass) {
-	// this.viewClass = viewClass;
-	// }
-
-	/**
-	 * Регистрируем страницы.
-	 */
-	// public static void registrateNavigationViews(Navigator navigator) {
-	// for (MenuItems mainItem : MenuItems.values()) {
-	// if (mainItem.getUrl() != null && mainItem.getViewClass() != null) {
-	// navigator.addView(mainItem.getUrl(),
-	// mainItem.getViewClass());
-	// }
-	// if (mainItem.getItems() != null) {
-	// for (MenuItem item : mainItem.getItems()) {
-	// navigator.addView(item.getUrl(), item.getViewClass());
-	// }
-	// }
-	// }
-	// }
-
 	public static class MenuItem {
 
 		private String name;
 
 		private String url;
 
-		// private Class<? extends View> viewClass;
-
 		private MenuItem(String name, String url) {
 			this.name = name;
 			this.url = url;
-			// this.setViewClass(viewClass);
 		}
 
 		public String getName() {
@@ -98,14 +69,5 @@ public enum MenuItems {
 		public void setUrl(String url) {
 			this.url = url;
 		}
-
-		// public Class<? extends View> getViewClass() {
-		// return viewClass;
-		// }
-		//
-		// public void setViewClass(Class<? extends View> viewClass) {
-		// this.viewClass = viewClass;
-		// }
 	}
-
 }

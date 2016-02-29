@@ -21,6 +21,15 @@
 	<!-- <param-value>ru.skysoftlab.smarthome.heating.MainUI</param-value> -->
 	<!-- </init-param> -->
 	<!-- <init-param> -->
+	<!-- <param-name>uiprovider</param-name> -->
+	<!-- <param-value>com.vaadin.cdi.CDIUIProvider</param-value> -->
+	<!-- </init-param> -->
+
+	<!-- <init-param> -->
+	<!-- <param-name>viewprovider</param-name> -->
+	<!-- <param-value>com.vaadin.cdi.CDIViewProvider</param-value> -->
+	<!-- </init-param> -->
+	<!-- <init-param> -->
 	<!-- <description>Application widgetset</description> -->
 	<!-- <param-name>widgetset</param-name> -->
 	<!-- <param-value>ru.skysoftlab.smarthome.heating.widgetset.VaadinauthWidgetset</param-value> -->

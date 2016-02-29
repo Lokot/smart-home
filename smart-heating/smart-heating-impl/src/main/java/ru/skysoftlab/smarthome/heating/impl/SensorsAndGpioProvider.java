@@ -86,13 +86,29 @@ public class SensorsAndGpioProvider {
 	 * 
 	 * @return
 	 */
-	public List<? extends IGpioPin> getAllKonturs() {
+	public Collection<? extends IGpioPin> getAllKonturs() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<GpioPin> criteriaQuery = builder
 				.createQuery(GpioPin.class);
 		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
 		criteriaQuery.select(s).where(
 				builder.equal(s.get(GpioPin_.type), GpioPinType.KONTUR));
+		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
+		List<GpioPin> rv = query.getResultList();
+		return rv;
+	}
+
+	/**
+	 * Возвращает все пины.
+	 * 
+	 * @return
+	 */
+	public List<GpioPin> getAllGpioPins() {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<GpioPin> criteriaQuery = builder
+				.createQuery(GpioPin.class);
+		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
+		criteriaQuery.select(s);
 		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
 		List<GpioPin> rv = query.getResultList();
 		return rv;
