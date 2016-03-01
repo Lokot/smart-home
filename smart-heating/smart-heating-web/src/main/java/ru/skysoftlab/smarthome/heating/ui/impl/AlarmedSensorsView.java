@@ -1,10 +1,11 @@
-package ru.skysoftlab.smarthome.heating.ui;
+package ru.skysoftlab.smarthome.heating.ui.impl;
 
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
-import ru.skysoftlab.smarthome.heating.services.AlarmedSensorsService;
+import ru.skysoftlab.smarthome.heating.services.SensorsService;
+import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanItemContainer;
@@ -28,11 +29,11 @@ public class AlarmedSensorsView extends BaseMenuView {
 	private Grid grid = new Grid();
 
 	@Inject
-	private AlarmedSensorsService service;
+	private SensorsService service;
 
 	public void refreshData() {
 		grid.setContainerDataSource(new BeanItemContainer<>(
-				AlarmedSensorDto.class, service.findAll()));
+				AlarmedSensorDto.class, service.findAlarmed()));
 	}
 
 	@Override
