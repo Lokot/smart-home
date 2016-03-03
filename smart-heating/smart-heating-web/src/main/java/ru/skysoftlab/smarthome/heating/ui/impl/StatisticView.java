@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
 import ru.skysoftlab.smarthome.heating.ui.impl.layouts.GpioStates;
+import ru.skysoftlab.smarthome.heating.ui.impl.layouts.TemperatureChart;
 import ru.skysoftlab.smarthome.heating.ui.impl.layouts.TemperatureCondition;
 
 import com.vaadin.cdi.CDIView;
@@ -29,6 +30,9 @@ public class StatisticView extends BaseMenuView {
 	private GpioStates gpioStates;
 
 	@Inject
+	private TemperatureChart temperatureChart;
+
+	@Inject
 	private TemperatureCondition temperatureCondition;
 
 	@PostConstruct
@@ -36,7 +40,7 @@ public class StatisticView extends BaseMenuView {
 		gpioStates.setWidth("100%");
 		temperatureCondition.setWidth("100%");
 		HorizontalLayout mainLayout = new HorizontalLayout(gpioStates,
-				temperatureCondition);
+				temperatureChart, temperatureCondition);
 		mainLayout.setSizeFull();
 		// mainLayout.setExpandRatio(gpioStates, 1);
 		layout.addComponent(mainLayout);
@@ -50,6 +54,7 @@ public class StatisticView extends BaseMenuView {
 
 	private void reload() {
 		gpioStates.reload();
+		temperatureChart.reload();
 		temperatureCondition.reload();
 	}
 

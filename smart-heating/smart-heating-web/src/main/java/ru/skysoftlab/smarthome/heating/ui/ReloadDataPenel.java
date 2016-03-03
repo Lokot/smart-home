@@ -1,7 +1,5 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
-import java.io.Serializable;
-
 import com.vaadin.ui.Panel;
 
 /**
@@ -10,16 +8,12 @@ import com.vaadin.ui.Panel;
  * @author Артём
  *
  */
-public abstract class ReloadDataPenel extends Panel implements Serializable {
+public abstract class ReloadDataPenel extends Panel implements IReloadedComponent {
 
 	private static final long serialVersionUID = 8083276825243115359L;
 
 	public ReloadDataPenel(String caption) {
 		super(caption);
 	}
-
-	/**
-	 * Перегрузить данные.
-	 */
-	public abstract void reload();
+	
 }
