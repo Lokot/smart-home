@@ -2,6 +2,9 @@ Bulldog GPIO Library for Java
 https://github.com/px3/bulldog/tree/master
 https://github.com/px3/bulldog.git
 
+##Build
+mvn clean install -P tomee,buildVaadin
+
 // TODO разобраться
 ▒▒▒ 02, 2016 1:05:35 AM org.owfs.jowfsclient.alarm.AlarmingDevicesReader handleConnectionException
 WARNING: Exception occured
