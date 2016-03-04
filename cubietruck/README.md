@@ -35,3 +35,6 @@ shutdown Цh now
 Настройка:
 http://docs.cubieboard.org/tutorials/common/gpio_on_lubuntu
 http://docs.cubieboard.org/tutorials/cubietruck/start
+
+Описание:
+http://vermus.blogspot.ru/2013/12/1-wire-ds9490r-cubietruck-1-wire-ds2401.html

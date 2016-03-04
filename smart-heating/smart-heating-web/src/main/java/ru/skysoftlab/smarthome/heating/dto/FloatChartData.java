@@ -1,6 +1,6 @@
 package ru.skysoftlab.smarthome.heating.dto;
 
-import at.downdrown.vaadinaddons.highchartsapi.model.data.HighChartsData;
+import at.downdrown.vaadinaddons.highchartsapi.model.data.base.HighChartsBaseData;
 
 /**
  * Данные для графика.
@@ -8,25 +8,25 @@ import at.downdrown.vaadinaddons.highchartsapi.model.data.HighChartsData;
  * @author Артём
  *
  */
-public class FloatChartData implements HighChartsData {
+public class FloatChartData implements HighChartsBaseData {
 
-	private Float value;
+	private float value;
 
-	public FloatChartData(Float value) {
+	public FloatChartData(float value) {
 		this.value = value;
 	}
 
-	public Float getValue() {
+	public float getValue() {
 		return value;
 	}
 
-	public void setValue(Float value) {
+	public void setValue(float value) {
 		this.value = value;
 	}
 
 	@Override
 	public String getHighChartValue() {
-		return this.value.toString();
+		return String.valueOf(this.value);
 	}
 
 	@Override
