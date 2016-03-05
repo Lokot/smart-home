@@ -2,7 +2,7 @@ package ru.skysoftlab.smarthome.heating;
 
 import javax.inject.Inject;
 
-import com.vaadin.cdi.access.JaasAccessControl;
+import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -17,7 +17,7 @@ public class ErrorView extends CustomComponent implements View {
 	private static final long serialVersionUID = 1L;
 
     @Inject
-    private JaasAccessControl accessControl;
+    private AccessControl accessControl;
 
     @Inject
     private javax.enterprise.event.Event<NavigationEvent> navigationEvent;

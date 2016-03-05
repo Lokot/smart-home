@@ -9,6 +9,8 @@ import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
 import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.access.AccessControl;
+import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
@@ -34,7 +36,7 @@ public class LoginView extends CustomComponent implements View,
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
 	@Inject
-	private Authenticator authenticator;
+    private Authenticator accessControl;
 
 	private TextField user = new TextField("User:");
 	private PasswordField password = new PasswordField("Password:");
@@ -73,8 +75,8 @@ public class LoginView extends CustomComponent implements View,
 		String username = user.getValue();
 		String password = this.password.getValue();
 		try {
-//			JaasAccessControl.login(username, password);
-			authenticator.login(username, password,
+//			Authenticator.login(username, password);
+			accessControl.login(username, password,
 					(HttpServletRequest) VaadinService.getCurrentRequest());
 			getSession().setAttribute("user", username);
 			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));

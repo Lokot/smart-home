@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 import org.vaadin.teemu.switchui.Switch;
 
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.ViewComponentQualifier;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
@@ -26,6 +28,7 @@ import com.vaadin.ui.Label;
  * @author Артём
  *
  */
+@ViewComponentQualifier(view = NavigationService.STATISTIC, name = "gpio", order=0)
 public class GpioStates extends ReloadDataPenel {
 
 	private static final long serialVersionUID = -4244093789449867305L;

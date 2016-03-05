@@ -1,61 +1,19 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
-import ru.skysoftlab.smarthome.heating.ui.impl.layouts.GpioStates;
-import ru.skysoftlab.smarthome.heating.ui.impl.layouts.TemperatureChart;
-import ru.skysoftlab.smarthome.heating.ui.impl.layouts.TemperatureCondition;
+import ru.skysoftlab.smarthome.heating.ui.Dashboard;
 
 import com.vaadin.cdi.CDIView;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.HorizontalLayout;
 
 /**
- * Страница сос статистикой.
+ * Доска статистики.
  * 
  * @author Артём
  *
  */
 @CDIView(NavigationService.STATISTIC)
-public class StatisticView extends BaseMenuView {
+public class StatisticView extends Dashboard {
 
 	private static final long serialVersionUID = -3561981958851866015L;
-
-	// TODO сделать связь через CDI аннотацию и получать все по интерфейсу
-
-	@Inject
-	private GpioStates gpioStates;
-
-	@Inject
-	private TemperatureChart temperatureChart;
-
-	@Inject
-	private TemperatureCondition temperatureCondition;
-
-	@PostConstruct
-	public void init() {
-		gpioStates.setWidth("100%");
-		temperatureCondition.setWidth("100%");
-		HorizontalLayout mainLayout = new HorizontalLayout(gpioStates,
-				temperatureChart, temperatureCondition);
-		mainLayout.setSizeFull();
-		// mainLayout.setExpandRatio(gpioStates, 1);
-		layout.addComponent(mainLayout);
-		// reload();
-	}
-
-	@Override
-	public void enter(ViewChangeEvent event) {
-		reload();
-	}
-
-	private void reload() {
-		gpioStates.reload();
-		temperatureChart.reload();
-		temperatureCondition.reload();
-	}
 
 }

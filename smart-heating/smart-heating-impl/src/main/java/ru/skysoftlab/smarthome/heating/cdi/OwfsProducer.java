@@ -3,6 +3,7 @@ package ru.skysoftlab.smarthome.heating.cdi;
 import java.io.Serializable;
 
 import javax.annotation.Resource;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 
 import org.owfs.jowfsclient.OwfsConnectionConfig;
@@ -43,5 +44,13 @@ public class OwfsProducer implements Serializable {
 		scanner.setPeriodInterval(interval);
 		return scanner;
 	}
+
+	public void closeConfig(@Disposes OwfsConnectionConfig config) {
+		config = null;
+    }
+	
+	public void closeFactory(@Disposes OwfsConnectionFactory factory) {
+		factory = null;
+    }
 
 }

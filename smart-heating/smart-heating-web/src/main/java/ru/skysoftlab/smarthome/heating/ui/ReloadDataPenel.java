@@ -8,7 +8,7 @@ import com.vaadin.ui.Panel;
  * @author Артём
  *
  */
-public abstract class ReloadDataPenel extends Panel implements IReloadedComponent {
+public abstract class ReloadDataPenel extends Panel implements IDashboardModule {
 
 	private static final long serialVersionUID = 8083276825243115359L;
 

@@ -1,5 +1,6 @@
 package ru.skysoftlab.smarthome.heating.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,8 +25,10 @@ import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
  * @author Артём
  *
  */
-public class SensorsAndGpioProvider {
+public class SensorsAndGpioProvider implements Serializable {
 
+	private static final long serialVersionUID = 3004034316446904991L;
+	
 	@Inject
 	private EntityManager em;
 
