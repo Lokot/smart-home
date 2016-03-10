@@ -12,6 +12,7 @@
 		<module>smart-heating-impl</module>
 		<module>smart-heating-web</module>
 		<module>smart-heating-security</module>
+		<module>vaadin-cronGen</module>
 	</modules>
 	
 	<repositories>
