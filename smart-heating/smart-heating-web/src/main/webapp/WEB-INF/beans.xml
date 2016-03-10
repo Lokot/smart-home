@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-	<alternatives>
-		<class>ru.skysoftlab.smarthome.heating.security.Authenticator</class>
-	</alternatives>
+<!-- 	<alternatives> -->
+<!-- 		<class>ru.skysoftlab.smarthome.heating.security.Authenticator</class> -->
+<!-- 	</alternatives> -->
 </beans>

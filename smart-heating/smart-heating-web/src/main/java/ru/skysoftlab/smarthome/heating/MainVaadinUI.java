@@ -3,7 +3,6 @@ package ru.skysoftlab.smarthome.heating;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.annatations.SimpleQualifier;
-import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -23,10 +22,6 @@ public class MainVaadinUI extends UI {
 
 	@Inject
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
-	
-	public MainVaadinUI() {
-		new Authenticator();
-	}
 	
 	@Override
 	protected void init(VaadinRequest request) {

@@ -19,5 +19,10 @@ import com.vaadin.server.VaadinServlet;
 public class Servlet extends VaadinServlet {
 
 	private static final long serialVersionUID = 2918754860952978590L;
+	
+//	public Servlet() {
+//		String path = this.getClass().getResource("/login.config").getPath();
+//		System.setProperty("java.security.auth.login.config", path);
+//	}
 
 }

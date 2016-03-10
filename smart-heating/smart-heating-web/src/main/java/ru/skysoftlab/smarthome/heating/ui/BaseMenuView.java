@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import ru.skysoftlab.smarthome.heating.MenuItems;
@@ -8,11 +9,14 @@ import ru.skysoftlab.smarthome.heating.NavigationEvent;
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
+import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -28,8 +32,8 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 	@Inject
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
-	@Inject
-	private Authenticator authenticator;
+//	@Inject
+//	private Authenticator authenticator;
 
 	protected final VerticalLayout layout = new VerticalLayout();
 
@@ -102,10 +106,19 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			authenticator.logout((HttpServletRequest) VaadinService
-					.getCurrentRequest());
-			getSession().setAttribute("user", null);
-			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));
+//			authenticator.logout((HttpServletRequest) VaadinService
+//					.getCurrentRequest());
+			try {
+				JaasAccessControl.logout();
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
+			} finally{
+				getSession().setAttribute("user", null);
+				navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));
+			}
+			
 		}
 
 	}

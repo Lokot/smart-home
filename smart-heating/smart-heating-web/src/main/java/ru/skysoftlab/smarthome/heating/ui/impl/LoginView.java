@@ -14,6 +14,7 @@ import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletService;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -35,8 +36,8 @@ public class LoginView extends CustomComponent implements View,
 	@Inject
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
-	@Inject
-    private Authenticator accessControl;
+//	@Inject
+//    private AccessControl accessControl;
 
 	private TextField user = new TextField("User:");
 	private PasswordField password = new PasswordField("Password:");
@@ -75,9 +76,9 @@ public class LoginView extends CustomComponent implements View,
 		String username = user.getValue();
 		String password = this.password.getValue();
 		try {
-//			Authenticator.login(username, password);
-			accessControl.login(username, password,
-					(HttpServletRequest) VaadinService.getCurrentRequest());
+			JaasAccessControl.login(username, password);
+//			accessControl.login(username, password,
+//					(HttpServletRequest) VaadinService.getCurrentRequest());
 			getSession().setAttribute("user", username);
 			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));
 		} catch (ServletException e) {
