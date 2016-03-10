@@ -8,6 +8,5 @@ public class CronGenState extends JavaScriptComponentState {
 
 	public String domId;
 	public String value;
-
-		
+	
 }

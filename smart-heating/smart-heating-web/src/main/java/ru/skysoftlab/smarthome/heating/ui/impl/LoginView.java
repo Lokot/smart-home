@@ -2,19 +2,15 @@ package ru.skysoftlab.smarthome.heating.ui.impl;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
+import ru.skysoftlab.crongen.CronGenField;
 import ru.skysoftlab.smarthome.heating.NavigationEvent;
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.security.Authenticator;
 
 import com.vaadin.cdi.CDIView;
-import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletService;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -42,6 +38,8 @@ public class LoginView extends CustomComponent implements View,
 	private TextField user = new TextField("User:");
 	private PasswordField password = new PasswordField("Password:");
 	private Button loginButton = new Button("Login", this);
+	
+	private CronGenField cronInput = new CronGenField();
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -55,8 +53,11 @@ public class LoginView extends CustomComponent implements View,
 		password.setRequired(true);
 		password.setValue("");
 		password.setNullRepresentation("");
+		
+		cronInput.setWidth("300px");
+		cronInput.setValue("");
 
-		VerticalLayout fields = new VerticalLayout(user, password, loginButton,
+		VerticalLayout fields = new VerticalLayout(cronInput, user, password, loginButton,
 				new Label("Username/password for admin: admin/admin"),
 				new Label("and for simple user: user/user"));
 		fields.setSpacing(true);

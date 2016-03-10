@@ -197,5 +197,10 @@
 			<artifactId>highchartsapi</artifactId>
 			<version>2.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>ru.skysoftlab.smarthome.heating</groupId>
+			<artifactId>vaadin-cronGen</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
