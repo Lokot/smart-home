@@ -81,10 +81,11 @@ public class SensorsService implements Serializable {
 		Collection<TemperatureDto> rv = new ArrayList<>();
 		OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
 		try {
-			for(Sensor sensor: sensorsProvider.getDs18bConfigs()){
+			for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 				TemperatureDto dto = new TemperatureDto();
 				dto.setSensorName(sensor.getName());
-				dto.setTemp(OwsfUtilDS18B.getFasttemp(client, sensor.getSensorId()));
+				dto.setTemp(OwsfUtilDS18B.getFasttemp(client,
+						sensor.getSensorId()));
 				rv.add(dto);
 			}
 		} catch (OwfsException | IOException e) {
@@ -103,6 +104,22 @@ public class SensorsService implements Serializable {
 			}
 		}
 		return rv;
+	}
+
+	/**
+	 * Возвращает список датчиков температур.
+	 * 
+	 * @return
+	 */
+	public List<String> getIdsDS18B() {
+		try {
+			OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
+			return OwsfUtilDS18B.getIdsDS18B(client);
+		} catch (OwfsException | IOException e) {
+			e.printStackTrace();
+			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
+		}
+		return new ArrayList<String>();
 	}
 
 }

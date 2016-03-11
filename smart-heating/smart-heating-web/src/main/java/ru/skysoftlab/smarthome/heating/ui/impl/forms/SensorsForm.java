@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -18,13 +17,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import org.owfs.jowfsclient.OwfsConnection;
-import org.owfs.jowfsclient.OwfsConnectionConfig;
-import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.OwfsException;
 
-import ru.skysoftlab.smarthome.heating.annatations.EJBBean;
-import ru.skysoftlab.smarthome.heating.ejb.TestBean;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
@@ -32,8 +26,8 @@ import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
 import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
-import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -61,6 +55,10 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	@Inject
 	private EntityManager em;
 
+	@Inject
+	private SensorsService service;
+
+	// TODO попробовать через продюсер
 	// @Inject
 	// @EJB()
 	// private AlarmScannerBean scanner;
@@ -83,40 +81,19 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		if (this.entity != null) {
 			gpioPin.addItems(this.entity.getGpioPin());
 		}
-		try {
-			gpioBox.addItems(getFreeGpioPin());
-		} catch (NamingException e) {
-			e.printStackTrace();
-			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		}
+		gpioBox.addItems(getFreeGpioPin());
+		sensorId.addItems(getFreeSensorsIds());
+	}
 
-		OwfsConnection client = null;
-		try {
-			OwfsConnectionConfig connectionConfig = new OwfsConnectionConfig(
-					"192.168.0.14", 3000);
-			client = OwfsConnectionFactory.newOwfsClient(connectionConfig);
-			List<String> sensorsIds = OwsfUtilDS18B.getIdsDS18B(client);
-			sensorsIds.removeAll(getNoFreeSensorsIds());
-			sensorId.addItems(sensorsIds);
-		} catch (OwfsException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		} finally {
-			if (client != null) {
-				try {
-					client.disconnect();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-				}
-			}
-		}
+	/**
+	 * Возвращает список свободных датчиков.
+	 * 
+	 * @return
+	 */
+	private List<String> getFreeSensorsIds() {
+		List<String> rv = service.getIdsDS18B();
+		rv.removeAll(getNoFreeSensorsIds());
+		return rv;
 	}
 
 	@Override
@@ -161,7 +138,12 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		return rv;
 	}
 
-	private List<String> getNoFreeSensorsIds() throws NamingException {
+	/**
+	 * Возвращает список закрепленных датчиков.
+	 * 
+	 * @return
+	 */
+	private List<String> getNoFreeSensorsIds() {
 		List<String> rv = new ArrayList<>();
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Tuple> criteria = builder.createTupleQuery();
@@ -175,7 +157,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		return rv;
 	}
 
-	private List<GpioPin> getFreeGpioPin() throws NamingException {
+	private List<GpioPin> getFreeGpioPin() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<GpioPin> criteriaQuery = builder
 				.createQuery(GpioPin.class);
@@ -238,6 +220,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					clearComponents();
 					// обновляем сканнер
 					try {
+						// TODO попробовать через продюсер
 						IAlarmScanner scanner = (IAlarmScanner) new InitialContext()
 								.lookup("java:module/"
 										+ AlarmScannerBean.class

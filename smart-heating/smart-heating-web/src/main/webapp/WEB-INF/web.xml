@@ -48,7 +48,8 @@
 		<description>Адрес OWFS сервера.</description>
 		<env-entry-name>owfsServerUrl</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>192.168.0.14:3000</env-entry-value>
+		<!-- nmap -p 80,8080 192.168.0.0-255 -->
+		<env-entry-value>192.168.0.21:3000</env-entry-value>
 	</env-entry>
 	<env-entry>
 		<description>Интервал сканирования датчиков.</description>
