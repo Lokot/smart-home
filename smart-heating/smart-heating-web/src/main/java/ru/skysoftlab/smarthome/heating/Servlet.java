@@ -4,7 +4,7 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.server.VaadinServlet;
+import com.vaadin.cdi.server.VaadinCDIServlet;
 
 /**
  * Сервлет для подгрузки widgetset.
@@ -14,15 +14,11 @@ import com.vaadin.server.VaadinServlet;
  */
 @WebServlet(value = "/*", asyncSupported = true, initParams = {
 		@WebInitParam(name = "session-timeout", value = "60"),
-		@WebInitParam(name = "UIProvider", value = "com.vaadin.cdi.CDIUIProvider") })
+		@WebInitParam(name = "UIProvider", value = "com.vaadin.cdi.CDIUIProvider"),
+		@WebInitParam(name = "viewprovider", value = "com.vaadin.cdi.CDIViewProvider") })
 @VaadinServletConfiguration(productionMode = false, ui = MainVaadinUI.class, closeIdleSessions = true, widgetset = "ru.skysoftlab.smarthome.heating.widgetset.VaadinauthWidgetset")
-public class Servlet extends VaadinServlet {
+public class Servlet extends VaadinCDIServlet {
 
 	private static final long serialVersionUID = 2918754860952978590L;
-	
-//	public Servlet() {
-//		String path = this.getClass().getResource("/login.config").getPath();
-//		System.setProperty("java.security.auth.login.config", path);
-//	}
 
 }

@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.annatations.SimpleQualifier;
 
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.server.VaadinRequest;
@@ -12,7 +11,6 @@ import com.vaadin.ui.UI;
 
 @Theme("valo")
 @CDIUI("")
-@Push
 @SimpleQualifier(MainVaadinUI.NAME)
 public class MainVaadinUI extends UI {
 

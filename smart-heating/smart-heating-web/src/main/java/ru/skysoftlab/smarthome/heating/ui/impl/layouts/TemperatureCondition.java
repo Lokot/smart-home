@@ -10,11 +10,13 @@ import ru.skysoftlab.smarthome.heating.dto.TemperatureDto;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
 
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.GridLayout.OutOfBoundsException;
 import com.vaadin.ui.GridLayout.OverlapsException;
 import com.vaadin.ui.Label;
 
+@UIScoped
 @ViewComponentQualifier(view = NavigationService.STATISTIC, name = "temperature", order=2)
 public class TemperatureCondition extends ReloadDataPenel {
 

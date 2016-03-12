@@ -12,6 +12,7 @@ import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
 import at.downdrown.vaadinaddons.highchartsapi.model.series.LineChartSeries;
 
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -23,6 +24,7 @@ import com.vaadin.ui.VerticalLayout;
  * @author Артём
  *
  */
+@UIScoped
 @ViewComponentQualifier(view = NavigationService.STATISTIC, name = "chart", order=1)
 public class TemperatureChart extends VerticalLayout implements
 		IDashboardModule {

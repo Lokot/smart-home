@@ -17,6 +17,7 @@ import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
 
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.GridLayout.OutOfBoundsException;
 import com.vaadin.ui.GridLayout.OverlapsException;
@@ -28,6 +29,7 @@ import com.vaadin.ui.Label;
  * @author Артём
  *
  */
+@UIScoped
 @ViewComponentQualifier(view = NavigationService.STATISTIC, name = "gpio", order=0)
 public class GpioStates extends ReloadDataPenel {
 

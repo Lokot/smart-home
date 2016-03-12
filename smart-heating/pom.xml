@@ -8,12 +8,12 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>vaadin-cronGen</module>
 		<module>smart-heating-persistence</module>
 		<module>smart-heating-common</module>
 		<module>smart-heating-impl</module>
 		<module>smart-heating-web</module>
-		<!-- <module>smart-heating-security</module> -->
-		<module>vaadin-cronGen</module>
+		<module>smart-heating-security</module>
 	</modules>
 
 	<repositories>

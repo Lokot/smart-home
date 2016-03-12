@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBAccessException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,6 +22,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
 @CDIView(NavigationService.MAIN)
+//@RolesAllowed("ADMIN")
 public class MainView extends BaseMenuView {
 	
 	private static final long serialVersionUID = 4030871317601600678L;
