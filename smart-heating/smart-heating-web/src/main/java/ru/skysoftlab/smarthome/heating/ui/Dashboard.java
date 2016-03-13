@@ -10,7 +10,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.annatations.ViewComponentQualifier;
+import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -64,11 +64,11 @@ public abstract class Dashboard extends BaseMenuView {
 
 	private List<IDashboardModule> getModules() {
 		List<IDashboardModule> rv = new ArrayList<>();
-		ViewComponentQualifier ann = new ViewComponentQualifier() {
+		DashBoardElementQualifier ann = new DashBoardElementQualifier() {
 
 			@Override
 			public Class<? extends java.lang.annotation.Annotation> annotationType() {
-				return ViewComponentQualifier.class;
+				return DashBoardElementQualifier.class;
 			}
 
 			@Override
@@ -95,7 +95,7 @@ public abstract class Dashboard extends BaseMenuView {
 				IDashboardModule candidate = it.next();
 				rv.add(candidate);
 			}
-			Collections.sort(rv, ViewComponentQualifier.VIEW_QUALIFIER_ORDER);
+			Collections.sort(rv, DashBoardElementQualifier.VIEW_QUALIFIER_ORDER);
 		} catch (Exception e) {
 			Notification.show("Не найдены модули для отображения.",
 					Type.TRAY_NOTIFICATION);

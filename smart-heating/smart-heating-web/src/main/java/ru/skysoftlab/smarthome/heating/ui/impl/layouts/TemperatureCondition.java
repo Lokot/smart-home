@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.annatations.ViewComponentQualifier;
+import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
 import ru.skysoftlab.smarthome.heating.dto.TemperatureDto;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
@@ -23,7 +23,7 @@ import com.vaadin.ui.Label;
  *
  */
 @UIScoped
-@ViewComponentQualifier(view = NavigationService.STATISTIC, name = "temperature", order = 2)
+@DashBoardElementQualifier(view = NavigationService.STATISTIC, name = "temperature", order = 2)
 public class TemperatureCondition extends ReloadDataPenel {
 
 	private static final long serialVersionUID = 687213563573955336L;

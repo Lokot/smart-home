@@ -43,6 +43,8 @@ public class LoginView extends CustomComponent implements View,
 
 	@Override
 	public void enter(ViewChangeEvent event) {
+		getSession().setAttribute("user", null);
+		
 		setSizeFull();
 
 		user.setWidth("300px");

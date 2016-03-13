@@ -3,7 +3,7 @@ package ru.skysoftlab.smarthome.heating.ui.impl.layouts;
 import javax.annotation.PostConstruct;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.annatations.ViewComponentQualifier;
+import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
 import ru.skysoftlab.smarthome.heating.ui.IDashboardModule;
 import at.downdrown.vaadinaddons.highchartsapi.Colors;
 import at.downdrown.vaadinaddons.highchartsapi.HighChart;
@@ -25,7 +25,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  */
 @UIScoped
-@ViewComponentQualifier(view = NavigationService.STATISTIC, name = "chart", order=1)
+@DashBoardElementQualifier(view = NavigationService.STATISTIC, name = "chart", order=1)
 public class TemperatureChart extends VerticalLayout implements
 		IDashboardModule {
 

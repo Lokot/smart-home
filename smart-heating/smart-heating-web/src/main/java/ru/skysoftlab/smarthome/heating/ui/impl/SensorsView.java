@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.jpa.SensorEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
@@ -22,6 +24,8 @@ import com.vaadin.data.Container.Indexed;
  *
  */
 @CDIView(NavigationService.SENSORS)
+@MainMenuItem(name = "Настройки", order = 1)
+@MenuItemView(name = "Датчики", order = 1)
 public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;

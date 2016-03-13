@@ -36,6 +36,9 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 
 	protected MenuBar barmenu = new MenuBar();
 
+	// @Inject
+	// private MenuBar barmenu;
+
 	public BaseMenuView() {
 		super();
 		// setSizeFull();

@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.jpa.GpioPinEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
@@ -22,6 +24,8 @@ import com.vaadin.data.Container.Indexed;
  *
  */
 @CDIView(NavigationService.GPIO)
+@MainMenuItem(name = "Настройки", order = 0)
+@MenuItemView(name = "Пины", order = 0)
 public class GpioView extends AbstractGridView<GpioPin, GpioForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;
