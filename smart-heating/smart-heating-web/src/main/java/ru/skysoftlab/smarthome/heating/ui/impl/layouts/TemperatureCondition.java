@@ -16,8 +16,14 @@ import com.vaadin.ui.GridLayout.OutOfBoundsException;
 import com.vaadin.ui.GridLayout.OverlapsException;
 import com.vaadin.ui.Label;
 
+/**
+ * Состояние температуры.
+ * 
+ * @author Loktionov Artem
+ *
+ */
 @UIScoped
-@ViewComponentQualifier(view = NavigationService.STATISTIC, name = "temperature", order=2)
+@ViewComponentQualifier(view = NavigationService.STATISTIC, name = "temperature", order = 2)
 public class TemperatureCondition extends ReloadDataPenel {
 
 	private static final long serialVersionUID = 687213563573955336L;

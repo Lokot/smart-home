@@ -2,22 +2,32 @@ package ru.skysoftlab.smarthome.heating.cdi;
 
 import java.io.Serializable;
 
-import javax.annotation.Resource;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 import org.owfs.jowfsclient.OwfsConnectionConfig;
 import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.alarm.AlarmingDevicesScanner;
 
+import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
+
+/**
+ * Провайдер для работы с OneWare сетью.
+ * 
+ * @author Артём
+ *
+ */
 public class OwfsProducer implements Serializable {
 
 	private static final long serialVersionUID = 7565939967506122425L;
 
-	@Resource(name = "owfsServerUrl")
+	@Inject
+	@AppProperty("owfsServerUrl")
 	private String url;
-	
-	@Resource(name = "owfsScannerInterval")
+
+	@Inject
+	@AppProperty("owfsScannerInterval")
 	private Integer interval;
 
 	@Produces
@@ -40,17 +50,18 @@ public class OwfsProducer implements Serializable {
 	@Produces
 	public AlarmingDevicesScanner getAlarmingDevicesScanner() {
 		OwfsConnectionFactory owfsConnectionFactory = getOwfsConnectionFactory();
-		AlarmingDevicesScanner scanner = owfsConnectionFactory.getAlarmingScanner();
+		AlarmingDevicesScanner scanner = owfsConnectionFactory
+				.getAlarmingScanner();
 		scanner.setPeriodInterval(interval);
 		return scanner;
 	}
 
 	public void closeConfig(@Disposes OwfsConnectionConfig config) {
 		config = null;
-    }
-	
+	}
+
 	public void closeFactory(@Disposes OwfsConnectionFactory factory) {
 		factory = null;
-    }
+	}
 
 }

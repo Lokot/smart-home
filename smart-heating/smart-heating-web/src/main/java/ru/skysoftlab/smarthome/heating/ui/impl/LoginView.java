@@ -3,12 +3,10 @@ package ru.skysoftlab.smarthome.heating.ui.impl;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 
-import ru.skysoftlab.crongen.CronGenField;
 import ru.skysoftlab.smarthome.heating.NavigationEvent;
 import ru.skysoftlab.smarthome.heating.NavigationService;
 
 import com.vaadin.cdi.CDIView;
-import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -25,6 +23,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
+/**
+ * Страница аутентификации.
+ * 
+ * @author Артём
+ *
+ */
 @CDIView(NavigationService.LOGIN)
 public class LoginView extends CustomComponent implements View,
 		Button.ClickListener {
@@ -33,14 +37,9 @@ public class LoginView extends CustomComponent implements View,
 	@Inject
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
-	@Inject
-	private AccessControl accessControl;
-
 	private TextField user = new TextField("User:");
 	private PasswordField password = new PasswordField("Password:");
 	private Button loginButton = new Button("Login", this);
-
-	private CronGenField cronInput = new CronGenField();
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -55,13 +54,9 @@ public class LoginView extends CustomComponent implements View,
 		password.setValue("");
 		password.setNullRepresentation("");
 
-		cronInput.setWidth("300px");
-		cronInput.setValue("");
-
-		VerticalLayout fields = new VerticalLayout(cronInput, user, password,
-				loginButton, new Label(
-						"Username/password for admin: admin/admin"), new Label(
-						"and for simple user: user/user"));
+		VerticalLayout fields = new VerticalLayout(user, password, loginButton,
+				new Label("Username/password for admin: admin/admin"),
+				new Label("and for simple user: user/user"));
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -79,8 +74,6 @@ public class LoginView extends CustomComponent implements View,
 		String username = user.getValue();
 		String password = this.password.getValue();
 		try {
-			// (HttpServletRequest)
-			// VaadinCDIServletService.getCurrentRequest());
 			JaasAccessControl.login(username, password);
 			getSession().setAttribute("user", username);
 			navigationEvent.fire(new NavigationEvent(NavigationService.MAIN));

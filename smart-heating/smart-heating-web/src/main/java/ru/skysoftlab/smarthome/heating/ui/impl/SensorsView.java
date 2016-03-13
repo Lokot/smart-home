@@ -16,19 +16,19 @@ import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Container.Indexed;
 
 /**
+ * Управление датчиками.
  * 
  * @author Loktionov Artem
  *
  */
 @CDIView(NavigationService.SENSORS)
-public class SensorsView extends
-		AbstractGridView<Sensor, SensorsForm> {
+public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;
-	
+
 	@Inject
 	private SensorEntityProviderBean entityProvider;
-	
+
 	@Inject
 	private SensorsForm form;
 
@@ -51,14 +51,14 @@ public class SensorsView extends
 
 	@Override
 	protected Object[] getRemoveColumn() {
-		return new String[] { "id", "gpioPin", "deviceName"};
+		return new String[] { "id", "gpioPin", "deviceName" };
 	}
 
 	@Override
 	protected Object[] getColumnOrder() {
 		return new String[] { "name", "sensorId", "low", "top" };
 	}
-	
+
 	@Override
 	protected String getTitle() {
 		return "Список датчиков";
@@ -78,7 +78,7 @@ public class SensorsView extends
 	protected EntityProvider<Sensor> getEntityProvider() {
 		return entityProvider;
 	}
-	
+
 	@Override
 	protected SensorsForm getEntityForm() {
 		return form;

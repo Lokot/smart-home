@@ -10,6 +10,14 @@
 		<class>ru.skysoftlab.smarthome.heating.entitys.Temp</class>
 		<class>ru.skysoftlab.smarthome.heating.entitys.Sensor</class>
 		<class>ru.skysoftlab.smarthome.heating.entitys.GpioPin</class>
+		<!-- Свойства. -->
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.JpaProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.BooleanProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.DateProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.DoubleProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.IntegerProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.LongProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.StringProperty</class>
 		
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

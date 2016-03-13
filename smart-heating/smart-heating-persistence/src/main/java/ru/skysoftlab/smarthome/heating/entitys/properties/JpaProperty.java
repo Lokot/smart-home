@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 import ru.skysoftlab.smarthome.heating.properties.IDbProperty;
 
 @Entity
-public class ConfigProperty implements IDbProperty, Serializable {
+public class JpaProperty implements IDbProperty, Serializable {
 
 	private static final long serialVersionUID = -1284259336857932785L;
 

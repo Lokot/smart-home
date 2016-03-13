@@ -13,15 +13,15 @@
 		<board-name>cubieboard</board-name>
 	</properties>
 
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>sonatype-public-repository</id> -->
-<!-- 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url> -->
-<!-- 			<snapshots> -->
-<!-- 				<enabled>true</enabled> -->
-<!-- 			</snapshots> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
+	<!-- <repositories> -->
+	<!-- <repository> -->
+	<!-- <id>sonatype-public-repository</id> -->
+	<!-- <url>https://oss.sonatype.org/content/repositories/snapshots/</url> -->
+	<!-- <snapshots> -->
+	<!-- <enabled>true</enabled> -->
+	<!-- </snapshots> -->
+	<!-- </repository> -->
+	<!-- </repositories> -->
 
 	<dependencies>
 		<dependency>
@@ -29,12 +29,12 @@
 			<artifactId>jowfsclient</artifactId>
 			<version>1.2.6</version>
 		</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 			<groupId>io.silverspoon</groupId> -->
-<!-- 			<artifactId>bulldog-board-${board-name}</artifactId> -->
-<!-- 			<version>${version.bulldog}</version> -->
-<!-- 		</dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>io.silverspoon</groupId> -->
+		<!-- <artifactId>bulldog-board-${board-name}</artifactId> -->
+		<!-- <version>${version.bulldog}</version> -->
+		<!-- </dependency> -->
 	</dependencies>
 
 </project>

@@ -3,58 +3,17 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>SmartHomeHeating</display-name>
-	
-	<!-- <context-param> -->
-	<!-- <description>Vaadin production mode</description> -->
-	<!-- <param-name>productionMode</param-name> -->
-	<!-- <param-value>false</param-value> -->
-	<!-- </context-param> -->
-	<!-- <servlet> -->
-	<!-- <servlet-name>SmartHomeHeatingApplication</servlet-name> -->
-	<!-- <servlet-class>com.vaadin.server.VaadinServlet</servlet-class> -->
-	<!-- <init-param> -->
-	<!-- <description>Vaadin UI class to use</description> -->
-	<!-- <param-name>UI</param-name> -->
-	<!-- <param-value>ru.skysoftlab.smarthome.heating.MainUI</param-value> -->
-	<!-- </init-param> -->
-	<!-- <init-param> -->
-	<!-- <param-name>uiprovider</param-name> -->
-	<!-- <param-value>com.vaadin.cdi.CDIUIProvider</param-value> -->
-	<!-- </init-param> -->
-
-	<!-- <init-param> -->
-	<!-- <param-name>viewprovider</param-name> -->
-	<!-- <param-value>com.vaadin.cdi.CDIViewProvider</param-value> -->
-	<!-- </init-param> -->
-	<!-- <init-param> -->
-	<!-- <description>Application widgetset</description> -->
-	<!-- <param-name>widgetset</param-name> -->
-	<!-- <param-value>ru.skysoftlab.smarthome.heating.widgetset.VaadinauthWidgetset</param-value> -->
-	<!-- </init-param> -->
-	<!-- </servlet> -->
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>SmartHomeHeatingApplication</servlet-name> -->
-	<!-- <url-pattern>/*</url-pattern> -->
-	<!-- </servlet-mapping> -->
-	<!-- <welcome-file-list> -->
-	<!-- <welcome-file>index.html</welcome-file> -->
-	<!-- <welcome-file>index.htm</welcome-file> -->
-	<!-- <welcome-file>index.jsp</welcome-file> -->
-	<!-- <welcome-file>default.html</welcome-file> -->
-	<!-- <welcome-file>default.htm</welcome-file> -->
-	<!-- <welcome-file>default.jsp</welcome-file> -->
-	<!-- </welcome-file-list> -->
 	<env-entry>
 		<description>Адрес OWFS сервера.</description>
-		<env-entry-name>owfsServerUrl</env-entry-name>
+		<env-entry-name>deltaspike/owfsServerUrl</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
 		<!-- nmap -p 80,8080 192.168.0.0-255 -->
 		<env-entry-value>192.168.0.21:3000</env-entry-value>
 	</env-entry>
 	<env-entry>
 		<description>Интервал сканирования датчиков.</description>
-		<env-entry-name>owfsScannerInterval</env-entry-name>
-		<env-entry-type>java.lang.Integer</env-entry-type>
+		<env-entry-name>deltaspike/owfsScannerInterval</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
 		<env-entry-value>5000</env-entry-value>
 	</env-entry>
 </web-app>

@@ -8,7 +8,7 @@ import com.vaadin.cdi.CDIView;
 /**
  * Доска статистики.
  * 
- * @author Артём
+ * @author Loktionov Artem
  *
  */
 @CDIView(NavigationService.STATISTIC)

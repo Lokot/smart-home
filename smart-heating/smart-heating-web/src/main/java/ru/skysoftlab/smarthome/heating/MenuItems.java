@@ -10,6 +10,7 @@ public enum MenuItems {
 
 	/** Заказ-наряд */
 	OPTIONS("Настройки", null, new MenuItem[] {
+			new MenuItem("Свойства системы", NavigationService.CONFIG),
 			new MenuItem("Пины", NavigationService.GPIO),
 			new MenuItem("Датчики", NavigationService.SENSORS) }),
 

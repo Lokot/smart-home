@@ -18,7 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * Отображает датчики в состоянии сигнализации.
  * 
- * @author Артём
+ * @author Loktionov Artem
  *
  */
 @CDIView(NavigationService.ALARMS)

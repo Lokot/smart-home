@@ -15,6 +15,12 @@ import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Container.Indexed;
 
+/**
+ * Управление устройствами.
+ * 
+ * @author Loktionov Artem
+ *
+ */
 @CDIView(NavigationService.GPIO)
 public class GpioView extends AbstractGridView<GpioPin, GpioForm> {
 

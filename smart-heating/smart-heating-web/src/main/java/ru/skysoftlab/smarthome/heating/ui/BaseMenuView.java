@@ -28,6 +28,7 @@ public abstract class BaseMenuView extends CustomComponent implements View {
 	@Inject
 	private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
+	@SuppressWarnings("unused")
 	@Inject
 	private AccessControl authenticator;
 
