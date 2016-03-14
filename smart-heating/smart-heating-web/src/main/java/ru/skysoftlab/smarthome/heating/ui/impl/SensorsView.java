@@ -3,6 +3,7 @@ package ru.skysoftlab.smarthome.heating.ui.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
@@ -10,6 +11,7 @@ import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.jpa.SensorEntityProviderBean;
+import ru.skysoftlab.smarthome.heating.security.RolesList;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
 import ru.skysoftlab.smarthome.heating.ui.impl.forms.SensorsForm;
 
@@ -24,8 +26,9 @@ import com.vaadin.data.Container.Indexed;
  *
  */
 @CDIView(NavigationService.SENSORS)
-@MainMenuItem(name = "Настройки", order = 1)
+@MainMenuItem(name = "Настройки", order = NavigationService.MainMenu.CONFIG)
 @MenuItemView(name = "Датчики", order = 1)
+@RolesAllowed({ RolesList.USER, RolesList.ADMIN })
 public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;

@@ -1,9 +1,13 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
+import ru.skysoftlab.smarthome.heating.security.RolesList;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
 
@@ -22,6 +26,9 @@ import com.vaadin.ui.VerticalLayout;
  *
  */
 @CDIView(NavigationService.ALARMS)
+@MainMenuItem(name = "Сигнализация", order = NavigationService.MainMenu.ALARM)
+@MenuItemView(name = "Датчики в сигнализации", order = 0)
+@RolesAllowed({ RolesList.USER, RolesList.ADMIN })
 public class AlarmedSensorsView extends BaseMenuView {
 
 	private static final long serialVersionUID = -6977338109883974310L;

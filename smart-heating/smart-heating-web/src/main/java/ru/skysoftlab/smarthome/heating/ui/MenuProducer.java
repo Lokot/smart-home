@@ -1,8 +1,10 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -15,6 +17,11 @@ import javax.servlet.ServletException;
 
 import org.reflections.Reflections;
 
+import ru.skysoftlab.smarthome.heating.NavigationEvent;
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
+
 import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.cdi.access.JaasAccessControl;
@@ -23,44 +30,58 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
-import ru.skysoftlab.smarthome.heating.NavigationEvent;
-import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
-import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
-
 /**
  * Меню.
  * 
  * @author Артём
  *
  */
-public class MenuProducer {
+public class MenuProducer implements Serializable {
 
+	private static final long serialVersionUID = -2477114251740004956L;
+	
+	@Inject
+	protected javax.enterprise.event.Event<NavigationEvent> navigationEvent;
+	
 	@Inject
 	private AccessControl authenticator;
 	
+	// TODO выкинуть в настройки ???
+	private String[] packages = {"ru.skysoftlab.smarthome.heating.ui.impl"};
+	
 	@Produces
-	// @SessionScoped
-	// @SimpleQualifier("MainMenu")
 	public MenuBar createMenuBar() {
 		MenuBar rv = new MenuBar();
 		rv.addItem("Главная", new NavigationCommand(NavigationService.MAIN));
-		Reflections reflections = new Reflections("ru.skysoftlab.smarthome.heating.ui.impl");
-		Set<Class<? extends BaseMenuView>> classes = reflections.getSubTypesOf(BaseMenuView.class);
-		SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> viewsMap = getViews(classes);
+		SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> viewsMap = getMenuViews(getViewsClasses(packages));
 		for (MenuItemDto menuItemDto : viewsMap.keySet()) {
 			List<Class<? extends BaseMenuView>> subMenuViewsClasses = viewsMap.get(menuItemDto);
 			if (subMenuViewsClasses != null && subMenuViewsClasses.size() > 0) {
-				rv.addItem(menuItemDto.getName(), null);
+				MenuItem item = rv.addItem(menuItemDto.getName(), null);
 				for (Class<? extends BaseMenuView> view : subMenuViewsClasses) {
 					CDIView cdiAnn = view.getAnnotation(CDIView.class);
-					MenuItemView menuItemView = view.getClass().getAnnotation(MenuItemView.class);
-					rv.addItem(menuItemView.name(), new NavigationCommand(cdiAnn.value()));
+					MenuItemView menuItemView = view.getAnnotation(MenuItemView.class);
+					item.addItem(menuItemView.name(), new NavigationCommand(cdiAnn.value()));
 				}
 			}
 		}
 		rv.addItem("Выход", new LogOutCommand());
 		return rv;
+	}
+
+	private Set<Class<? extends BaseMenuView>> getViewsClasses(String ... packages) {
+		Set<Class<? extends BaseMenuView>> classes = new HashSet<>();
+		for (String packageName : packages) {
+			Reflections reflections = new Reflections(packageName);
+			for (Class<?> cdiViewClass : reflections.getTypesAnnotatedWith(CDIView.class)) {
+				try {
+					// TODO переделать isAssignableFrom(cls)
+					Class<? extends BaseMenuView> bmvClass = cdiViewClass.asSubclass(BaseMenuView.class);
+					classes.add(bmvClass);
+				} catch(ClassCastException e) { }
+			}	
+		}
+		return classes;
 	}
 
 	/**
@@ -72,9 +93,6 @@ public class MenuProducer {
 	public class NavigationCommand implements MenuBar.Command {
 
 		private static final long serialVersionUID = -2959468243274000189L;
-
-		@Inject
-		protected javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
 		/** Наименование страницы. */
 		protected String view;
@@ -122,7 +140,7 @@ public class MenuProducer {
 	 * 
 	 * @return
 	 */
-	private SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> getViews(
+	private SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> getMenuViews(
 			Set<Class<? extends BaseMenuView>> classes) {
 		SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> viewsForMenuBar = new TreeMap<>(
 				new Comparator<MenuItemDto>() {
@@ -135,29 +153,26 @@ public class MenuProducer {
 				});
 
 		for (Class<? extends BaseMenuView> viewClass : classes) {
-
 			if (viewClass.isAnnotationPresent(CDIView.class) && viewClass.isAnnotationPresent(MainMenuItem.class)
 					&& viewClass.isAnnotationPresent(MenuItemView.class)) {
-				MainMenuItem mainMenuItem = viewClass.getAnnotation(MainMenuItem.class);
-				List<Class<? extends BaseMenuView>> menuItems = viewsForMenuBar.get(mainMenuItem);
+				MenuItemDto key = createDto(viewClass);
+				List<Class<? extends BaseMenuView>> menuItems = viewsForMenuBar.get(key);
 				// добавляем главный пункт
 				if (menuItems == null) {
 					menuItems = new ArrayList<>();
-					viewsForMenuBar.put(createDto(viewClass), menuItems);
+					viewsForMenuBar.put(key, menuItems);
 				}
 				// добавляем пункт
 				if (isShow(viewClass)) {
 					menuItems.add(viewClass);
 				}
 			}
-
 		}
 
 		// сортировка всех подменю
 		for (List<Class<? extends BaseMenuView>> baseMenuView : viewsForMenuBar.values()) {
 			Collections.sort(baseMenuView, MenuItemView.VIEW_QUALIFIER_ORDER);
 		}
-
 		return viewsForMenuBar;
 	}
 

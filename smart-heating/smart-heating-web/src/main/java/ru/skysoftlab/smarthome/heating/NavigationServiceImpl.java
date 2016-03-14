@@ -8,6 +8,7 @@ import ru.skysoftlab.smarthome.heating.annatations.SimpleQualifier;
 
 import com.vaadin.cdi.CDIViewProvider;
 import com.vaadin.cdi.NormalUIScoped;
+import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -27,6 +28,9 @@ public class NavigationServiceImpl implements NavigationService {
 	@Inject
 	@SimpleQualifier(MainVaadinUI.NAME)
 	private UI ui;
+	
+	@Inject
+	private AccessControl authenticator;
 
 	@PostConstruct
 	public void initialize() {
@@ -40,7 +44,7 @@ public class NavigationServiceImpl implements NavigationService {
 	@Override
 	public void onNavigationEvent(@Observes NavigationEvent event) {
 		try {
-			boolean isLoggedIn = ui.getSession().getAttribute("user") != null;
+			boolean isLoggedIn = authenticator.isUserSignedIn();
 			boolean isLoginView = event.getNavigateTo().equals(NavigationService.LOGIN);
 			if (!isLoggedIn && !isLoginView) {
 				ui.getNavigator().navigateTo(NavigationService.LOGIN);

@@ -1,6 +1,11 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
+import javax.annotation.security.RolesAllowed;
+
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
+import ru.skysoftlab.smarthome.heating.security.RolesList;
 import ru.skysoftlab.smarthome.heating.ui.Dashboard;
 
 import com.vaadin.cdi.CDIView;
@@ -12,6 +17,9 @@ import com.vaadin.cdi.CDIView;
  *
  */
 @CDIView(NavigationService.STATISTIC)
+@MainMenuItem(name = "Сигнализация", order = NavigationService.MainMenu.ALARM)
+@MenuItemView(name = "Статистика", order = 1)
+@RolesAllowed({ RolesList.USER, RolesList.ADMIN })
 public class StatisticView extends Dashboard {
 
 	private static final long serialVersionUID = -3561981958851866015L;
