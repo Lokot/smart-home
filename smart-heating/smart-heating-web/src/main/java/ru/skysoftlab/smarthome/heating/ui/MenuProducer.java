@@ -1,25 +1,19 @@
 package ru.skysoftlab.smarthome.heating.ui;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 
-import ru.skysoftlab.smarthome.heating.NavigationEvent;
-import ru.skysoftlab.smarthome.heating.NavigationService;
-import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
-import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
+import org.reflections.Reflections;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.access.AccessControl;
@@ -29,6 +23,11 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
+import ru.skysoftlab.smarthome.heating.NavigationEvent;
+import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
+import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
+
 /**
  * Меню.
  * 
@@ -37,29 +36,27 @@ import com.vaadin.ui.Notification.Type;
  */
 public class MenuProducer {
 
-	@Inject @Any
-	private Instance<BaseMenuView> viewSource;
-
 	@Inject
 	private AccessControl authenticator;
 	
-	private MenuBar menubar = new MenuBar();
-
-	// @Produces
+	@Produces
 	// @SessionScoped
 	// @SimpleQualifier("MainMenu")
 	public MenuBar createMenuBar() {
 		MenuBar rv = new MenuBar();
 		rv.addItem("Главная", new NavigationCommand(NavigationService.MAIN));
-		SortedMap<MenuItemDto, List<BaseMenuView>> viewsMap = getViews();
+		Reflections reflections = new Reflections("ru.skysoftlab.smarthome.heating.ui.impl");
+		Set<Class<? extends BaseMenuView>> classes = reflections.getSubTypesOf(BaseMenuView.class);
+		SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> viewsMap = getViews(classes);
 		for (MenuItemDto menuItemDto : viewsMap.keySet()) {
-			rv.addItem(menuItemDto.getName(), null);
-			for (BaseMenuView view : viewsMap.get(menuItemDto)) {
-				CDIView cdiAnn = view.getClass().getAnnotation(CDIView.class);
-				MenuItemView menuItemView = view.getClass().getAnnotation(
-						MenuItemView.class);
-				rv.addItem(menuItemView.name(),
-						new NavigationCommand(cdiAnn.value()));
+			List<Class<? extends BaseMenuView>> subMenuViewsClasses = viewsMap.get(menuItemDto);
+			if (subMenuViewsClasses != null && subMenuViewsClasses.size() > 0) {
+				rv.addItem(menuItemDto.getName(), null);
+				for (Class<? extends BaseMenuView> view : subMenuViewsClasses) {
+					CDIView cdiAnn = view.getAnnotation(CDIView.class);
+					MenuItemView menuItemView = view.getClass().getAnnotation(MenuItemView.class);
+					rv.addItem(menuItemView.name(), new NavigationCommand(cdiAnn.value()));
+				}
 			}
 		}
 		rv.addItem("Выход", new LogOutCommand());
@@ -99,7 +96,7 @@ public class MenuProducer {
 	 * @author Артём
 	 *
 	 */
-	public class LogOutCommand extends NavigationCommand {
+	public final class LogOutCommand extends NavigationCommand {
 
 		private static final long serialVersionUID = -2959468243274000189L;
 
@@ -125,75 +122,60 @@ public class MenuProducer {
 	 * 
 	 * @return
 	 */
-	private SortedMap<MenuItemDto, List<BaseMenuView>> getViews() {
-		SortedMap<MenuItemDto, List<BaseMenuView>> viewsForMenuBar = new TreeMap<>(new Comparator<MenuItemDto>() {
+	private SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> getViews(
+			Set<Class<? extends BaseMenuView>> classes) {
+		SortedMap<MenuItemDto, List<Class<? extends BaseMenuView>>> viewsForMenuBar = new TreeMap<>(
+				new Comparator<MenuItemDto>() {
 
-			@Override
-			public int compare(MenuItemDto item1, MenuItemDto item2) {
-				return item1.compareTo(item2);
-			}
-
-		});
-		try {
-			MenuItemView ann = new MenuItemView() {
-
-				@Override
-				public Class<? extends Annotation> annotationType() {
-					return MenuItemView.class;
-				}
-
-				@Override
-				public int order() {
-					return 0;
-				}
-
-				@Override
-				public String name() {
-					return null;
-				}
-
-			};
-
-			for (Iterator<BaseMenuView> it = viewSource.select(ann).iterator(); it
-					.hasNext();) {
-				BaseMenuView candidate = it.next();
-				Class<?> viewClass = candidate.getClass();
-				if (viewClass.isAnnotationPresent(CDIView.class)
-						&& viewClass.isAnnotationPresent(MainMenuItem.class)
-						&& viewClass.isAnnotationPresent(MenuItemView.class)) {
-					MainMenuItem mainMenuItem = viewClass
-							.getAnnotation(MainMenuItem.class);
-					List<BaseMenuView> menuItems = viewsForMenuBar
-							.get(mainMenuItem);
-					if (menuItems == null) {
-						menuItems = new ArrayList<>();
-						viewsForMenuBar.put(new MenuItemDto(
-								mainMenuItem.name(), mainMenuItem.order()),
-								menuItems);
+					@Override
+					public int compare(MenuItemDto item1, MenuItemDto item2) {
+						return item1.compareTo(item2);
 					}
-					if (viewClass.isAnnotationPresent(RolesAllowed.class)) {
-						RolesAllowed rolesAllowed = viewClass
-								.getAnnotation(RolesAllowed.class);
-						if (authenticator
-								.isUserInSomeRole(rolesAllowed.value())) {
-							menuItems.add(candidate);
-						}
-					} else {
-						menuItems.add(candidate);
-					}
+
+				});
+
+		for (Class<? extends BaseMenuView> viewClass : classes) {
+
+			if (viewClass.isAnnotationPresent(CDIView.class) && viewClass.isAnnotationPresent(MainMenuItem.class)
+					&& viewClass.isAnnotationPresent(MenuItemView.class)) {
+				MainMenuItem mainMenuItem = viewClass.getAnnotation(MainMenuItem.class);
+				List<Class<? extends BaseMenuView>> menuItems = viewsForMenuBar.get(mainMenuItem);
+				// добавляем главный пункт
+				if (menuItems == null) {
+					menuItems = new ArrayList<>();
+					viewsForMenuBar.put(createDto(viewClass), menuItems);
+				}
+				// добавляем пункт
+				if (isShow(viewClass)) {
+					menuItems.add(viewClass);
 				}
 			}
 
-			// сортировка пунктов подменю
-			for (List<BaseMenuView> baseMenuView : viewsForMenuBar.values()) {
-				Collections.sort(baseMenuView,
-						MenuItemView.VIEW_QUALIFIER_ORDER);
-			}
-		} catch (Exception e) {
-			Notification.show("Не найдены модули для отображения.",
-					Type.TRAY_NOTIFICATION);
 		}
+
+		// сортировка всех подменю
+		for (List<Class<? extends BaseMenuView>> baseMenuView : viewsForMenuBar.values()) {
+			Collections.sort(baseMenuView, MenuItemView.VIEW_QUALIFIER_ORDER);
+		}
+
 		return viewsForMenuBar;
+	}
+
+	private boolean isShow(Class<?> viewClass) {
+		if (viewClass.isAnnotationPresent(RolesAllowed.class)) {
+			RolesAllowed rolesAllowed = viewClass.getAnnotation(RolesAllowed.class);
+			if (authenticator.isUserInSomeRole(rolesAllowed.value())) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
+	private MenuItemDto createDto(Class<? extends BaseMenuView> viewClass) {
+		MainMenuItem mainMenuItem = viewClass.getAnnotation(MainMenuItem.class);
+		return new MenuItemDto(mainMenuItem.name(), mainMenuItem.order());
 	}
 
 	/**

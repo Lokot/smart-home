@@ -32,10 +32,10 @@ public @interface MenuItemView {
 	/**
 	 * Сравниватель.
 	 */
-	public static final Comparator<Object> VIEW_QUALIFIER_ORDER = new Comparator<Object>() {
-		public int compare(Object e1, Object e2) {
-			int e1Order = e1.getClass().getAnnotation(MenuItemView.class).order();
-			int e2Order = e2.getClass().getAnnotation(MenuItemView.class).order();
+	public static final Comparator<Class<?>> VIEW_QUALIFIER_ORDER = new Comparator<Class<?>>() {
+		public int compare(Class<?> e1, Class<?> e2) {
+			int e1Order = e1.getAnnotation(MenuItemView.class).order();
+			int e2Order = e2.getAnnotation(MenuItemView.class).order();
 			return Integer.compare(e1Order, e2Order);
 		}
 	};

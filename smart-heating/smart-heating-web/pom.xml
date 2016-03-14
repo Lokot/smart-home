@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>smart-heating-web</artifactId>
 	<packaging>war</packaging>
-	
+
 	<repositories>
 		<repository>
 			<id>apache-m2-snapshot</id>
@@ -16,7 +16,7 @@
 			<url>http://repository.apache.org/snapshots</url>
 		</repository>
 	</repositories>
-	
+
 	<!-- Профили сборки. -->
 	<profiles>
 		<!-- Профиль для TomEE версии. -->
@@ -196,6 +196,11 @@
 			<groupId>ru.skysoftlab.smarthome.heating</groupId>
 			<artifactId>vaadin-cronGen</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.10</version>
 		</dependency>
 	</dependencies>
 </project>
