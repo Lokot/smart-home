@@ -4,18 +4,16 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.ServletException;
 
 import ru.skysoftlab.smarthome.heating.NavigationEvent;
@@ -47,23 +45,14 @@ public class MenuProducer {
 	
 	private MenuBar menubar = new MenuBar();
 
-//	@Produces
+	// @Produces
 	// @SessionScoped
 	// @SimpleQualifier("MainMenu")
 	public MenuBar createMenuBar() {
 		MenuBar rv = new MenuBar();
 		rv.addItem("Главная", new NavigationCommand(NavigationService.MAIN));
-		Map<MenuItemDto, List<BaseMenuView>> viewsMap = getViews();
-		List<MenuItemDto> mainMenu = new ArrayList<>(viewsMap.keySet());
-		mainMenu.sort(new Comparator<MenuItemDto>() {
-
-			@Override
-			public int compare(MenuItemDto item1, MenuItemDto item2) {
-				return item1.compareTo(item2);
-			}
-
-		});
-		for (MenuItemDto menuItemDto : mainMenu) {
+		SortedMap<MenuItemDto, List<BaseMenuView>> viewsMap = getViews();
+		for (MenuItemDto menuItemDto : viewsMap.keySet()) {
 			rv.addItem(menuItemDto.getName(), null);
 			for (BaseMenuView view : viewsMap.get(menuItemDto)) {
 				CDIView cdiAnn = view.getClass().getAnnotation(CDIView.class);
@@ -136,8 +125,15 @@ public class MenuProducer {
 	 * 
 	 * @return
 	 */
-	private Map<MenuItemDto, List<BaseMenuView>> getViews() {
-		Map<MenuItemDto, List<BaseMenuView>> viewsForMenuBar = new HashMap<>();
+	private SortedMap<MenuItemDto, List<BaseMenuView>> getViews() {
+		SortedMap<MenuItemDto, List<BaseMenuView>> viewsForMenuBar = new TreeMap<>(new Comparator<MenuItemDto>() {
+
+			@Override
+			public int compare(MenuItemDto item1, MenuItemDto item2) {
+				return item1.compareTo(item2);
+			}
+
+		});
 		try {
 			MenuItemView ann = new MenuItemView() {
 
@@ -225,13 +221,7 @@ public class MenuProducer {
 
 		@Override
 		public int compareTo(MenuItemDto o) {
-			if (order == o.getOrder()) {
-				return 0;
-			} else if (order > o.getOrder()) {
-				return 1;
-			} else {
-				return -1;
-			}
+			return Integer.compare(order, o.getOrder());
 		}
 	}
 }

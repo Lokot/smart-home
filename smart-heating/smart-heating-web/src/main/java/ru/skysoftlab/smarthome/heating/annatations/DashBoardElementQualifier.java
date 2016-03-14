@@ -39,17 +39,9 @@ public @interface DashBoardElementQualifier {
 	 */
 	public static final Comparator<Object> VIEW_QUALIFIER_ORDER = new Comparator<Object>() {
 		public int compare(Object e1, Object e2) {
-			int e1Order = e1.getClass()
-					.getAnnotation(DashBoardElementQualifier.class).order();
-			int e2Order = e2.getClass()
-					.getAnnotation(DashBoardElementQualifier.class).order();
-			if (e1Order == e2Order) {
-				return 0;
-			} else if (e1Order > e2Order) {
-				return 1;
-			} else {
-				return -1;
-			}
+			int e1Order = e1.getClass().getAnnotation(DashBoardElementQualifier.class).order();
+			int e2Order = e2.getClass().getAnnotation(DashBoardElementQualifier.class).order();
+			return Integer.compare(e1Order, e2Order);
 		}
 	};
 }
