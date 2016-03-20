@@ -39,16 +39,16 @@ import com.vaadin.ui.Notification.Type;
 public class MenuProducer implements Serializable {
 
 	private static final long serialVersionUID = -2477114251740004956L;
-	
+
 	@Inject
 	protected javax.enterprise.event.Event<NavigationEvent> navigationEvent;
-	
+
 	@Inject
 	private AccessControl authenticator;
-	
+
 	// TODO выкинуть в настройки ???
-	private String[] packages = {"ru.skysoftlab.smarthome.heating.ui.impl"};
-	
+	private String[] packages = { "ru.skysoftlab.smarthome.heating.ui.impl" };
+
 	@Produces
 	public MenuBar createMenuBar() {
 		MenuBar rv = new MenuBar();
@@ -69,17 +69,17 @@ public class MenuProducer implements Serializable {
 		return rv;
 	}
 
-	private Set<Class<? extends BaseMenuView>> getViewsClasses(String ... packages) {
+	private Set<Class<? extends BaseMenuView>> getViewsClasses(String... packages) {
 		Set<Class<? extends BaseMenuView>> classes = new HashSet<>();
 		for (String packageName : packages) {
 			Reflections reflections = new Reflections(packageName);
 			for (Class<?> cdiViewClass : reflections.getTypesAnnotatedWith(CDIView.class)) {
 				try {
-					// TODO переделать isAssignableFrom(cls)
 					Class<? extends BaseMenuView> bmvClass = cdiViewClass.asSubclass(BaseMenuView.class);
 					classes.add(bmvClass);
-				} catch(ClassCastException e) { }
-			}	
+				} catch (ClassCastException e) {
+				}
+			}
 		}
 		return classes;
 	}

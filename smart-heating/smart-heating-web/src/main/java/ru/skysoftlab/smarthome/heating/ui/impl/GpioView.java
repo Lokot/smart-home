@@ -35,7 +35,7 @@ public class GpioView extends AbstractGridView<GpioPin, GpioForm> {
 
 	@Inject
 	private GpioPinEntityProviderBean entityProvider;
-
+	
 	@Inject
 	private GpioForm form;
 

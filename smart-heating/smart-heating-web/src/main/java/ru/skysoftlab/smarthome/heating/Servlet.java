@@ -12,8 +12,7 @@ import com.vaadin.cdi.server.VaadinCDIServlet;
  * @author Артём
  *
  */
-@WebServlet(value = "/*", asyncSupported = true, initParams = {
-		@WebInitParam(name = "session-timeout", value = "60"),
+@WebServlet(value = "/*", asyncSupported = true, initParams = { @WebInitParam(name = "session-timeout", value = "60"),
 		@WebInitParam(name = "UIProvider", value = "com.vaadin.cdi.CDIUIProvider"),
 		@WebInitParam(name = "viewprovider", value = "com.vaadin.cdi.CDIViewProvider") })
 @VaadinServletConfiguration(productionMode = false, ui = MainVaadinUI.class, closeIdleSessions = true, widgetset = "ru.skysoftlab.smarthome.heating.widgetset.VaadinauthWidgetset")

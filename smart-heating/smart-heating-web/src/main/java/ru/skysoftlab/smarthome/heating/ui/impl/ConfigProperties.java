@@ -25,8 +25,7 @@ import com.vaadin.data.Container.Indexed;
  */
 @CDIView(NavigationService.CONFIG)
 @RolesAllowed({ RolesList.ADMIN })
-public class ConfigProperties extends
-		AbstractGridView<JpaProperty, ConfigPropertyForm> {
+public class ConfigProperties extends AbstractGridView<JpaProperty, ConfigPropertyForm> {
 
 	private static final long serialVersionUID = 8056035440071000165L;
 
