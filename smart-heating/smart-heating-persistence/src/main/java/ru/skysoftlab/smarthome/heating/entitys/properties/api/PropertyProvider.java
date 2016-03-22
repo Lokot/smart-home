@@ -16,4 +16,16 @@ public interface PropertyProvider {
 
 	public Date getDateValue(String key);
 	
+	public void setStringValue(String key, String value, String name);
+
+	public void setIntegerValue(String key, Integer value, String name);
+
+	public void setLongValue(String key, Long value, String name);
+	
+	public void setDoubleValue(String key, Double value, String name);
+	
+	public void setBooleanValue(String key, Boolean value, String name);
+
+	public void setDateValue(String key, Date value, String name);
+	
 }

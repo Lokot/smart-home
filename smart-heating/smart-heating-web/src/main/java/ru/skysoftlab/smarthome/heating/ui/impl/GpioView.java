@@ -7,6 +7,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.NavigationService.ConfigMenu;
+import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
 import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
@@ -26,8 +28,8 @@ import com.vaadin.data.Container.Indexed;
  *
  */
 @CDIView(NavigationService.GPIO)
-@MainMenuItem(name = "Настройки", order = NavigationService.MainMenu.CONFIG)
-@MenuItemView(name = "Пины", order = 0)
+@MainMenuItem(name = "Настройки", order = MainMenu.CONFIG)
+@MenuItemView(name = "Пины", order = ConfigMenu.GPIO)
 @RolesAllowed({ RolesList.ADMIN })
 public class GpioView extends AbstractGridView<GpioPin, GpioForm> {
 

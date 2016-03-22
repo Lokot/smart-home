@@ -7,6 +7,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
+import ru.skysoftlab.smarthome.heating.NavigationService.ConfigMenu;
+import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
 import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
@@ -26,8 +28,8 @@ import com.vaadin.data.Container.Indexed;
  *
  */
 @CDIView(NavigationService.SENSORS)
-@MainMenuItem(name = "Настройки", order = NavigationService.MainMenu.CONFIG)
-@MenuItemView(name = "Датчики", order = 1)
+@MainMenuItem(name = "Настройки", order = MainMenu.CONFIG)
+@MenuItemView(name = "Датчики", order = ConfigMenu.SENSORS)
 @RolesAllowed({ RolesList.USER, RolesList.ADMIN })
 public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 
