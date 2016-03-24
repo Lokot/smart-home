@@ -6,7 +6,7 @@ import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class EmProducer implements Serializable {
+public class EmProducerToDelete implements Serializable {
 
 	private static final long serialVersionUID = 5127966525383571663L;
 

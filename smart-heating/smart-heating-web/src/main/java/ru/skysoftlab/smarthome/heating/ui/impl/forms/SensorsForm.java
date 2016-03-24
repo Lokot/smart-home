@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
@@ -18,16 +16,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.owfs.jowfsclient.OwfsException;
-
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
-import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
-import ru.skysoftlab.smarthome.heating.services.SensorsService;
-import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -41,6 +29,15 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
+import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.services.SensorsService;
+import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 /**
  * Форма датчиков.
@@ -58,10 +55,8 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	@Inject
 	private SensorsService service;
 
-	// TODO попробовать через продюсер
-	// @Inject
-	// @EJB()
-	// private AlarmScannerBean scanner;
+	@Inject
+	private IAlarmScanner scanner;
 
 	private ComboBox sensorId;
 	private TextField name;
@@ -221,12 +216,12 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					// обновляем сканнер
 					try {
 						// TODO попробовать через продюсер
-						IAlarmScanner scanner = (IAlarmScanner) new InitialContext()
-								.lookup("java:module/"
-										+ AlarmScannerBean.class
-												.getSimpleName());
+//						IAlarmScanner scanner = (IAlarmScanner) new InitialContext()
+//								.lookup("java:module/"
+//										+ AlarmScannerBean.class
+//												.getSimpleName());
 						scanner.setAlarmingDeviceHandler(entity);
-					} catch (NamingException | IOException | OwfsException e) {
+					} catch (IOException | OwfsException e) { //NamingException | 
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

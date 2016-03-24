@@ -3,18 +3,8 @@ package ru.skysoftlab.smarthome.heating.system;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.annotation.Resource;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 
@@ -27,19 +17,12 @@ import ru.skysoftlab.smarthome.heating.entitys.properties.StringProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.api.ApplicationProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.api.PropertyProvider;
 
-@TransactionManagement(TransactionManagementType.BEAN)
 public class PropertyProviderImpl implements PropertyProvider, Serializable {
 
 	private static final long serialVersionUID = 586089832829495884L;
 
-	// private static final Logger log = Logger
-	// .getLogger(PropertyProviderImpl.class);
-
 	@Inject
 	private EntityManager em;
-
-	@Resource
-	private UserTransaction utx;
 
 	public String getStringValue(String key) {
 		StringProperty propertyValue = em.find(StringProperty.class, key);
@@ -150,25 +133,8 @@ public class PropertyProviderImpl implements PropertyProvider, Serializable {
 	}
 
 	private void persist(ApplicationProperty<?> property) {
-		try {
-			utx.begin();
-			try {
-				em.persist(property);
-			} catch (EntityExistsException e) {
-				em.merge(property);
-			}
-			try {
-				utx.commit();
-			} catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException
-					| RollbackException e) {
-				utx.rollback();
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (NotSupportedException | SystemException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		em.merge(property);
+		em.flush();
 	}
 
 }

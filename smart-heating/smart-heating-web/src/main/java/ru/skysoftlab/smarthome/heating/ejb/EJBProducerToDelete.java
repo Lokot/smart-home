@@ -9,14 +9,14 @@ import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
 
 @Stateless
-public class EJBFactory {
+public class EJBProducerToDelete {
 
-    @EJB
-    protected AlarmScannerBean scanner;
-
-    @Produces @EJBBean
-    public IAlarmScanner getAlarmScannerBean() {
-        return scanner;
-    }
+//    @EJB
+//    protected AlarmScannerBean scanner;
+//
+//    @Produces @EJBBean
+//    public IAlarmScanner getAlarmScannerBean() {
+//        return scanner;
+//    }
     
 }

@@ -11,6 +11,7 @@ import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.alarm.AlarmingDevicesScanner;
 
 import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
+import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 
 /**
  * Провайдер для работы с OneWare сетью.
@@ -21,13 +22,15 @@ import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
 public class OwfsProducer implements Serializable {
 
 	private static final long serialVersionUID = 7565939967506122425L;
+	
+	public static final String OWFS_SERVER = "owfsServerUrl";
 
 	@Inject
-	@AppProperty("owfsServerUrl")
+	@AppProperty(OWFS_SERVER)
 	private String url;
 
 	@Inject
-	@AppProperty("owfsScannerInterval")
+	@AppProperty(AlarmScannerBean.INTERVAL)
 	private Integer interval;
 
 	@Produces

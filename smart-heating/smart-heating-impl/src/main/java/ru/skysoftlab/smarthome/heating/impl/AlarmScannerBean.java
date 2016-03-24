@@ -25,8 +25,11 @@ import ru.skysoftlab.smarthome.heating.owfs.IDs18bConfig;
 public class AlarmScannerBean implements IAlarmScanner {
 
 	private static final long serialVersionUID = 4027430659678255880L;
+	
+	public static final String INTERVAL = "owfsScannerInterval";
 
 	@Inject
+	// TODO надо переопределять сканер при изменении Url серввера
 	private AlarmingDevicesScanner scanner;
 
 	@Inject
@@ -60,5 +63,5 @@ public class AlarmScannerBean implements IAlarmScanner {
 	public void setInterval(int interval) {
 		scanner.setPeriodInterval(interval);
 	}
-
+	
 }
