@@ -29,9 +29,9 @@ public class OwfsProducer implements Serializable {
 	@AppProperty(OWFS_SERVER)
 	private String url;
 
-	@Inject
-	@AppProperty(AlarmScannerBean.INTERVAL)
-	private Integer interval;
+//	@Inject
+//	@AppProperty(AlarmScannerBean.INTERVAL)
+//	private Integer interval;
 
 	@Produces
 	public OwfsConnectionConfig getOwfsConnectionConfig() {
@@ -39,6 +39,7 @@ public class OwfsProducer implements Serializable {
 		String[] urlParams = url.split(":");
 		rv = new OwfsConnectionConfig(urlParams[0],
 				Integer.valueOf(urlParams[1]));
+//		rv.setAlarmingInterval(interval);
 		return rv;
 	}
 
@@ -47,17 +48,18 @@ public class OwfsProducer implements Serializable {
 		String[] urlParams = url.split(":");
 		OwfsConnectionFactory owfsConnectionFactory = new OwfsConnectionFactory(
 				urlParams[0], Integer.valueOf(urlParams[1]));
+//		owfsConnectionFactory.setConnectionConfig(getOwfsConnectionConfig());
 		return owfsConnectionFactory;
 	}
 
-	@Produces
-	public AlarmingDevicesScanner getAlarmingDevicesScanner() {
-		OwfsConnectionFactory owfsConnectionFactory = getOwfsConnectionFactory();
-		AlarmingDevicesScanner scanner = owfsConnectionFactory
-				.getAlarmingScanner();
-		scanner.setPeriodInterval(interval);
-		return scanner;
-	}
+//	@Produces
+//	public AlarmingDevicesScanner getAlarmingDevicesScanner() {
+//		OwfsConnectionFactory owfsConnectionFactory = getOwfsConnectionFactory();
+//		AlarmingDevicesScanner scanner = owfsConnectionFactory
+//				.getAlarmingScanner();
+//		scanner.setPeriodInterval(interval);
+//		return scanner;
+//	}
 
 	public void closeConfig(@Disposes OwfsConnectionConfig config) {
 		config = null;

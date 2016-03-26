@@ -15,11 +15,11 @@ import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
  */
 public class AlarmScannerObserver {
 
-	@Inject
-	private IAlarmScanner scanner;
-
-	@Asynchronous
-	public void editIntervalEvent(@Observes SystemConfigEvent event) {
-		scanner.setInterval((Integer) event.getParams().get(AlarmScannerBean.INTERVAL));
-	}
+//	@Inject
+//	private IAlarmScanner scanner;
+//
+//	@Asynchronous
+//	public void editIntervalEvent(@Observes SystemConfigEvent event) {
+//		scanner.setInterval((Integer) event.getParams().get(AlarmScannerBean.INTERVAL));
+//	}
 }

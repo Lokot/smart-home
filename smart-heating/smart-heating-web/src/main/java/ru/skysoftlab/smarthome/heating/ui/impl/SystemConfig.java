@@ -59,7 +59,7 @@ public class SystemConfig extends BaseMenuView {
 	private Button save = new Button("Сохранить");
 
 	private void configureComponents() {
-		intervalField.setValue(propertyProvider.getIntegerValue(AlarmScannerBean.INTERVAL).toString());
+//		intervalField.setValue(propertyProvider.getIntegerValue(AlarmScannerBean.INTERVAL).toString());
 		urlField.setValue(propertyProvider.getStringValue(OwfsProducer.OWFS_SERVER).toString());
 		save.addClickListener(new ClickListener() {
 
@@ -69,13 +69,13 @@ public class SystemConfig extends BaseMenuView {
 			public void buttonClick(ClickEvent event) {
 				Map<String, Object> params = new HashMap<>();
 				params.put(OwfsProducer.OWFS_SERVER, urlField.getValue());
-				params.put(AlarmScannerBean.INTERVAL, Integer.valueOf(intervalField.getValue()));
+//				params.put(AlarmScannerBean.INTERVAL, Integer.valueOf(intervalField.getValue()));
 				try {
 					try {
 						utx.begin();
 						propertyProvider.setStringValue(OwfsProducer.OWFS_SERVER, urlField.getValue(), "Url cервера OWSF");
-						propertyProvider.setIntegerValue(AlarmScannerBean.INTERVAL,
-								Integer.valueOf(intervalField.getValue()), "Интервал сканирования");
+//						propertyProvider.setIntegerValue(AlarmScannerBean.INTERVAL,
+//								Integer.valueOf(intervalField.getValue()), "Интервал сканирования");
 						utx.commit();
 					} finally {
 						if (utx.getStatus() == 0) {

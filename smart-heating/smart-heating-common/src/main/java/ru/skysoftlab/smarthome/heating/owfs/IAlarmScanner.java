@@ -3,6 +3,8 @@ package ru.skysoftlab.smarthome.heating.owfs;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.ejb.Local;
+
 import org.owfs.jowfsclient.OwfsException;
 
 /**
@@ -11,6 +13,7 @@ import org.owfs.jowfsclient.OwfsException;
  * @author Артём
  *
  */
+@Local
 public interface IAlarmScanner extends Serializable {
 
 	/**
@@ -26,5 +29,5 @@ public interface IAlarmScanner extends Serializable {
 	 * 
 	 * @param interval
 	 */
-	public void setInterval(int interval);
+//	public void setInterval(int interval);
 }
