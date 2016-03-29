@@ -21,6 +21,11 @@ public class CronGenField extends AbstractJavaScriptComponentField<String> {
 		setId(getDomId());
 		getState().domId = getDomId();
 	}
+	
+	public CronGenField(String caption) {
+        this();
+        setCaption(caption);
+    }
 
 	public static int nextChartId() {
 		return ++currChartId;

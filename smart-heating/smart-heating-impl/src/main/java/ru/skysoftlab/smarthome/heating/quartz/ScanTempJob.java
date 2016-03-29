@@ -28,7 +28,7 @@ import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
  *
  */
 @Singleton
-public final class ScanTempJob implements Job {
+public class ScanTempJob implements Job {
 
 	private Logger LOG = LoggerFactory.getLogger(ScanTempJob.class);
 
@@ -43,6 +43,7 @@ public final class ScanTempJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		LOG.info("Сканирование температур" + context.getJobDetail());
 		Date now = context.getTrigger().getStartTime();
 		OwfsConnection client = factory.createNewConnection();
 		for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {

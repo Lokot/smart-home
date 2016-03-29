@@ -20,4 +20,8 @@ public class SystemConfigEvent {
 		return params;
 	}
 
+	public <T> T getParam(String key) {
+		return (T) getParams().get(key);
+	}
+
 }

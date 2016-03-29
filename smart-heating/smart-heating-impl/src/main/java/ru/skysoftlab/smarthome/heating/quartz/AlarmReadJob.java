@@ -28,7 +28,7 @@ import ru.skysoftlab.smarthome.heating.owfs.ITempAlarmHandler;
  *
  */
 @Singleton
-public final class AlarmReadJob implements Job, IAlarmScanner {
+public class AlarmReadJob implements Job, IAlarmScanner {
 
 	private static final long serialVersionUID = -2990505287440980547L;
 	
@@ -56,7 +56,7 @@ public final class AlarmReadJob implements Job, IAlarmScanner {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOG.info("Сканирование " + context.getJobDetail());
+		LOG.info("Сканирование датчиков в сигнализации" + context.getJobDetail());
 		reader.run();
 	}
 

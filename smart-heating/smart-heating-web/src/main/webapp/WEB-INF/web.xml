@@ -11,9 +11,15 @@
 		<env-entry-value>192.168.0.21:3000</env-entry-value>
 	</env-entry>
 	<env-entry>
-		<description>Интервал сканирования датчиков.</description>
+		<description>Интервал сканирования датчиков (минуты).</description>
 		<env-entry-name>deltaspike/owfsScannerInterval</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>5000</env-entry-value>
+		<env-entry-value>0 0/5 * 1/1 * ? *</env-entry-value>
+	</env-entry>
+	<env-entry>
+		<description>Интервал сканирования датчиков (минуты).</description>
+		<env-entry-name>deltaspike/owfsTempScannerInterval</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>0 0/30 * 1/1 * ? *</env-entry-value>
 	</env-entry>
 </web-app>
