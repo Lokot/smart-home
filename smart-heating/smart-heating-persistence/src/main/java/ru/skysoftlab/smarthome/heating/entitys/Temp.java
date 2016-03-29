@@ -30,21 +30,24 @@ public class Temp implements Serializable {
 	private Sensor sensor;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
-
+	
 	public Temp() {
+		
 	}
 
-	public Temp(Long id, Float temp) {
-		this.id = id;
+	public Temp(Float temp, Sensor sensor, Date date) {
 		this.temp = temp;
+		this.sensor = sensor;
+		this.date = date;
 	}
 
 	public Float getTemp() {
 		return this.temp;
 	}
 
-	public void setTemp(Float temp) {
+	public Temp setTemp(Float temp) {
 		this.temp = temp;
+		return this;
 	}
 
 	public Long getId() {
@@ -59,15 +62,17 @@ public class Temp implements Serializable {
 		return this.sensor;
 	}
 
-	public void setSensor(Sensor sensor) {
+	public Temp setSensor(Sensor sensor) {
 		this.sensor = sensor;
+		return this;
 	}
 
 	public Date getDate() {
 		return this.date;
 	}
 
-	public void setDate(Date date) {
+	public Temp setDate(Date date) {
 		this.date = date;
+		return this;
 	}
 }

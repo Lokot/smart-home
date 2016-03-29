@@ -5,8 +5,8 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
 
 import ru.skysoftlab.smarthome.heating.annatations.EJBBean;
-import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.toDelete.AlarmScannerBean;
 
 @Stateless
 public class EJBProducerToDelete {

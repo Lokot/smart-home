@@ -36,7 +36,7 @@ public class CdiJobFactory implements JobFactory {
 			}
 		}
 
-		throw new RuntimeException("Cannot create a Job of type " + jobClass);
+		throw new SchedulerException("Cannot create a Job of type " + jobClass);
 	}
 
 }

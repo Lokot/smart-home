@@ -125,9 +125,15 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return name;
-//		return "Sensor [id=" + id + ", sensorId=" + sensorId + ", name=" + name
-//				+ ", gpioPin=" + gpioPin + ", low=" + low + ", top=" + top
-//				+ "]";
+		// return "Sensor [id=" + id + ", sensorId=" + sensorId + ", name=" +
+		// name
+		// + ", gpioPin=" + gpioPin + ", low=" + low + ", top=" + top
+		// + "]";
+	}
+
+	public String toLog() {
+		return "Sensor [id=" + id + ", sensorId=" + sensorId + ", name=" + name + ", gpioPin=" + gpioPin + ", low="
+				+ low + ", top=" + top + "]";
 	}
 
 }

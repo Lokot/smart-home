@@ -1,20 +1,23 @@
 package ru.skysoftlab.smarthome.heating.cdi;
 
+import java.io.IOException;
 import java.io.Serializable;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 
+import org.owfs.jowfsclient.OwfsConnection;
 import org.owfs.jowfsclient.OwfsConnectionConfig;
 import org.owfs.jowfsclient.OwfsConnectionFactory;
-import org.owfs.jowfsclient.alarm.AlarmingDevicesScanner;
+import org.owfs.jowfsclient.alarm.AlarmingDevicesReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
-import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 
 /**
- * Провайдер для работы с OneWare сетью.
+ * Продюсер для работы с OneWare сетью.
  * 
  * @author Артём
  *
@@ -22,51 +25,54 @@ import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 public class OwfsProducer implements Serializable {
 
 	private static final long serialVersionUID = 7565939967506122425L;
-	
+
 	public static final String OWFS_SERVER = "owfsServerUrl";
 
-	@Inject
-	@AppProperty(OWFS_SERVER)
-	private String url;
+	private Logger LOG = LoggerFactory.getLogger(OwfsProducer.class);
 
-//	@Inject
-//	@AppProperty(AlarmScannerBean.INTERVAL)
-//	private Integer interval;
+	// @Inject
+	// @AppProperty(OWFS_SERVER)
+	// private String url;
+
+	// @Inject
+	// @AppProperty(JobController.INTERVAL)
+	// private Integer interval;
 
 	@Produces
-	public OwfsConnectionConfig getOwfsConnectionConfig() {
+	public OwfsConnectionConfig getOwfsConnectionConfig(@AppProperty(OWFS_SERVER) String url) {
 		OwfsConnectionConfig rv = null;
 		String[] urlParams = url.split(":");
-		rv = new OwfsConnectionConfig(urlParams[0],
-				Integer.valueOf(urlParams[1]));
-//		rv.setAlarmingInterval(interval);
+		rv = new OwfsConnectionConfig(urlParams[0], Integer.valueOf(urlParams[1]));
 		return rv;
 	}
 
 	@Produces
-	public OwfsConnectionFactory getOwfsConnectionFactory() {
+	public OwfsConnectionFactory getOwfsConnectionFactory(@AppProperty(OWFS_SERVER) String url) {
 		String[] urlParams = url.split(":");
-		OwfsConnectionFactory owfsConnectionFactory = new OwfsConnectionFactory(
-				urlParams[0], Integer.valueOf(urlParams[1]));
-//		owfsConnectionFactory.setConnectionConfig(getOwfsConnectionConfig());
+		OwfsConnectionFactory owfsConnectionFactory = new OwfsConnectionFactory(urlParams[0],
+				Integer.valueOf(urlParams[1]));
 		return owfsConnectionFactory;
 	}
 
-//	@Produces
-//	public AlarmingDevicesScanner getAlarmingDevicesScanner() {
-//		OwfsConnectionFactory owfsConnectionFactory = getOwfsConnectionFactory();
-//		AlarmingDevicesScanner scanner = owfsConnectionFactory
-//				.getAlarmingScanner();
-//		scanner.setPeriodInterval(interval);
-//		return scanner;
-//	}
-
-	public void closeConfig(@Disposes OwfsConnectionConfig config) {
-		config = null;
+	@Produces
+	public AlarmingDevicesReader getAlarmingDevicesReader(OwfsConnectionFactory factory) {
+		return new AlarmingDevicesReader(factory);
 	}
 
-	public void closeFactory(@Disposes OwfsConnectionFactory factory) {
-		factory = null;
+	@Produces
+	@RequestScoped
+	public OwfsConnection getOwfsConnectionConfig(OwfsConnectionConfig config) {
+		return OwfsConnectionFactory.newOwfsClient(config);
+	}
+
+	public void deInitClient(@Disposes OwfsConnection client) {
+		try {
+			client.disconnect();
+			LOG.info("OWSF-connection closed");
+		} catch (IOException e) {
+			LOG.error("Close OWSF-connection error", e);
+		}
+		client = null;
 	}
 
 }

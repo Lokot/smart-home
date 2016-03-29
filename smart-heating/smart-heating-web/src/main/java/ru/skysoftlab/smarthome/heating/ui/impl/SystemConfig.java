@@ -1,5 +1,8 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
+import static ru.skysoftlab.smarthome.heating.cdi.OwfsProducer.OWFS_SERVER;
+import static ru.skysoftlab.smarthome.heating.quartz.JobController.INTERVAL;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +27,8 @@ import ru.skysoftlab.smarthome.heating.NavigationService.ConfigMenu;
 import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
 import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
-import ru.skysoftlab.smarthome.heating.cdi.OwfsProducer;
 import ru.skysoftlab.smarthome.heating.entitys.properties.api.PropertyProvider;
 import ru.skysoftlab.smarthome.heating.events.SystemConfigEvent;
-import ru.skysoftlab.smarthome.heating.impl.AlarmScannerBean;
 import ru.skysoftlab.smarthome.heating.security.RolesList;
 import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
 
@@ -50,7 +51,7 @@ public class SystemConfig extends BaseMenuView {
 
 	@Inject
 	private PropertyProvider propertyProvider;
-	
+
 	@Inject
 	private javax.enterprise.event.Event<SystemConfigEvent> systemEvent;
 
@@ -59,8 +60,8 @@ public class SystemConfig extends BaseMenuView {
 	private Button save = new Button("Сохранить");
 
 	private void configureComponents() {
-//		intervalField.setValue(propertyProvider.getIntegerValue(AlarmScannerBean.INTERVAL).toString());
-		urlField.setValue(propertyProvider.getStringValue(OwfsProducer.OWFS_SERVER).toString());
+		intervalField.setValue(propertyProvider.getIntegerValue(INTERVAL).toString());
+		urlField.setValue(propertyProvider.getStringValue(OWFS_SERVER).toString());
 		save.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 6589973284665779345L;
@@ -68,14 +69,14 @@ public class SystemConfig extends BaseMenuView {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				Map<String, Object> params = new HashMap<>();
-				params.put(OwfsProducer.OWFS_SERVER, urlField.getValue());
-//				params.put(AlarmScannerBean.INTERVAL, Integer.valueOf(intervalField.getValue()));
+				params.put(OWFS_SERVER, urlField.getValue());
+				params.put(INTERVAL, Integer.valueOf(intervalField.getValue()));
 				try {
 					try {
 						utx.begin();
-						propertyProvider.setStringValue(OwfsProducer.OWFS_SERVER, urlField.getValue(), "Url cервера OWSF");
-//						propertyProvider.setIntegerValue(AlarmScannerBean.INTERVAL,
-//								Integer.valueOf(intervalField.getValue()), "Интервал сканирования");
+						propertyProvider.setStringValue(OWFS_SERVER, urlField.getValue(), "Url cервера OWSF");
+						propertyProvider.setIntegerValue(INTERVAL, Integer.valueOf(intervalField.getValue()),
+								"Интервал сканирования");
 						utx.commit();
 					} finally {
 						if (utx.getStatus() == 0) {

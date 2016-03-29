@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.impl;
+package ru.skysoftlab.smarthome.heating.toDelete;
 
 import javax.ejb.Asynchronous;
 import javax.enterprise.event.Observes;

@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.impl;
+package ru.skysoftlab.smarthome.heating.toDelete;
 
 import java.io.IOException;
 
