@@ -3,9 +3,11 @@ package ru.skysoftlab.smarthome.heating.quartz;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import org.apache.openejb.quartz.Job;
 import org.apache.openejb.quartz.JobExecutionContext;
@@ -34,6 +36,9 @@ public class ScanTempJob implements Job {
 
 	@Inject
 	private EntityManager em;
+	
+	@Resource
+	private UserTransaction utx;
 
 	@Inject
 	private OwfsConnectionFactory factory;
@@ -43,14 +48,16 @@ public class ScanTempJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOG.info("Сканирование температур" + context.getJobDetail());
-		Date now = context.getTrigger().getStartTime();
+		LOG.info("Сканирование температур " + context.getJobDetail());
+		Date now = context.getScheduledFireTime();
 		OwfsConnection client = factory.createNewConnection();
 		for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 			try {
 				float t = OwsfUtilDS18B.getTemperature(client, sensor.getSensorId());
 				try {
+					utx.begin();
 					em.persist(new Temp(t, sensor, now));
+					utx.commit();
 				} catch (Exception e) {
 					LOG.error("Save temp error", e);
 				}

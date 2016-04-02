@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,6 +20,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
+@NamedQueries({ @NamedQuery(name = "Temp.byDate", query = "SELECT e FROM Temp e WHERE e.date>=:start AND e.date<:stop") })
 public class Temp implements Serializable {
 
 	private static final long serialVersionUID = -928474898602043274L;
@@ -31,8 +34,10 @@ public class Temp implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
+	// TODO время и дата отдельно
+
 	public Temp() {
-		
+
 	}
 
 	public Temp(Float temp, Sensor sensor, Date date) {

@@ -56,7 +56,7 @@ public class AlarmReadJob implements Job, IAlarmScanner {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOG.info("Сканирование датчиков в сигнализации" + context.getJobDetail());
+		LOG.info("Сканирование датчиков в сигнализации " + context.getJobDetail());
 		reader.run();
 	}
 

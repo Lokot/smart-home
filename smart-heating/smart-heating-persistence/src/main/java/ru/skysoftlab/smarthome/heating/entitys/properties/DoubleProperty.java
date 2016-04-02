@@ -25,7 +25,7 @@ public class DoubleProperty implements ApplicationProperty<Double>, Serializable
 
     @Id
     @Length(min = 8, max = 128)
-    @Column(name = "key", length = 128, nullable = false)
+    @Column(name = "pkey", length = 128, nullable = false)
     public String getKey() {
         return key;
     }

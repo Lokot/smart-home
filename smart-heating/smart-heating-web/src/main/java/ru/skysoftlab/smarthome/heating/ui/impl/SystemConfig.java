@@ -15,7 +15,7 @@ import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.skysoftlab.crongen.CronGenField;
+import ru.skysoftlab.crongen.CronGenExt;
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.NavigationService.ConfigMenu;
 import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
@@ -62,8 +62,8 @@ public class SystemConfig extends BaseMenuView {
 	@Inject
 	private javax.enterprise.event.Event<SystemConfigEvent> systemEvent;
 
-	private CronGenField alarmIntervalField = new CronGenField("Интервал сканирования сигнализации:");
-	private CronGenField tempIntervalField = new CronGenField("Интервал сканирования температур:");
+	private TextField alarmIntervalField = new TextField("Интервал сканирования сигнализации:");
+	private TextField tempIntervalField = new TextField("Интервал сканирования температур:");
 	private TextField urlField = new TextField("Url cервера OWSF:");
 	private Button save = new Button("Сохранить");
 
@@ -106,11 +106,18 @@ public class SystemConfig extends BaseMenuView {
 
 	private void buildLayout() {
 		Label title = new Label("Системные настройки");
+		
+		CronGenExt ext = new CronGenExt();
+		ext.extend(alarmIntervalField);
+		CronGenExt ext1 = new CronGenExt();
+		ext1.extend(tempIntervalField);
+				
+		
 		FormLayout form = new FormLayout(urlField, alarmIntervalField, tempIntervalField, save);
 		VerticalLayout left = new VerticalLayout(title, form);
 		left.setExpandRatio(form, 1);
 		left.setSizeFull();
-
+		left.setHeight("600px");
 		HorizontalLayout mainLayout = new HorizontalLayout(left);
 		mainLayout.setSizeFull();
 		mainLayout.setExpandRatio(left, 1);
