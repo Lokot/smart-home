@@ -1,13 +1,11 @@
 package ru.skysoftlab.smarthome.heating.ui.impl.layouts;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -15,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
@@ -30,7 +27,6 @@ import at.downdrown.vaadinaddons.highchartsapi.model.Axis.AxisType;
 import at.downdrown.vaadinaddons.highchartsapi.model.Axis.AxisValueType;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
-import at.downdrown.vaadinaddons.highchartsapi.model.series.LineChartSeries;
 
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -68,7 +64,7 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				reload();
+				redraw();
 			}
 		});
 	}
@@ -95,6 +91,10 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 	@Override
 	public void reload() {
 		date.setValue(new Date());
+		redraw();
+	}
+	
+	private void redraw() {
 		try {
 			lineChart.redraw(getConfig());
 		} catch (HighChartsException e) {
@@ -102,52 +102,43 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 			e.printStackTrace();
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 		}
-
 	}
 
 	private ChartConfiguration getConfig() {
-		List<String> timeCategories = new ArrayList<>();
-		Map<LocalTime, List<Temp>> tempByDates = getTempByDates();
-		for (LocalTime date : tempByDates.keySet()) {
-			timeCategories.add(date.toString("HH:mm"));	
-		}
 		Axis xAxis = new Axis(AxisType.xAxis);
 		xAxis.setTitle("Время");
 		xAxis.setAxisValueType(AxisValueType.DATETIME);
-		xAxis.setCategories(timeCategories);
+		// dateTimeLabelFormats
+
 		Axis yAxis = new Axis(AxisType.yAxis);
 		yAxis.setTitle("Температура (°C)");
-		// TODO переделать график на плавный
-		// *** LINE ***
 		ChartConfiguration lineConfiguration = new ChartConfiguration();
-		lineConfiguration.setTitle("Температура за сутки "
-				+ new SimpleDateFormat("dd MMM YYYY").format(date.getValue()));
-		lineConfiguration.setChartType(ChartType.LINE);
+		lineConfiguration.setTitle("Температура за сутки");
+		lineConfiguration.setSubTitle(new SimpleDateFormat("dd MMM YYYY").format(date.getValue()));
+		// lineConfiguration.setChartType(ChartType.LINE);
+		lineConfiguration.setChartType(ChartType.SPLINE);
 		lineConfiguration.setBackgroundColor(Colors.WHITE);
 		lineConfiguration.setxAxis(xAxis);
 		lineConfiguration.setyAxis(yAxis);
-
-		for(LineChartSeries t: createSeries(tempByDates).values()){
-			lineConfiguration.getSeriesList().add(t);
-		}
+		lineConfiguration.getSeriesList().addAll(getSeries());
 		return lineConfiguration;
 	}
 
-	private Map<Sensor, LineChartSeries> createSeries(Map<LocalTime, List<Temp>> dateTemp) {
-		Map<Sensor, LineChartSeries> rv = new HashMap<>();
-		for (List<Temp> tempList : dateTemp.values()) {
-			for (Temp temp : tempList) {
-				Sensor sensor = temp.getSensor();
-				LineChartSeries sensorSer = rv.get(sensor);
-				if (sensorSer == null) {
-					sensorSer = new LineChartSeries(sensor.getName());
-					rv.put(sensor, sensorSer);
-				}
-				// TODO округлить до 1 знака после запятой
-				sensorSer.addData(temp.getTemp());
+	private Collection<SplineChartSeries> getSeries() {
+		List<Temp> temps = getDateTemp(date.getValue());
+		Map<Sensor, SplineChartSeries> rv = new HashMap<>();
+		for (Temp temp : temps) {
+			Sensor sensor = temp.getSensor();
+			SplineChartSeries sensorSer = rv.get(sensor);
+			if (sensorSer == null) {
+				sensorSer = new SplineChartSeries(sensor.getName());
+				rv.put(sensor, sensorSer);
 			}
+			// TODO округлить до 1 знака после запятой
+			// new DecimalFormat("#0.00").format(0.1321231);
+			sensorSer.addData(new TimeFloatData(temp.getDate().getTime(), temp.getTemp()));
 		}
-		return rv;
+		return rv.values();
 	}
 
 	private List<Temp> getDateTemp(Date date) {
@@ -160,27 +151,6 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 		query.setParameter("stop", stop);
 		List<Temp> results = query.getResultList();
 		return results;
-	}
-
-	private Map<LocalTime, List<Temp>> getTempByDates() {
-		Map<LocalTime, List<Temp>> rv = new TreeMap<>(new Comparator<LocalTime>() {
-
-			@Override
-			public int compare(LocalTime o1, LocalTime o2) {
-				return o1.compareTo(o2);
-			}
-		});
-		List<Temp> tempList = getDateTemp(date.getValue());
-		for (Temp temp : tempList) {
-			LocalTime time = LocalTime.fromDateFields(temp.getDate());
-			List<Temp> dateTempList = rv.get(time);
-			if (dateTempList == null) {
-				dateTempList = new ArrayList<>();
-				rv.put(time, dateTempList);
-			}
-			dateTempList.add(temp);
-		}
-		return rv;
 	}
 
 }
