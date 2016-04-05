@@ -1,6 +1,5 @@
 package ru.skysoftlab.smarthome.heating.ui.impl.forms;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +14,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import org.owfs.jowfsclient.OwfsException;
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
+import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
+import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
+import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.services.SensorsService;
+import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -29,15 +35,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
-import ru.skysoftlab.smarthome.heating.services.SensorsService;
-import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 /**
  * Форма датчиков.
@@ -104,18 +101,17 @@ public class SensorsForm extends AbstractForm<Sensor> {
 
 		gpioBox = new ComboBox("Свободные контура");
 
-		Button addGpio = new Button("Добавить контур",
-				new Button.ClickListener() {
+		Button addGpio = new Button("Добавить контур", new Button.ClickListener() {
 
-					private static final long serialVersionUID = 4489078023605774389L;
+			private static final long serialVersionUID = 4489078023605774389L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						GpioPin value = (GpioPin) gpioBox.getValue();
-						// Add some items (here by the item ID as the caption)
-						gpioPin.addItems(value);
-					}
-				});
+			@Override
+			public void buttonClick(ClickEvent event) {
+				GpioPin value = (GpioPin) gpioBox.getValue();
+				// Add some items (here by the item ID as the caption)
+				gpioPin.addItems(value);
+			}
+		});
 
 		Button removeGpio = new Button("Удалить контур");
 
@@ -154,11 +150,9 @@ public class SensorsForm extends AbstractForm<Sensor> {
 
 	private List<GpioPin> getFreeGpioPin() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder
-				.createQuery(GpioPin.class);
+		CriteriaQuery<GpioPin> criteriaQuery = builder.createQuery(GpioPin.class);
 		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		criteriaQuery.select(s).where(
-				builder.equal(s.get(GpioPin_.type), GpioPinType.KONTUR),
+		criteriaQuery.select(s).where(builder.equal(s.get(GpioPin_.type), GpioPinType.KONTUR),
 				s.get(GpioPin_.owner).isNull());
 		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
 		return query.getResultList();
@@ -199,32 +193,20 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					// Commit the fields from UI to DAO
 					formFieldBindings.commit();
 					HashSet<GpioPin> rr = new HashSet<>();
-					for (GpioPin component : (Collection<GpioPin>) gpioPin
-							.getItemIds()) {
+					for (GpioPin component : (Collection<GpioPin>) gpioPin.getItemIds()) {
 						component.setOwner(entity);
 						rr.add(component);
 					}
 					entity.setGpioPin(rr);
 					// Save DAO to backend with direct synchronous service API
 					gridView.getJpaContainer().addEntity(entity);
-					String msg = String
-							.format("Saved '%s'.", entity.toString());
+					String msg = String.format("Saved '%s'.", entity.toString());
 					Notification.show(msg, Type.TRAY_NOTIFICATION);
 					gridView.refreshData();
 					// чистим
 					clearComponents();
 					// обновляем сканнер
-					try {
-						// TODO попробовать через продюсер
-//						IAlarmScanner scanner = (IAlarmScanner) new InitialContext()
-//								.lookup("java:module/"
-//										+ AlarmScannerBean.class
-//												.getSimpleName());
-						scanner.setAlarmingDeviceHandler(entity);
-					} catch (IOException | OwfsException e) { //NamingException | 
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					scanner.setAlarmingDeviceHandler(entity);
 				} catch (FieldGroup.CommitException e) {
 					// Validation exceptions could be shown here
 					e.printStackTrace();

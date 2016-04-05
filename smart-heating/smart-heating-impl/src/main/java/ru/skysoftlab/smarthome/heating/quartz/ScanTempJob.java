@@ -36,7 +36,7 @@ public class ScanTempJob implements Job {
 
 	@Inject
 	private EntityManager em;
-	
+
 	@Resource
 	private UserTransaction utx;
 
@@ -53,7 +53,7 @@ public class ScanTempJob implements Job {
 		OwfsConnection client = factory.createNewConnection();
 		for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 			try {
-				float t = OwsfUtilDS18B.getTemperature(client, sensor.getSensorId());
+				float t = round(OwsfUtilDS18B.getTemperature(client, sensor.getSensorId()), 1);
 				try {
 					utx.begin();
 					em.persist(new Temp(t, sensor, now));
@@ -71,6 +71,21 @@ public class ScanTempJob implements Job {
 			LOG.error("Close connection error", e);
 		}
 		client = null;
+	}
+
+	/**
+	 * Округлить.
+	 * 
+	 * @param number
+	 * @param scale
+	 * @return
+	 */
+	private float round(float number, int scale) {
+		int pow = 10;
+		for (int i = 1; i < scale; i++)
+			pow *= 10;
+		float tmp = number * pow;
+		return (float) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
 	}
 
 }

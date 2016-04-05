@@ -10,8 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+
+import ru.skysoftlab.smarthome.heating.types.LocalDateUserType;
+import ru.skysoftlab.smarthome.heating.types.LocalTimeUserType;
 
 /**
  * Показания датчика.
@@ -20,7 +28,9 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
-@NamedQueries({ @NamedQuery(name = "Temp.byDate", query = "SELECT e FROM Temp e WHERE e.date>=:start AND e.date<:stop") })
+@TypeDefs({ @TypeDef(name = "dateType", typeClass = LocalDateUserType.class),
+		@TypeDef(name = "timeType", typeClass = LocalTimeUserType.class) })
+@NamedQueries({ @NamedQuery(name = "Temp.byDate", query = "SELECT e FROM Temp e WHERE e.date=:date") })
 public class Temp implements Serializable {
 
 	private static final long serialVersionUID = -928474898602043274L;
@@ -31,10 +41,10 @@ public class Temp implements Serializable {
 	private Float temp;
 	@OneToOne
 	private Sensor sensor;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
-	
-	// TODO время и дата отдельно
+	@Type(type = "dateType")
+	private LocalDate date;
+	@Type(type = "timeType")
+	private LocalTime time;
 
 	public Temp() {
 
@@ -43,7 +53,9 @@ public class Temp implements Serializable {
 	public Temp(Float temp, Sensor sensor, Date date) {
 		this.temp = temp;
 		this.sensor = sensor;
-		this.date = date;
+		LocalDateTime t = LocalDateTime.fromDateFields(date);
+		this.time = t.toLocalTime();
+		this.date = t.toLocalDate();
 	}
 
 	public Float getTemp() {
@@ -72,12 +84,20 @@ public class Temp implements Serializable {
 		return this;
 	}
 
-	public Date getDate() {
-		return this.date;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public Temp setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
-		return this;
 	}
+
+	public LocalTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
+	
 }

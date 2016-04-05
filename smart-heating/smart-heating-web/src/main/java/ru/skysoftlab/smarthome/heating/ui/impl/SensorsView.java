@@ -78,8 +78,8 @@ public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 		Map<String, String> rv = new HashMap<>();
 		rv.put("sensorId", "Идентификатор датчика");
 		rv.put("name", "Наименование");
-		rv.put("low", "Минимум (C)");
-		rv.put("top", "Максимум (C)");
+		rv.put("low", "Минимум (°C)");
+		rv.put("top", "Максимум (°C)");
 		return rv;
 	}
 

@@ -12,7 +12,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
@@ -48,15 +50,16 @@ import com.vaadin.ui.VerticalLayout;
 public class TemperatureChart extends VerticalLayout implements IDashboardModule {
 
 	private static final long serialVersionUID = 1307704684754077226L;
+
+	private Logger LOG = LoggerFactory.getLogger(TemperatureChart.class);
+
 	@Inject
 	private EntityManager em;
-	// Create a DateField with the default style
-	DateField date = new DateField();
 
+	private DateField date = new DateField();
 	private HighChart lineChart;
 
 	public TemperatureChart() {
-		// Set the date and time to present
 		date.setValue(new Date());
 		date.addValueChangeListener(new ValueChangeListener() {
 
@@ -83,7 +86,7 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 			setComponentAlignment(date, Alignment.MIDDLE_CENTER);
 			setComponentAlignment(lineChart, Alignment.MIDDLE_CENTER);
 		} catch (HighChartsException e) {
-			e.printStackTrace();
+			LOG.error("Ошибка сериализации сонфигурации.", e);
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 		}
 	}
@@ -93,13 +96,12 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 		date.setValue(new Date());
 		redraw();
 	}
-	
+
 	private void redraw() {
 		try {
 			lineChart.redraw(getConfig());
 		} catch (HighChartsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Ошибка отображения графика.", e);
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
 		}
 	}
@@ -108,14 +110,11 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 		Axis xAxis = new Axis(AxisType.xAxis);
 		xAxis.setTitle("Время");
 		xAxis.setAxisValueType(AxisValueType.DATETIME);
-		// dateTimeLabelFormats
-
 		Axis yAxis = new Axis(AxisType.yAxis);
 		yAxis.setTitle("Температура (°C)");
 		ChartConfiguration lineConfiguration = new ChartConfiguration();
 		lineConfiguration.setTitle("Температура за сутки");
 		lineConfiguration.setSubTitle(new SimpleDateFormat("dd MMM YYYY").format(date.getValue()));
-		// lineConfiguration.setChartType(ChartType.LINE);
 		lineConfiguration.setChartType(ChartType.SPLINE);
 		lineConfiguration.setBackgroundColor(Colors.WHITE);
 		lineConfiguration.setxAxis(xAxis);
@@ -134,21 +133,15 @@ public class TemperatureChart extends VerticalLayout implements IDashboardModule
 				sensorSer = new SplineChartSeries(sensor.getName());
 				rv.put(sensor, sensorSer);
 			}
-			// TODO округлить до 1 знака после запятой
-			// new DecimalFormat("#0.00").format(0.1321231);
-			sensorSer.addData(new TimeFloatData(temp.getDate().getTime(), temp.getTemp()));
+			sensorSer.addData(new TimeFloatData(temp.getTime().toDateTimeToday().getMillis(), temp.getTemp()));
 		}
 		return rv.values();
 	}
 
 	private List<Temp> getDateTemp(Date date) {
-		LocalDateTime ldt = LocalDateTime.fromDateFields(date).withTime(0, 0, 0, 0);
 		// TODO Добавить временную зону
-		Date start = ldt.toDateTime().toDate();
-		Date stop = ldt.plusDays(1).toDateTime().toDate();
 		TypedQuery<Temp> query = em.createNamedQuery("Temp.byDate", Temp.class);
-		query.setParameter("start", start);
-		query.setParameter("stop", stop);
+		query.setParameter("date", LocalDate.fromDateFields(date));
 		List<Temp> results = query.getResultList();
 		return results;
 	}

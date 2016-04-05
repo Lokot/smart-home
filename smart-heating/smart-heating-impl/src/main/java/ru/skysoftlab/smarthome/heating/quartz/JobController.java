@@ -135,6 +135,7 @@ public class JobController {
 			interval = alarmInterval;
 			try {
 				rescheduleJobNow(alarmTK, interval);
+				LOG.info("RescheduleAlarmJob");
 			} catch (SchedulerException e) {
 				LOG.error("Error reschedule scan alarm job", e);
 			}
@@ -145,6 +146,7 @@ public class JobController {
 			this.tempInterval = event.getParam(TEMP_INTERVAL);
 			try {
 				rescheduleJobNow(tempTK, this.tempInterval);
+				LOG.info("RescheduleTempJob");
 			} catch (SchedulerException e) {
 				LOG.error("Error reschedule scan temp job", e);
 			}
@@ -161,6 +163,7 @@ public class JobController {
 	private void rescheduleJobNow(TriggerKey key, String cronString) throws SchedulerException {
 		Trigger trigger = createCronTrigger(key, cronString, null);
 		scheduler.rescheduleJob(key, trigger);
+		LOG.debug("RescheduleJob " + key + " = " + cronString);
 	}
 
 	/**

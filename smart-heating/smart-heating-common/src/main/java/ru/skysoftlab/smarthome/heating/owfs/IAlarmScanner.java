@@ -1,14 +1,11 @@
 package ru.skysoftlab.smarthome.heating.owfs;
 
-import java.io.IOException;
 import java.io.Serializable;
-
-import org.owfs.jowfsclient.OwfsException;
 
 /**
  * Интерфейс сканера температур.
  * 
- * @author Артём
+ * @author Loktionov Artem
  *
  */
 public interface IAlarmScanner extends Serializable {
@@ -18,7 +15,14 @@ public interface IAlarmScanner extends Serializable {
 	 * 
 	 * @param config
 	 */
-	public void setAlarmingDeviceHandler(IDs18bConfig config)
-			throws IOException, OwfsException;
+	public void setAlarmingDeviceHandler(IDs18bConfig config);
+	
+	/**
+	 * Возвращает есть ли обработчик.
+	 * 
+	 * @param deviceName
+	 * @return
+	 */
+	public boolean isAlarmingDeviceHandlerInstalled(String deviceName);
 
 }
