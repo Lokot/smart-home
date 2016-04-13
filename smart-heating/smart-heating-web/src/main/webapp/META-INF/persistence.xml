@@ -18,6 +18,7 @@
 		<class>ru.skysoftlab.smarthome.heating.entitys.properties.IntegerProperty</class>
 		<class>ru.skysoftlab.smarthome.heating.entitys.properties.LongProperty</class>
 		<class>ru.skysoftlab.smarthome.heating.entitys.properties.StringProperty</class>
+		<class>ru.skysoftlab.smarthome.heating.entitys.properties.FloatProperty</class>
 		
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

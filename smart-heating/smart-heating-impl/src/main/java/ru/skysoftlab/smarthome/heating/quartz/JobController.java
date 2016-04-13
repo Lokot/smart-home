@@ -1,5 +1,12 @@
 package ru.skysoftlab.smarthome.heating.quartz;
 
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE_START;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE_STOP;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.INTERVAL;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.SUMMER_MODE;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.TEMP_INTERVAL;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,9 +49,6 @@ import ru.skysoftlab.smarthome.heating.events.SystemConfigEvent;
 public class JobController {
 
 	private static final String SYSTEM_GROUP = "system-jobs";
-
-	public static final String INTERVAL = "owfsScannerInterval";
-	public static final String TEMP_INTERVAL = "owfsTempScannerInterval";
 
 	private Logger LOG = LoggerFactory.getLogger(JobController.class);
 
@@ -151,6 +155,25 @@ public class JobController {
 				LOG.error("Error reschedule scan temp job", e);
 			}
 		}
+
+		Boolean summerMode = event.getParam(SUMMER_MODE);
+		if (summerMode != null) {
+			if (summerMode) {
+//				stopAlarmReadJob();
+			} else {
+//				startAlarmReadJob();
+			}
+		}
+
+		// params.put(HOLIDAY_MODE, holidayField.getValue());
+		// params.put(HOLIDAY_MODE_START, holidayStartField.getValue());
+		// params.put(HOLIDAY_MODE_STOP, holidayStopField.getValue());
+
+	}
+
+	private void stopAlarmReadJob() {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**

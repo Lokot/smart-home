@@ -49,6 +49,11 @@ public class PropertyProducer implements Serializable {
 	}
 	
 	@Produces @AppProperty("")
+	public Float getFloatProperty(InjectionPoint ip,  PropertyProviderImpl provider) {		
+		return provider.getFloatValue(getPropertyName(ip));
+	}
+	
+	@Produces @AppProperty("")
 	public Long getLongProperty(InjectionPoint ip,  PropertyProviderImpl provider) {		
 		return provider.getLongValue(getPropertyName(ip));
 	}

@@ -8,6 +8,8 @@ public interface PropertyProvider {
 
 	public Integer getIntegerValue(String key);
 
+	public Float getFloatValue(String key);
+	
 	public Long getLongValue(String key);
 	
 	public Double getDoubleValue(String key);
@@ -27,5 +29,7 @@ public interface PropertyProvider {
 	public void setBooleanValue(String key, Boolean value, String name);
 
 	public void setDateValue(String key, Date value, String name);
+	
+	public void setFloatValue(String key, Float value, String name);
 	
 }

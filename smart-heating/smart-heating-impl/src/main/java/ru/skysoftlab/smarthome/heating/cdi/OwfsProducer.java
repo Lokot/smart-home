@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
+import static ru.skysoftlab.smarthome.heating.config.ConfigNames.OWFS_SERVER;
 
 /**
  * Продюсер для работы с OneWare сетью.
@@ -25,8 +26,6 @@ import ru.skysoftlab.smarthome.heating.annatations.AppProperty;
 public class OwfsProducer implements Serializable {
 
 	private static final long serialVersionUID = 7565939967506122425L;
-
-	public static final String OWFS_SERVER = "owfsServerUrl";
 
 	private Logger LOG = LoggerFactory.getLogger(OwfsProducer.class);
 

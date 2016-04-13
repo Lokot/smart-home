@@ -11,6 +11,7 @@ import org.apache.deltaspike.core.api.config.ConfigResolver;
 import ru.skysoftlab.smarthome.heating.entitys.properties.BooleanProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.DateProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.DoubleProperty;
+import ru.skysoftlab.smarthome.heating.entitys.properties.FloatProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.IntegerProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.LongProperty;
 import ru.skysoftlab.smarthome.heating.entitys.properties.StringProperty;
@@ -135,6 +136,25 @@ public class PropertyProviderImpl implements PropertyProvider, Serializable {
 	private void persist(ApplicationProperty<?> property) {
 		em.merge(property);
 		em.flush();
+	}
+
+	@Override
+	public Float getFloatValue(String key) {
+		FloatProperty propertyValue = em.find(FloatProperty.class, key);
+		if (propertyValue != null) {
+			return propertyValue.getValue();
+		} else {
+			return ConfigResolver.resolve(key).as(Float.class).getValue();
+		}
+	}
+
+	@Override
+	public void setFloatValue(String key, Float value, String name) {
+		FloatProperty property = new FloatProperty();
+		property.setKey(key);
+		property.setValue(value);
+		property.setName(name);
+		persist(property);
 	}
 
 }

@@ -98,7 +98,6 @@ public abstract class AbstractForm<T> extends FormLayout {
 					Notification.show(msg, Type.TRAY_NOTIFICATION);
 					gridView.refreshData();
 				} catch (FieldGroup.CommitException e) {
-					e.printStackTrace();
 					// Validation exceptions could be shown here
 				}
 			}
