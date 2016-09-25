@@ -1,19 +1,11 @@
 package ru.skysoftlab.smarthome.heating.ui.impl;
 
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE_MAX_TEMP;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE_START;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.HOLIDAY_MODE_STOP;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.INTERVAL;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.OWFS_SERVER;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.SUMMER_MODE;
-import static ru.skysoftlab.smarthome.heating.config.ConfigNames.TEMP_INTERVAL;
+import java.util.Locale;
+import java.util.TimeZone;
 
-import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.UserTransaction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +18,9 @@ import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
 import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.dto.SystemConfigDto;
-import ru.skysoftlab.smarthome.heating.entitys.properties.api.PropertyProvider;
 import ru.skysoftlab.smarthome.heating.events.SystemConfigEvent;
 import ru.skysoftlab.smarthome.heating.security.RolesList;
+import ru.skysoftlab.smarthome.heating.services.ConfigService;
 import ru.skysoftlab.smarthome.heating.ui.BaseMenuView;
 
 import com.vaadin.cdi.CDIView;
@@ -37,6 +29,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.FormLayout;
@@ -64,11 +57,8 @@ public class SystemConfig extends BaseMenuView implements Button.ClickListener, 
 
 	private Logger LOG = LoggerFactory.getLogger(SystemConfig.class);
 
-	@Resource
-	private UserTransaction utx;
-
 	@Inject
-	private PropertyProvider propertyProvider;
+	private ConfigService configService;
 
 	@Inject
 	private javax.enterprise.event.Event<SystemConfigEvent> systemEvent;
@@ -90,17 +80,26 @@ public class SystemConfig extends BaseMenuView implements Button.ClickListener, 
 	private Button save = new Button("Сохранить", this);
 
 	private void configureComponents() {
-		Boolean readOnly = dto.getHoliday();
-		setReadOnlyField(readOnly);
-		holiday.addValueChangeListener(this);
-	}
-
-	private void buildLayout() {
-		Label title = new Label("Системные настройки");
 		CronGenExt ext = new CronGenExt();
 		ext.extend(alarmInterval);
 		CronGenExt ext1 = new CronGenExt();
 		ext1.extend(tempInterval);
+
+		Boolean readOnly = dto.getHoliday();
+		setReadOnlyField(readOnly);
+		holiday.addValueChangeListener(this);
+
+		holidayStart.setResolution(Resolution.MINUTE);
+		holidayStart.setLocale(new Locale("ru", "RU"));
+		holidayStart.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+
+		holidayStop.setResolution(Resolution.MINUTE);
+		holidayStop.setLocale(new Locale("ru", "RU"));
+		holidayStop.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+	}
+
+	private void buildLayout() {
+		Label title = new Label("Системные настройки");
 		FormLayout form = new FormLayout(url, alarmInterval, tempInterval, summerMode, holiday, holidayMaxTemp,
 				holidayStart, holidayStop, save);
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(dto, this);
@@ -134,33 +133,16 @@ public class SystemConfig extends BaseMenuView implements Button.ClickListener, 
 			formFieldBindings.commit();
 			// Save DAO to backend with direct synchronous service API
 			try {
-				try {
-					utx.begin();
-					propertyProvider.setStringValue(OWFS_SERVER, dto.getUrl(), "Url cервера OWSF");
-					propertyProvider.setStringValue(INTERVAL, dto.getAlarmInterval(),
-							"Интервал сканирования сигнализации");
-					propertyProvider.setStringValue(TEMP_INTERVAL, dto.getTempInterval(),
-							"Интервал сканирования температур");
-					propertyProvider.setBooleanValue(SUMMER_MODE, dto.getSummerMode(), "Режим лето");
-					propertyProvider.setBooleanValue(HOLIDAY_MODE, dto.getHoliday(), "Режим отпуск");
-					propertyProvider.setDateValue(HOLIDAY_MODE_START, dto.getHolidayStart(), "Начало отпуска");
-					propertyProvider.setDateValue(HOLIDAY_MODE_STOP, dto.getHolidayStop(), "Конец отпуска");
-					propertyProvider.setFloatValue(HOLIDAY_MODE_MAX_TEMP, dto.getHolidayMaxTemp(),
-							"Максимальная температура");
-
-					utx.commit();
-				} finally {
-					if (utx.getStatus() == 0) {
-						utx.rollback();
-					}
-				}
+				configService.saveConfig(dto);
+				// событие изменения настроек
+				systemEvent.fire(new SystemConfigEvent(dto.getDataForEvent()));
+				String msg = String.format("Saved '%s'.", dto.toString());
+				Notification.show(msg, Type.TRAY_NOTIFICATION);
 			} catch (Exception e) {
-				LOG.error("System configuration save error", e);
+				String msg = "System configuration save error";
+				LOG.error(msg, e);
+				Notification.show(msg, Type.ERROR_MESSAGE);
 			}
-			// событие изменения настроек
-			systemEvent.fire(new SystemConfigEvent(dto.getDataForEvent()));
-			String msg = String.format("Saved '%s'.", dto.toString());
-			Notification.show(msg, Type.TRAY_NOTIFICATION);
 		} catch (FieldGroup.CommitException e) {
 			// Validation exceptions could be shown here
 		}

@@ -10,8 +10,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.owfs.jowfsclient.OwfsConnection;
-import org.owfs.jowfsclient.OwfsConnectionConfig;
-import org.owfs.jowfsclient.OwfsConnectionFactory;
 import org.owfs.jowfsclient.OwfsException;
 
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
