@@ -46,6 +46,41 @@
 		<profile>
 			<id>jboss</id>
 		</profile>
+		<!-- Профиль для OWFS версии. -->
+		<profile>
+			<id>owfs</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>ru.skysoftlab.smarthome.heating</groupId>
+					<artifactId>smart-heating-impl-owfs</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Профиль для версии c нативным доступом к 1Wire сети. -->
+		<profile>
+			<id>owapi</id>
+			<dependencies>
+				<dependency>
+					<groupId>ru.skysoftlab.smarthome.heating</groupId>
+					<artifactId>smart-heating-impl-onewireapi</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>com.dalsemi.onewire</groupId>
+					<artifactId>owapi</artifactId>
+					<version>1.10</version>
+				</dependency>
+				<dependency>
+					<groupId>com.dalsemi.onewire</groupId>
+					<artifactId>usb-adapter</artifactId>
+					<version>1.0</version>
+				</dependency>
+			</dependencies>
+		</profile>
 		<!-- Build Widgetsets -->
 		<profile>
 			<id>buildVaadin</id>

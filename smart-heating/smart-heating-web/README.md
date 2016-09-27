@@ -11,3 +11,10 @@ tomee.xml add
 		Password    some_pass
 		JtaManaged true
 	</Resource>
+
+	
+	Профили сборки:
+	1) tomee - по умолчанию для Tomee (без hibernate-validator-*.jar и validation-api-*.jar)
+	2) owfs - по умолчанию для взаимодействия с OWFS-сервером
+	3) owapi - для взаимодействия с адаптером DS9490 через JNI
+	4) buildVaadin - для пересборки Vaadin

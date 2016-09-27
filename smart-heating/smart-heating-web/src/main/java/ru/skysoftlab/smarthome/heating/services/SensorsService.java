@@ -9,8 +9,6 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.owfs.jowfsclient.OwfsException;
-
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
 import ru.skysoftlab.smarthome.heating.dto.TemperatureDto;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;

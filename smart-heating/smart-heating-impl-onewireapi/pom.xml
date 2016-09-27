@@ -20,19 +20,58 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.dalsemi</groupId>
-			<artifactId>onewire</artifactId>
-			<version>1.2</version>
+			<groupId>com.dalsemi.onewire</groupId>
+			<artifactId>owapi</artifactId>
+			<version>1.10</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/resources/libs/OneWireAPI.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>com.dalsemi</groupId>
-			<artifactId>PDKAdapterUSB</artifactId>
-			<version>1.2</version>
+			<groupId>com.dalsemi.onewire</groupId>
+			<artifactId>usb-adapter</artifactId>
+			<version>1.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/resources/libs/PDKAdapterUSB.jar</systemPath>
 		</dependency>
 
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>owapi</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>com.dalsemi.onewire</groupId>
+							<artifactId>owapi</artifactId>
+							<version>1.10</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/src/main/resources/libs/OneWireAPI.jar</file>
+						</configuration>
+					</execution>
+					<execution>
+						<id>usb-adapter</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>com.dalsemi.onewire</groupId>
+							<artifactId>usb-adapter</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/src/main/resources/libs/PDKAdapterUSB.jar</file>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

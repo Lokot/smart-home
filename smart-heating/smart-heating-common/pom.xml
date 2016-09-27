@@ -24,11 +24,11 @@
 	<!-- </repositories> -->
 
 	<dependencies>
-		<dependency>
-			<groupId>org.owfs</groupId>
-			<artifactId>jowfsclient</artifactId>
-			<version>1.2.6</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.owfs</groupId> -->
+<!-- 			<artifactId>jowfsclient</artifactId> -->
+<!-- 			<version>1.2.6</version> -->
+<!-- 		</dependency> -->
 
 		<!-- <dependency> -->
 		<!-- <groupId>io.silverspoon</groupId> -->
