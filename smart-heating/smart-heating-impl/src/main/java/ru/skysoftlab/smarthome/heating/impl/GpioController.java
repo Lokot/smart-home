@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.gpio.IGpioController;
-import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
+import ru.skysoftlab.smarthome.heating.devices.IDevicesController;
+import ru.skysoftlab.smarthome.heating.devices.IDevice;
 import ru.skysoftlab.smarthome.heating.util.PinsUtil;
 
 /**
@@ -14,7 +14,7 @@ import ru.skysoftlab.smarthome.heating.util.PinsUtil;
  * @author Артём
  *
  */
-public class GpioController implements IGpioController {
+public class GpioController implements IDevicesController {
 
 	private static final long serialVersionUID = -7828970261921394602L;
 	
@@ -29,8 +29,8 @@ public class GpioController implements IGpioController {
 	 * .String)
 	 */
 	@Override
-	public void toOpen(String deviceName) {
-		for (IGpioPin gpioPin : sensorsProvider.getDs18bConfig(deviceName)
+	public void openHC(String deviceName) {
+		for (IDevice gpioPin : sensorsProvider.getDs18bConfig(deviceName)
 				.getGpioPin()) {
 			try {
 				open(gpioPin);
@@ -48,8 +48,8 @@ public class GpioController implements IGpioController {
 	 * .String)
 	 */
 	@Override
-	public void toClose(String deviceName) {
-		for (IGpioPin gpioPin : sensorsProvider.getDs18bConfig(deviceName)
+	public void closeHC(String deviceName) {
+		for (IDevice gpioPin : sensorsProvider.getDs18bConfig(deviceName)
 				.getGpioPin()) {
 			try {
 				close(gpioPin);
@@ -93,8 +93,8 @@ public class GpioController implements IGpioController {
 	 * @see ru.skysoftlab.smarthome.heating.gpio.IGpioController#toOpenAll()
 	 */
 	@Override
-	public void toOpenAll() {
-		for (IGpioPin gpioPin : sensorsProvider.getAllKonturs()) {
+	public void openHCAll() {
+		for (IDevice gpioPin : sensorsProvider.getAllKonturs()) {
 			try {
 				swichState(gpioPin, true);
 			} catch (IOException e) {
@@ -103,15 +103,15 @@ public class GpioController implements IGpioController {
 		}
 	}
 
-	private void open(IGpioPin pin) throws IOException {
+	private void open(IDevice pin) throws IOException {
 		swichState(pin, true);
 	}
 
-	private void close(IGpioPin pin) throws IOException {
+	private void close(IDevice pin) throws IOException {
 		swichState(pin, false);
 	}
 
-	private void swichState(IGpioPin pin, boolean state) throws IOException {
+	private void swichState(IDevice pin, boolean state) throws IOException {
 		if ((pin.isNormaliClosed() && state)
 				|| (!pin.isNormaliClosed() && !state)) {
 			if (!PinsUtil.isEnabledPin(pin)) {

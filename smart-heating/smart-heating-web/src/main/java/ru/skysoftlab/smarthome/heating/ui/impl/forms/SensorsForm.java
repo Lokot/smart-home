@@ -14,11 +14,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
+import ru.skysoftlab.smarthome.heating.devices.DeviceType;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
@@ -152,7 +152,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<GpioPin> criteriaQuery = builder.createQuery(GpioPin.class);
 		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		criteriaQuery.select(s).where(builder.equal(s.get(GpioPin_.type), GpioPinType.KONTUR),
+		criteriaQuery.select(s).where(builder.equal(s.get(GpioPin_.type), DeviceType.KONTUR),
 				s.get(GpioPin_.owner).isNull());
 		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
 		return query.getResultList();

@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.gpio;
+package ru.skysoftlab.smarthome.heating.devices;
 
 /**
  * Пин на материнской плате.
@@ -6,14 +6,14 @@ package ru.skysoftlab.smarthome.heating.gpio;
  * @author Артём
  *
  */
-public interface IGpioPin {
+public interface IDevice {
 
 	/**
 	 * Виртуальный номер пина.
 	 * 
 	 * @return
 	 */
-	public Integer getGpio();
+	public Integer getVirtualPinNomber();
 
 	/**
 	 * Возвращает наименование.
@@ -34,6 +34,6 @@ public interface IGpioPin {
 	 * 
 	 * @return
 	 */
-	public GpioPinType getType();
+	public DeviceType getType();
 
 }

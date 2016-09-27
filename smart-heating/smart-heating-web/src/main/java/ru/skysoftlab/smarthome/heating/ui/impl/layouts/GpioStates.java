@@ -12,8 +12,8 @@ import org.vaadin.teemu.switchui.Switch;
 
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
+import ru.skysoftlab.smarthome.heating.devices.DeviceType;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
 
@@ -85,7 +85,7 @@ public class GpioStates extends ReloadDataPenel {
 		public int compare(GpioPin e1, GpioPin e2) {
 			if (e1.getType().equals(e2.getType())) {
 				return 0;
-			} else if (e1.getType().equals(GpioPinType.BOILER)) {
+			} else if (e1.getType().equals(DeviceType.BOILER)) {
 				return 1;
 			}
 			return -1;

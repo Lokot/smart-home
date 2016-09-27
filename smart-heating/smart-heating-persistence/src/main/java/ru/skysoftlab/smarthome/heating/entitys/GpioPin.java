@@ -13,8 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
-import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
+import ru.skysoftlab.smarthome.heating.devices.DeviceType;
+import ru.skysoftlab.smarthome.heating.devices.IDevice;
 
 /**
  * Пин на плате.
@@ -23,7 +23,7 @@ import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
  *
  */
 @Entity
-public class GpioPin implements IGpioPin, Serializable {
+public class GpioPin implements IDevice, Serializable {
 
 	private static final long serialVersionUID = -7517168275011878703L;
 
@@ -39,7 +39,7 @@ public class GpioPin implements IGpioPin, Serializable {
 	private String name;
 	private Boolean normaliClosed;
 	@Enumerated(EnumType.STRING)
-	private GpioPinType type;
+	private DeviceType type;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="OWNER_ID")
 	private Sensor owner;
@@ -52,7 +52,7 @@ public class GpioPin implements IGpioPin, Serializable {
 		this.id = id;
 	}
 
-	public Integer getGpio() {
+	public Integer getVirtualPinNomber() {
 		return gpio;
 	}
 
@@ -99,11 +99,11 @@ public class GpioPin implements IGpioPin, Serializable {
 	}
 
 	@Override
-	public GpioPinType getType() {
+	public DeviceType getType() {
 		return this.type;
 	}
 
-	public void setType(GpioPinType type) {
+	public void setType(DeviceType type) {
 		this.type = type;
 	}
 

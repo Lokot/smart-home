@@ -12,6 +12,7 @@ public class TempAlarmingEvent {
 	private TempAlarmingType type;
 	/** Имя датчика. */
 	private String deviceName;
+	/** Примерное значение. */
 	private Float fastTemp;
 
 	/**
@@ -21,8 +22,7 @@ public class TempAlarmingEvent {
 	 * @param temp
 	 * @return
 	 */
-	public static TempAlarmingEvent createLowTempEvent(String deviceName,
-			Float temp) {
+	public static TempAlarmingEvent createLowTempEvent(String deviceName, Float temp) {
 		return new TempAlarmingEvent(TempAlarmingType.LOW, deviceName, temp);
 	}
 
@@ -33,13 +33,11 @@ public class TempAlarmingEvent {
 	 * @param temp
 	 * @return
 	 */
-	public static TempAlarmingEvent createTopTempEvent(String deviceName,
-			Float temp) {
+	public static TempAlarmingEvent createTopTempEvent(String deviceName, Float temp) {
 		return new TempAlarmingEvent(TempAlarmingType.TOP, deviceName, temp);
 	}
 
-	private TempAlarmingEvent(TempAlarmingType type, String deviceName,
-			Float fastTemp) {
+	private TempAlarmingEvent(TempAlarmingType type, String deviceName, Float fastTemp) {
 		this.type = type;
 		this.deviceName = deviceName;
 		this.fastTemp = fastTemp;
@@ -56,11 +54,10 @@ public class TempAlarmingEvent {
 	public Float getFastTemp() {
 		return fastTemp;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "TempAlarmingEvent [type=" + type + ", deviceName=" + deviceName
-				+ ", fastTemp=" + fastTemp + "]";
+		return "TempAlarmingEvent [type=" + type + ", deviceName=" + deviceName + ", fastTemp=" + fastTemp + "]";
 	}
 
 	/**

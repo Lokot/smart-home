@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
-import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
+import ru.skysoftlab.smarthome.heating.devices.IDevice;
 
 public final class PinsUtil {
 
@@ -14,46 +14,46 @@ public final class PinsUtil {
 	public static final String Low = "0";
 	public static final String Out = "out";
 
-	public static void exportPin(IGpioPin gpioPin) throws IOException {
+	public static void exportPin(IDevice gpioPin) throws IOException {
 		FileOutputStream fileOutputStream = new FileOutputStream(new File(
 				gpio_path + "/export"));
-		fileOutputStream.write(gpioPin.getGpio().toString().getBytes());
+		fileOutputStream.write(gpioPin.getVirtualPinNomber().toString().getBytes());
 		fileOutputStream.flush();
 		fileOutputStream.close();
 	}
 
-	public static void unexportPin(IGpioPin gpioPin) throws IOException {
+	public static void unexportPin(IDevice gpioPin) throws IOException {
 		FileOutputStream fileOutputStream = new FileOutputStream(new File(
 				gpio_path + "/unexport"));
-		fileOutputStream.write(gpioPin.getGpio().toString().getBytes());
+		fileOutputStream.write(gpioPin.getVirtualPinNomber().toString().getBytes());
 		fileOutputStream.flush();
 		fileOutputStream.close();
 	}
 
-	public static void setOutDirectionPin(IGpioPin gpioPin) throws IOException {
+	public static void setOutDirectionPin(IDevice gpioPin) throws IOException {
 		setDirectionPin(gpioPin, "out");
 	}
 
-	private static void setDirectionPin(IGpioPin gpioPin, String type)
+	private static void setDirectionPin(IDevice gpioPin, String type)
 			throws IOException {
 		FileOutputStream fileOutputStream = new FileOutputStream(new File(
-				gpio_path + "/gpio" + gpioPin.getGpio() + "/direction"));
+				gpio_path + "/gpio" + gpioPin.getVirtualPinNomber() + "/direction"));
 		fileOutputStream.write(type.getBytes());
 		fileOutputStream.flush();
 		fileOutputStream.close();
 	}
 
-	public static void setPinHigh(IGpioPin gpioPin) throws IOException {
+	public static void setPinHigh(IDevice gpioPin) throws IOException {
 		setPin(gpioPin, High);
 	}
 
-	public static void setPinLow(IGpioPin gpioPin) throws IOException {
+	public static void setPinLow(IDevice gpioPin) throws IOException {
 		setPin(gpioPin, Low);
 	}
 
-	private static void setPin(IGpioPin gpioPin, String value)
+	private static void setPin(IDevice gpioPin, String value)
 			throws IOException {
-		File gpioValue = new File(gpio_path + "/gpio" + gpioPin.getGpio()
+		File gpioValue = new File(gpio_path + "/gpio" + gpioPin.getVirtualPinNomber()
 				+ "/value");
 		if (gpioValue.exists()) {
 			FileOutputStream fileOutputStream = new FileOutputStream(gpioValue);
@@ -66,9 +66,9 @@ public final class PinsUtil {
 	}
 
 	// TODO подумать про нормально-открытые и закрытые
-	public static Boolean isEnabledPin(IGpioPin gpioPin) throws IOException {
+	public static Boolean isEnabledPin(IDevice gpioPin) throws IOException {
 		boolean rv = false;
-		File gpioValue = new File(gpio_path + "/gpio" + gpioPin.getGpio()
+		File gpioValue = new File(gpio_path + "/gpio" + gpioPin.getVirtualPinNomber()
 				+ "/value");
 		if (gpioValue.exists()) {
 			FileReader fr = new FileReader(gpioValue);

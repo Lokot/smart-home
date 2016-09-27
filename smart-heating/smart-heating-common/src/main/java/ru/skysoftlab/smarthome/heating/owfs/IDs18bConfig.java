@@ -2,7 +2,7 @@ package ru.skysoftlab.smarthome.heating.owfs;
 
 import java.util.Set;
 
-import ru.skysoftlab.smarthome.heating.gpio.IGpioPin;
+import ru.skysoftlab.smarthome.heating.devices.IDevice;
 
 /**
  * Класс настроек датчика.
@@ -38,6 +38,6 @@ public interface IDs18bConfig {
 	 * 
 	 * @return
 	 */
-	public Set<? extends IGpioPin> getGpioPin();
+	public Set<? extends IDevice> getGpioPin();
 
 }

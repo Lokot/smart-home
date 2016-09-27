@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import ru.skysoftlab.smarthome.heating.devices.DeviceType;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.gpio.GpioPinType;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 import com.vaadin.ui.CheckBox;
@@ -37,7 +37,7 @@ public class GpioForm extends AbstractForm<GpioPin> {
 		def = new TextField("Идентификационный номер на плате");
 		name = new TextField("Контур");
 		normaliClosed = new CheckBox("Нормальнозакрытый");
-		type = new ComboBox("Тип устройства", EnumSet.allOf(GpioPinType.class));
+		type = new ComboBox("Тип устройства", EnumSet.allOf(DeviceType.class));
 		Collection<Component> rv = new ArrayList<>();
 		rv.add(gpio);
 		rv.add(pin);
