@@ -12,16 +12,13 @@ import javax.transaction.UserTransaction;
 import org.apache.openejb.quartz.Job;
 import org.apache.openejb.quartz.JobExecutionContext;
 import org.apache.openejb.quartz.JobExecutionException;
-import org.owfs.jowfsclient.OwfsConnection;
-import org.owfs.jowfsclient.OwfsConnectionFactory;
-import org.owfs.jowfsclient.OwfsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Temp;
 import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
-import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
+import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
 
 /**
  * Задание на сканирование температуры.
@@ -40,20 +37,23 @@ public class ScanTempJob implements Job {
 	@Resource
 	private UserTransaction utx;
 
-	@Inject
-	private OwfsConnectionFactory factory;
+//	@Inject
+//	private OwfsConnectionFactory factory;
 
 	@Inject
 	private SensorsAndGpioProvider sensorsProvider;
+	
+	@Inject
+	private IOneWire client;
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOG.info("Сканирование температур " + context.getJobDetail());
 		Date now = context.getScheduledFireTime();
-		OwfsConnection client = factory.createNewConnection();
+//		OwfsConnection client = factory.createNewConnection();
 		for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 			try {
-				float t = round(OwsfUtilDS18B.getTemperature(client, sensor.getSensorId()), 1);
+				float t = round(client.getTemperature(sensor.getSensorId()), 1);
 				try {
 					utx.begin();
 					em.persist(new Temp(t, sensor, now));
@@ -61,16 +61,16 @@ public class ScanTempJob implements Job {
 				} catch (Exception e) {
 					LOG.error("Save temp error", e);
 				}
-			} catch (OwfsException | IOException e) {
+			} catch (IOException e) {
 				LOG.error("Read sensor(" + sensor.toLog() + ") error", e);
 			}
 		}
-		try {
-			client.disconnect();
-		} catch (IOException e) {
-			LOG.error("Close connection error", e);
-		}
-		client = null;
+//		try {
+//			client.disconnect();
+//		} catch (IOException e) {
+//			LOG.error("Close connection error", e);
+//		}
+//		client = null;
 	}
 
 	/**

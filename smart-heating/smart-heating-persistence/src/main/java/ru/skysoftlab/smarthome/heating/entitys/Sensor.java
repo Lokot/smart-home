@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import ru.skysoftlab.smarthome.heating.owfs.IDs18bConfig;
+import ru.skysoftlab.smarthome.heating.onewire.IDs18bConfig;
 
 /**
  * Датчик.

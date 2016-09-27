@@ -14,6 +14,8 @@
 		<module>smart-heating-impl</module>
 		<module>smart-heating-web</module>
 		<module>smart-heating-security</module>
+		<module>smart-heating-impl-owfs</module>
+		<module>smart-heating-impl-onewireapi</module>
 	</modules>
 
 	<repositories>

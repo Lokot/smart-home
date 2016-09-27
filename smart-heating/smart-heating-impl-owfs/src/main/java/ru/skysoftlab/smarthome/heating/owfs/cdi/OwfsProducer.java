@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.cdi;
+package ru.skysoftlab.smarthome.heating.owfs.cdi;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
 
 import ru.skysoftlab.smarthome.heating.annatations.EJBBean;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 import ru.skysoftlab.smarthome.heating.toDelete.AlarmScannerBean;
 
 @Stateless

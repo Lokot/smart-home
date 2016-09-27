@@ -7,7 +7,7 @@ import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 
 /**
  * Инициализация приложения.

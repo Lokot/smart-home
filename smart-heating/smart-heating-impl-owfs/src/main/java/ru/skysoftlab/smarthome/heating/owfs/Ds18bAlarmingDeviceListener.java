@@ -6,7 +6,9 @@ import org.owfs.jowfsclient.OwfsConnection;
 import org.owfs.jowfsclient.OwfsException;
 import org.owfs.jowfsclient.alarm.AlarmingDeviceListener;
 
-import ru.skysoftlab.smarthome.heating.util.OwsfUtilDS18B;
+import ru.skysoftlab.smarthome.heating.onewire.IDs18bConfig;
+import ru.skysoftlab.smarthome.heating.onewire.ITempAlarmHandler;
+import ru.skysoftlab.smarthome.heating.onewire.TempAlarmingEvent;
 
 /**
  * Слушатель изменения температуры.

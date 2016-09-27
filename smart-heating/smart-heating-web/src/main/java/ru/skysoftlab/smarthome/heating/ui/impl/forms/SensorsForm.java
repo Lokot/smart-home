@@ -19,7 +19,7 @@ import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
 import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
@@ -53,7 +53,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 	private SensorsService service;
 
 	@Inject
-	private IAlarmScanner scanner;
+	private IAlarmScannerJob scanner;
 
 	private ComboBox sensorId;
 	private TextField name;
@@ -206,7 +206,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 					// чистим
 					clearComponents();
 					// обновляем сканнер
-					scanner.setAlarmingDeviceHandler(entity);
+					scanner.setDeviceConfig(entity);
 				} catch (FieldGroup.CommitException e) {
 					// Validation exceptions could be shown here
 					e.printStackTrace();

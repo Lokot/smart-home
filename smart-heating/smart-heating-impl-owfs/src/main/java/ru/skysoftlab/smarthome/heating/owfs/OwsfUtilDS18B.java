@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.util;
+package ru.skysoftlab.smarthome.heating.owfs;
 
 import java.io.IOException;
 import java.util.ArrayList;

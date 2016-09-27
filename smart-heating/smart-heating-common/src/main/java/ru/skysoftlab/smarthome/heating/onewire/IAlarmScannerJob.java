@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.owfs;
+package ru.skysoftlab.smarthome.heating.onewire;
 
 import java.io.Serializable;
 
@@ -8,14 +8,14 @@ import java.io.Serializable;
  * @author Loktionov Artem
  *
  */
-public interface IAlarmScanner extends Serializable {
+public interface IAlarmScannerJob extends Serializable {
 
 	/**
 	 * Обновляет обработчик изменения температуры.
 	 * 
 	 * @param config
 	 */
-	public void setAlarmingDeviceHandler(IDs18bConfig config);
+	public void setDeviceConfig(IDs18bConfig config);
 	
 	/**
 	 * Возвращает есть ли обработчик.
@@ -23,6 +23,6 @@ public interface IAlarmScanner extends Serializable {
 	 * @param deviceName
 	 * @return
 	 */
-	public boolean isAlarmingDeviceHandlerInstalled(String deviceName);
+//	public boolean isAlarmingDeviceHandlerInstalled(String deviceName);
 
 }

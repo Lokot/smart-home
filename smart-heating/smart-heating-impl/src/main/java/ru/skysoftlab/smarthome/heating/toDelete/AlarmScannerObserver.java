@@ -5,7 +5,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.events.SystemConfigEvent;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
+import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 
 /**
  * Слушатель событий.

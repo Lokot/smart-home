@@ -1,18 +1,5 @@
 package ru.skysoftlab.smarthome.heating.toDelete;
 
-import java.io.IOException;
-
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.inject.Inject;
-
-import org.owfs.jowfsclient.OwfsException;
-import org.owfs.jowfsclient.alarm.AlarmingDevicesScanner;
-
-import ru.skysoftlab.smarthome.heating.owfs.Ds18bAlarmingDeviceListener;
-import ru.skysoftlab.smarthome.heating.owfs.IAlarmScanner;
-import ru.skysoftlab.smarthome.heating.owfs.IDs18bConfig;
 
 /**
  * Сканер датчиков.

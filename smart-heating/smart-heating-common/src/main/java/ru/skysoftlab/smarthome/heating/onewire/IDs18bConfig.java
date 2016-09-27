@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.owfs;
+package ru.skysoftlab.smarthome.heating.onewire;
 
 import java.util.Set;
 

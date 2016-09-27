@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ru.skysoftlab.smarthome.heating.devices.IDevicesController;
-import ru.skysoftlab.smarthome.heating.owfs.ITempAlarmHandler;
-import ru.skysoftlab.smarthome.heating.owfs.TempAlarmingEvent;
+import ru.skysoftlab.smarthome.heating.onewire.ITempAlarmHandler;
+import ru.skysoftlab.smarthome.heating.onewire.TempAlarmingEvent;
 
 /**
  * Обработчик изменения температуры.
