@@ -1,6 +1,5 @@
 package ru.skysoftlab.smarthome.heating.owapi;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,13 +16,13 @@ import com.dalsemi.onewire.container.TemperatureContainer;
 import com.dalsemi.onewire.utils.Address;
 
 /**
- * Реализация интерфейса взаимодействия с 1-Wire сетью через нативные
- * библиотеки (DS9490 USB).
+ * Реализация интерфейса взаимодействия с 1-Wire сетью через нативные библиотеки
+ * (DS9490 USB).
  * 
  * @author Артём
  *
  */
-public class DS9490UsbOneWire implements IOneWire, Closeable {
+public class DS9490UsbOneWire implements IOneWire {
 
 	private static final long serialVersionUID = -8884179885543393286L;
 
@@ -35,9 +34,15 @@ public class DS9490UsbOneWire implements IOneWire, Closeable {
 
 	private DSPortAdapter access = null;
 
-	public DS9490UsbOneWire() {
+	public DS9490UsbOneWire(String aAdapter_name, String aPort_name) {
+		if (aAdapter_name == null) {
+			aAdapter_name = adapter_name;
+		}
+		if (aPort_name == null) {
+			aPort_name = port_name;
+		}
 		try {
-			access = OneWireAccessProvider.getAdapter(adapter_name, port_name);
+			access = OneWireAccessProvider.getAdapter(aAdapter_name, aPort_name);
 		} catch (OneWireException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

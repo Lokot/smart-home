@@ -2,10 +2,18 @@ package ru.skysoftlab.smarthome.heating.owapi;
 
 import java.io.IOException;
 
+import cz.adamh.utils.NativeUtils;
+
 public class TestWrapper {
 
 	public static void main(String[] args) throws IOException {
-		DS9490UsbOneWire wrapper = new DS9490UsbOneWire();
+//		try {
+////			System.loadLibrary("onewireUSB");
+//			NativeUtils.loadLibraryFromJar("/libs/libonewireUSB.so");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		DS9490UsbOneWire wrapper = new DS9490UsbOneWire(null, null);
 		System.out.println("All ---------------------------------------------");
 		for (String id : wrapper.getIdsDS18B()) {
 			System.out.println("Идентификатор = " + id + " температура = " + wrapper.getTemperature(id));

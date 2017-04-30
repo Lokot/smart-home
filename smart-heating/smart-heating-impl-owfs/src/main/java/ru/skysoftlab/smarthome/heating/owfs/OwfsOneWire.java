@@ -9,6 +9,8 @@ import javax.inject.Inject;
 
 import org.owfs.jowfsclient.OwfsConnection;
 import org.owfs.jowfsclient.OwfsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
 
@@ -22,6 +24,8 @@ import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
 public class OwfsOneWire implements IOneWire {
 
 	private static final long serialVersionUID = -4880078481700726553L;
+	
+	private Logger LOG = LoggerFactory.getLogger(OwfsOneWire.class);
 
 	@Inject
 	private OwfsConnection client;
@@ -139,6 +143,16 @@ public class OwfsOneWire implements IOneWire {
 		} catch (OwfsException e) {
 			throw new IOException(e);
 		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		try {
+			client.disconnect();
+			LOG.info("OWSF-connection closed");
+		} catch (IOException e) {
+			LOG.error("Close OWSF-connection error", e);
+		}		
 	}
 
 }

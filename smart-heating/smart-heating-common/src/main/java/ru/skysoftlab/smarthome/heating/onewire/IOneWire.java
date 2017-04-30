@@ -1,5 +1,6 @@
 package ru.skysoftlab.smarthome.heating.onewire;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author Артём
  *
  */
-public interface IOneWire extends Serializable {
+public interface IOneWire extends Serializable, Closeable {
 
 	/**
 	 * Возвращает температуру с датчика.

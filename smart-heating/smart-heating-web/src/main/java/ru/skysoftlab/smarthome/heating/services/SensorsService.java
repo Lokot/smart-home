@@ -31,22 +31,14 @@ public class SensorsService implements Serializable {
 
 	private static final long serialVersionUID = -620019230850598972L;
 
-//	@Inject
-//	private OwfsConnectionConfig config;
-	
-//	@Inject
-//	private OwfsConnection client;
-	
 	@Inject
 	private IOneWire client;
 
 	@Inject
 	private SensorsAndGpioProvider sensorsProvider;
 
-	// TODO переделать создание коннекции
 	public Collection<AlarmedSensorDto> findAlarmed() {
 		Collection<AlarmedSensorDto> rv = new ArrayList<>();
-//		OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
 		try {
 			Map<String, Float> alarmedTemps = client.getAlarmedTemps();
 			for (String sensorId : alarmedTemps.keySet()) {
@@ -63,36 +55,10 @@ public class SensorsService implements Serializable {
 				}
 				rv.add(dto);
 			}
-//			List<String> alarmedSensorsIds = client.getAlarmed(); // OwsfUtilDS18B.getAlarmed(client);
-//			for (String sensorId : alarmedSensorsIds) {
-//				AlarmedSensorDto dto = new AlarmedSensorDto();
-//				dto.setSensorId(sensorId);
-////				dto.setFastTemp(OwsfUtilDS18B.getFasttemp(client, sensorId));
-//				dto.setFastTemp(client.getFasttemp(sensorId));
-//				Sensor sensor = sensorsProvider.getDs18bConfig(sensorId);
-//				if (sensor != null) {
-//					dto.setName(sensor.getName());
-//					dto.setLow(sensor.getLow());
-//					dto.setTop(sensor.getTop());
-//				} else {
-//					dto.setName("Не задан");
-//				}
-//				rv.add(dto);
-//			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		} finally {
-//			if (client != null) {
-//				try {
-//					client.disconnect();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-//				}
-//			}
 		}
 		return rv;
 	}
@@ -100,7 +66,6 @@ public class SensorsService implements Serializable {
 	// TODO переделать создание коннекции
 	public Collection<TemperatureDto> findTemperatures() {
 		Collection<TemperatureDto> rv = new ArrayList<>();
-//		OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
 		try {
 			for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 				TemperatureDto dto = new TemperatureDto();
@@ -112,17 +77,7 @@ public class SensorsService implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-		} finally {
-//			if (client != null) {
-//				try {
-//					client.disconnect();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					Notification.show(e.getMessage(), Type.TRAY_NOTIFICATION);
-//				}
-//			}
-		}
+		} 
 		return rv;
 	}
 
@@ -133,7 +88,6 @@ public class SensorsService implements Serializable {
 	 */
 	public List<String> getIdsDS18B() {
 		try {
-//			OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
 			return client.getIdsDS18B();
 		} catch (IOException e) {
 			e.printStackTrace();

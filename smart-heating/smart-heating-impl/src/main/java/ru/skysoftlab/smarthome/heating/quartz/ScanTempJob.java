@@ -37,9 +37,6 @@ public class ScanTempJob implements Job {
 	@Resource
 	private UserTransaction utx;
 
-//	@Inject
-//	private OwfsConnectionFactory factory;
-
 	@Inject
 	private SensorsAndGpioProvider sensorsProvider;
 	
@@ -50,7 +47,6 @@ public class ScanTempJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOG.info("Сканирование температур " + context.getJobDetail());
 		Date now = context.getScheduledFireTime();
-//		OwfsConnection client = factory.createNewConnection();
 		for (Sensor sensor : sensorsProvider.getDs18bConfigs()) {
 			try {
 				float t = round(client.getTemperature(sensor.getSensorId()), 1);
@@ -65,12 +61,6 @@ public class ScanTempJob implements Job {
 				LOG.error("Read sensor(" + sensor.toLog() + ") error", e);
 			}
 		}
-//		try {
-//			client.disconnect();
-//		} catch (IOException e) {
-//			LOG.error("Close connection error", e);
-//		}
-//		client = null;
 	}
 
 	/**

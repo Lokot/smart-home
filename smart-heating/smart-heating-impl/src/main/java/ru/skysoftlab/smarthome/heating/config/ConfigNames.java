@@ -10,5 +10,9 @@ public interface ConfigNames {
 	public static final String HOLIDAY_MODE = "holidayMode";
 	public static final String HOLIDAY_MODE_START = "holidayModeStart";
 	public static final String HOLIDAY_MODE_STOP = "holidayModeStop";
+	public static final String ONE_WIRE_ADAPTER_NAME = "adapter_name";
+	public static final String ONE_WIRE_PORT_NAME = "port_name";
+	
+	
 	
 }
