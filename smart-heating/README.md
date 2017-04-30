@@ -4,7 +4,10 @@ https://github.com/px3/bulldog.git
 
 ##Build
 mvn clean install -P tomee,buildVaadin
-
+### Build for OneWire file system
+mvn clean install -P tomee,owfs
+### Build for use native OneWireAPI
+mvn clean install -P tomee,owapi
 
 Зависимости GitHub:
 https://github.com/downdrown/VaadinHighChartsAPI.git
@@ -12,7 +15,7 @@ https://github.com/adamheinrich/native-utils.git
 
 
 // TODO разобраться
-▒▒▒ 02, 2016 1:05:35 AM org.owfs.jowfsclient.alarm.AlarmingDevicesReader handleConnectionException
+02, 2016 1:05:35 AM org.owfs.jowfsclient.alarm.AlarmingDevicesReader handleConnectionException
 WARNING: Exception occured
 java.lang.NullPointerException
         at org.owfs.jowfsclient.util.OWFSUtils.extractDeviceNameFromDevicePath(OWFSUtils.java:11)
