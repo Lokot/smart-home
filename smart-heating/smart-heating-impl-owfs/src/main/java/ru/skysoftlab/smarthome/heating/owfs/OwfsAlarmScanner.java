@@ -24,23 +24,37 @@ import ru.skysoftlab.smarthome.heating.onewire.ITempAlarmHandler;
 public class OwfsAlarmScanner implements IAlarmDevScanner {
 
 	private static final long serialVersionUID = -1065714883620629842L;
-	
+
 	private Logger LOG = LoggerFactory.getLogger(OwfsAlarmScanner.class);
-	
+
 	@Inject
 	private ITempAlarmHandler tempAlarmHandler;
 
 	@Inject
 	private AlarmingDevicesReader reader;
-	
+
 	private List<IDs18bConfig> errorAddHandlerList;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ru.skysoftlab.smarthome.heating.onewire.IAlarmDevScanner#scanAlarmingDevices
+	 * ()
+	 */
 	@Override
 	public void scanAlarmingDevices() {
 		setErrorAlarmingDeviceHandlers();
 		reader.run();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ru.skysoftlab.smarthome.heating.onewire.IAlarmDevScanner#setDeviceConfig
+	 * (ru.skysoftlab.smarthome.heating.onewire.IDs18bConfig)
+	 */
 	@Override
 	public void setDeviceConfig(IDs18bConfig config) {
 		try {
@@ -51,13 +65,20 @@ public class OwfsAlarmScanner implements IAlarmDevScanner {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ru.skysoftlab.smarthome.heating.onewire.IAlarmDevScanner#setDeviceConfigs
+	 * (java.util.List)
+	 */
 	@Override
 	public void setDeviceConfigs(List<IDs18bConfig> configs) {
 		for (IDs18bConfig config : configs) {
 			setDeviceConfig(config);
 		}
 	}
-	
+
 	/**
 	 * Добавляет обработчик.
 	 * 
@@ -73,7 +94,7 @@ public class OwfsAlarmScanner implements IAlarmDevScanner {
 		reader.addAlarmingDeviceHandler(new Ds18bAlarmingDeviceListener(config, tempAlarmHandler));
 		LOG.info("Add handler " + config);
 	}
-	
+
 	/**
 	 * Добавляет конфиг в список ошибок.
 	 * 
@@ -85,7 +106,7 @@ public class OwfsAlarmScanner implements IAlarmDevScanner {
 		}
 		errorAddHandlerList.add(config);
 	}
-	
+
 	/**
 	 * Добавляет обработчики из списка ошибок.
 	 */

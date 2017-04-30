@@ -3,6 +3,7 @@ package ru.skysoftlab.smarthome.heating.onewire;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс взаимодействия с 1-Wire сетью.
@@ -44,5 +45,10 @@ public interface IOneWire extends Serializable {
 	 * Возвращает список сигнализирующих датчиков.
 	 */
 	public List<String> getAlarmed() throws IOException;
+	
+	/**
+	 * Возвращает список сигнализирующих датчиков с температурой.
+	 */
+	public Map<String, Float> getAlarmedTemps() throws IOException;
 
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -47,12 +48,11 @@ public class SensorsService implements Serializable {
 		Collection<AlarmedSensorDto> rv = new ArrayList<>();
 //		OwfsConnection client = OwfsConnectionFactory.newOwfsClient(config);
 		try {
-			List<String> alarmedSensorsIds = client.getAlarmed(); // OwsfUtilDS18B.getAlarmed(client);
-			for (String sensorId : alarmedSensorsIds) {
+			Map<String, Float> alarmedTemps = client.getAlarmedTemps();
+			for (String sensorId : alarmedTemps.keySet()) {
 				AlarmedSensorDto dto = new AlarmedSensorDto();
 				dto.setSensorId(sensorId);
-//				dto.setFastTemp(OwsfUtilDS18B.getFasttemp(client, sensorId));
-				dto.setFastTemp(client.getFasttemp(sensorId));
+				dto.setFastTemp(alarmedTemps.get(sensorId));
 				Sensor sensor = sensorsProvider.getDs18bConfig(sensorId);
 				if (sensor != null) {
 					dto.setName(sensor.getName());
@@ -63,6 +63,22 @@ public class SensorsService implements Serializable {
 				}
 				rv.add(dto);
 			}
+//			List<String> alarmedSensorsIds = client.getAlarmed(); // OwsfUtilDS18B.getAlarmed(client);
+//			for (String sensorId : alarmedSensorsIds) {
+//				AlarmedSensorDto dto = new AlarmedSensorDto();
+//				dto.setSensorId(sensorId);
+////				dto.setFastTemp(OwsfUtilDS18B.getFasttemp(client, sensorId));
+//				dto.setFastTemp(client.getFasttemp(sensorId));
+//				Sensor sensor = sensorsProvider.getDs18bConfig(sensorId);
+//				if (sensor != null) {
+//					dto.setName(sensor.getName());
+//					dto.setLow(sensor.getLow());
+//					dto.setTop(sensor.getTop());
+//				} else {
+//					dto.setName("Не задан");
+//				}
+//				rv.add(dto);
+//			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

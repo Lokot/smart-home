@@ -9,7 +9,8 @@ import org.owfs.jowfsclient.OwfsException;
 import org.owfs.jowfsclient.util.OWFSUtils;
 
 /**
- * Утилитный класс для работы с датчиками DS18B20.
+ * Утилитный класс для работы с датчиками DS18B20 через OneWire File System
+ * Server (owserver).
  * 
  * @author Артём
  *
@@ -27,8 +28,7 @@ public class OwsfUtilDS18B {
 	 * @throws IOException
 	 * @throws OwfsException
 	 */
-	public static void setTemphigh(OwfsConnection client, String id, Float temp)
-			throws IOException, OwfsException {
+	public static void setTemphigh(OwfsConnection client, String id, Float temp) throws IOException, OwfsException {
 		client.write(String.format("/%s/temphigh", id), temp.toString());
 	}
 
@@ -41,8 +41,7 @@ public class OwsfUtilDS18B {
 	 * @throws IOException
 	 * @throws OwfsException
 	 */
-	public static void setTemplow(OwfsConnection client, String id, Float temp)
-			throws IOException, OwfsException {
+	public static void setTemplow(OwfsConnection client, String id, Float temp) throws IOException, OwfsException {
 		client.write(String.format("/%s/templow", id), temp.toString());
 	}
 
@@ -55,8 +54,7 @@ public class OwsfUtilDS18B {
 	 * @throws IOException
 	 * @throws OwfsException
 	 */
-	public static Float getFasttemp(OwfsConnection client, String id)
-			throws IOException, OwfsException {
+	public static Float getFasttemp(OwfsConnection client, String id) throws IOException, OwfsException {
 		return Float.parseFloat(client.read(String.format("/%s/fasttemp", id)));
 	}
 
@@ -68,8 +66,7 @@ public class OwsfUtilDS18B {
 	 * @throws OwfsException
 	 * @throws IOException
 	 */
-	public static List<String> getIdsDS18B(OwfsConnection client)
-			throws OwfsException, IOException {
+	public static List<String> getIdsDS18B(OwfsConnection client) throws OwfsException, IOException {
 		List<String> rv = new ArrayList<>();
 		for (String path : client.listDirectoryAll("/")) {
 			try {
@@ -91,8 +88,7 @@ public class OwsfUtilDS18B {
 	 * @throws OwfsException
 	 * @throws IOException
 	 */
-	public static List<String> getAlarmed(OwfsConnection client)
-			throws OwfsException, IOException {
+	public static List<String> getAlarmed(OwfsConnection client) throws OwfsException, IOException {
 		List<String> rv = new ArrayList<>();
 		for (String path : client.listDirectoryAll("/alarm")) {
 			try {
@@ -115,9 +111,7 @@ public class OwsfUtilDS18B {
 	 * @throws OwfsException
 	 * @throws IOException
 	 */
-	public static Float getTemperature(OwfsConnection client, String id)
-			throws OwfsException, IOException {
-		return Float.parseFloat(client.read(String
-				.format("/%s/temperature", id)));
+	public static Float getTemperature(OwfsConnection client, String id) throws OwfsException, IOException {
+		return Float.parseFloat(client.read(String.format("/%s/temperature", id)));
 	}
 }

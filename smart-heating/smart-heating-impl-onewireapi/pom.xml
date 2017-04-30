@@ -72,6 +72,54 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Для отладки. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+<!-- 							<mainClass>TestMain</mainClass> -->
+							<mainClass>ru.skysoftlab.smarthome.heating.owapi.TestWrapper</mainClass>
+
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<configuration>
+					<tasks>
+						<scp todir="${targetNode}:~/" trust="true" failonerror="true"
+							file="${project.build.directory}/${project.build.finalName}.jar" />
+						<sshexec trust="true" host="192.168.0.114" username="root"
+							password="1234" command="java -jar ~/${project.build.finalName}.jar DS9490_USB1" />
+						<!-- <sshexec trust="true" host="192.168.0.114" username="root" -->
+						<!-- password="1234" command="ls ~/" /> -->
+
+					</tasks>
+				</configuration>
+				<executions>
+					<execution>
+						<id>upload</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-jsch</artifactId>
+						<version>1.8.3</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>
