@@ -17,6 +17,8 @@
 		<module>smart-heating-impl-owfs</module>
 		<module>smart-heating-impl-onewireapi</module>
 		<module>smart-heating-onewireapi</module>
+		<module>bulldog-gpio</module>
+		<module>bulldog-board-cubietruck</module>
 	</modules>
 
 	<repositories>
