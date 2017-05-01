@@ -9,9 +9,12 @@ mvn clean install -P tomee,owfs
 ### Build for use native OneWireAPI
 mvn clean install -P tomee,owapi
 
+Добавить в Git OneWireApi.jar
+
 Зависимости GitHub:
 https://github.com/downdrown/VaadinHighChartsAPI.git
 https://github.com/adamheinrich/native-utils.git
+https://github.com/Lokot/bulldog.git
 
 
 // TODO разобраться
