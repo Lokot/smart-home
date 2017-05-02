@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>vaadin-cronGen</module>
+		<!--<module>vaadin-cronGen</module>-->
 		<module>smart-heating-persistence</module>
 		<module>smart-heating-common</module>
 		<module>smart-heating-impl</module>
@@ -18,13 +18,21 @@
 		<module>smart-heating-impl-onewireapi</module>
 		<module>smart-heating-onewireapi</module>
 		<module>bulldog-gpio</module>
-		<module>bulldog-board-cubietruck</module>
+		<!--<module>bulldog-board-cubietruck</module>-->
 	</modules>
 
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
 			<url>http://maven.vaadin.com/vaadin-addons</url>
+		</repository>
+		<repository>
+			<id>curly-fiesta-mvn-repo</id>
+			<url>https://raw.github.com/Lokot/curly-fiesta/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
 		</repository>
 	</repositories>
 
