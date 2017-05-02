@@ -8,7 +8,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!--<module>vaadin-cronGen</module>-->
 		<module>smart-heating-persistence</module>
 		<module>smart-heating-common</module>
 		<module>smart-heating-impl</module>
@@ -18,7 +17,6 @@
 		<module>smart-heating-impl-onewireapi</module>
 		<module>smart-heating-onewireapi</module>
 		<module>bulldog-gpio</module>
-		<!--<module>bulldog-board-cubietruck</module>-->
 	</modules>
 
 	<repositories>
