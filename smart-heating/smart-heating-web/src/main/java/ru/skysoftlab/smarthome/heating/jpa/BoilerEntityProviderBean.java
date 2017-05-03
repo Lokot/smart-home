@@ -14,13 +14,13 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-import ru.skysoftlab.smarthome.heating.entitys.Valve;
+import ru.skysoftlab.smarthome.heating.entitys.Boiler;
 
 import com.vaadin.addon.jpacontainer.provider.MutableLocalEntityProvider;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GpioPinEntityProviderBean extends MutableLocalEntityProvider<Valve> {
+public class BoilerEntityProviderBean extends MutableLocalEntityProvider<Boiler> {
 
 	@Inject
 	private EntityManager em;
@@ -28,8 +28,8 @@ public class GpioPinEntityProviderBean extends MutableLocalEntityProvider<Valve>
 	@Resource
 	private UserTransaction utx;
 
-	public GpioPinEntityProviderBean() {
-		super(Valve.class);
+	public BoilerEntityProviderBean() {
+		super(Boiler.class);
 		setTransactionsHandledByProvider(true);
 	}
 

@@ -60,7 +60,7 @@ public class SensorsView extends AbstractGridView<Sensor, SensorsForm> {
 
 	@Override
 	protected Object[] getRemoveColumn() {
-		return new String[] { "id", "gpioPin", "deviceName" };
+		return new String[] { "id", "gpioPin", "deviceName", "master" };
 	}
 
 	@Override

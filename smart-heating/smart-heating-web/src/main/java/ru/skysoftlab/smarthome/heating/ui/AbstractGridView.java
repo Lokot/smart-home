@@ -91,7 +91,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>>
 			}
 		});
 
-		filter.setInputPrompt("Filter contacts...");
+		filter.setInputPrompt("Фильтр...");
 		filter.addTextChangeListener(new TextChangeListener() {
 
 			private static final long serialVersionUID = 8724327598558636541L;
@@ -119,7 +119,7 @@ public abstract class AbstractGridView<T, F extends AbstractForm<T>>
 
 			@Override
 			public void select(SelectionEvent event) {
-				Long itemId = (Long) grid.getSelectedRow();
+				Object itemId = grid.getSelectedRow();
 				if (itemId != null) {
 					getEntityForm().edit(jpaContainer.getItem(itemId).getEntity());
 				} else {

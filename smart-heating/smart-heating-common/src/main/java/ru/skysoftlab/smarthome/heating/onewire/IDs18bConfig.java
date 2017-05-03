@@ -2,6 +2,7 @@ package ru.skysoftlab.smarthome.heating.onewire;
 
 import java.util.Set;
 
+import ru.skysoftlab.smarthome.heating.devices.IBoiler;
 import ru.skysoftlab.smarthome.heating.devices.IDevice;
 
 /**
@@ -39,5 +40,11 @@ public interface IDs18bConfig {
 	 * @return
 	 */
 	public Set<? extends IDevice> getGpioPin();
+	
+	/**
+	 * Возвращает нагреатель.
+	 * @return
+	 */
+	public IBoiler getMaster();
 
 }

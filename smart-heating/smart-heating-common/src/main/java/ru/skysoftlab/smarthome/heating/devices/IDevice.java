@@ -9,18 +9,18 @@ package ru.skysoftlab.smarthome.heating.devices;
 public interface IDevice {
 
 	/**
-	 * Виртуальный номер пина.
+	 * Идентификационный номер на плате.
 	 * 
 	 * @return
 	 */
-	public Integer getVirtualPinNomber();
+	public String getDef();
 
 	/**
 	 * Возвращает наименование.
 	 * 
 	 * @return
 	 */
-	public String getName();
+	public String getUserName();
 
 	/**
 	 * Режим работы.
@@ -35,5 +35,6 @@ public interface IDevice {
 	 * @return
 	 */
 	public DeviceType getType();
-
+	
+	
 }

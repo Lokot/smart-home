@@ -16,6 +16,11 @@ https://github.com/downdrown/VaadinHighChartsAPI.git
 https://github.com/adamheinrich/native-utils.git
 https://github.com/Lokot/bulldog.git
 
+// TODO разобраться 
+не находит login.config из библиотеки smart-heating-security (пришлось класть в smart-heating-web)
+
+// TODO разобраться 
+пришлость класть geronimo-connector-3.1.4.jar в tomee/libs
 
 // TODO разобраться
 02, 2016 1:05:35 AM org.owfs.jowfsclient.alarm.AlarmingDevicesReader handleConnectionException

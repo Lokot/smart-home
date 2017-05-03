@@ -9,7 +9,8 @@ public interface NavigationService extends Serializable {
 	public static final String MAIN = "";
 	public static final String LOGIN = "login";
 	public static final String SENSORS = "sensors";
-	public static final String GPIO = "gpio";
+	public static final String BOILERS = "boilers";
+	public static final String VALVES = "valves";
 	public static final String ALARMS = "alarm";
 	public static final String STATISTIC = "statistic";
 	public static final String CONFIG = "config";
@@ -22,9 +23,10 @@ public interface NavigationService extends Serializable {
 	}
 	
 	public static interface ConfigMenu {
-		public static final int GPIO = 0;
+		public static final int VALVES = 0;
 		public static final int SENSORS = 1;
-		public static final int SYSTEM = 2;
+		public static final int BOILERS = 2;
+		public static final int SYSTEM = 3;
 	}
 	
 	public static interface AlarmMenu {

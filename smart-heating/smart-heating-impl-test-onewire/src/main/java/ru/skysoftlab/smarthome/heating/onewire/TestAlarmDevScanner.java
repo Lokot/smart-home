@@ -1,4 +1,4 @@
-package ru.skysoftlab.smarthome.heating.owapi;
+package ru.skysoftlab.smarthome.heating.onewire;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,22 +7,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.onewire.IAlarmDevScanner;
-import ru.skysoftlab.smarthome.heating.onewire.IDs18bConfig;
-import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
-import ru.skysoftlab.smarthome.heating.onewire.ITempAlarmHandler;
-import ru.skysoftlab.smarthome.heating.onewire.TempAlarmingEvent;
+public class TestAlarmDevScanner implements IAlarmDevScanner {
 
-/**
- * Сканер датчиков для DS9490.
- * 
- * @author Артём
- *
- */
-public class OwApiAlarmDevScanner implements IAlarmDevScanner {
-
-	private static final long serialVersionUID = -5251182044681739574L;
-
+	private static final long serialVersionUID = 6286579176881344109L;
 	@Inject
 	private IOneWire oneWire;
 	@Inject
@@ -44,10 +31,12 @@ public class OwApiAlarmDevScanner implements IAlarmDevScanner {
 				float alarmedTemp = alarmedTemps.get(id);
 				if (alarmedTemp <= configs.get(id).getLow()) {
 					// ON
-					alarmHandler.handleAlarm(TempAlarmingEvent.createLowTempEvent(id, alarmedTemp));
+					alarmHandler.handleAlarm(TempAlarmingEvent
+							.createLowTempEvent(id, alarmedTemp));
 				} else if (alarmedTemp >= configs.get(id).getTop()) {
 					// OFF
-					alarmHandler.handleAlarm(TempAlarmingEvent.createTopTempEvent(id, alarmedTemp));
+					alarmHandler.handleAlarm(TempAlarmingEvent
+							.createTopTempEvent(id, alarmedTemp));
 				}
 			}
 		} catch (IOException e) {

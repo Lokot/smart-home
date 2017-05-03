@@ -14,7 +14,8 @@ public class Authenticator extends JaasAccessControl implements Serializable {
 	private static final long serialVersionUID = -8775780572051229559L;
 
 	public Authenticator() {
-		System.setProperty("java.security.auth.login.config", this.getClass().getResource("/login.config").getPath());
+		String path = this.getClass().getResource("/login.config").getPath();
+		System.setProperty("java.security.auth.login.config", path);
 	}
 
 }

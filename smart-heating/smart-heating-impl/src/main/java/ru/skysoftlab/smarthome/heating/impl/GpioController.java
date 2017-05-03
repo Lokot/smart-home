@@ -1,12 +1,18 @@
 package ru.skysoftlab.smarthome.heating.impl;
 
-import java.io.IOException;
+import io.silverspoon.bulldog.core.gpio.DigitalOutput;
+import io.silverspoon.bulldog.core.pin.Pin;
+import io.silverspoon.bulldog.core.platform.Board;
+import io.silverspoon.bulldog.core.platform.Platform;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.devices.IDevicesController;
 import ru.skysoftlab.smarthome.heating.devices.IDevice;
-import ru.skysoftlab.smarthome.heating.util.PinsUtil;
+import ru.skysoftlab.smarthome.heating.devices.IDevicesController;
+import ru.skysoftlab.smarthome.heating.entitys.Boiler;
+import ru.skysoftlab.smarthome.heating.entitys.Valve;
 
 /**
  * Управляет устройствами.
@@ -17,9 +23,11 @@ import ru.skysoftlab.smarthome.heating.util.PinsUtil;
 public class GpioController implements IDevicesController {
 
 	private static final long serialVersionUID = -7828970261921394602L;
-	
+
 	@Inject
 	private SensorsAndGpioProvider sensorsProvider;
+
+	private Board board = Platform.createBoard();
 
 	/*
 	 * (non-Javadoc)
@@ -30,13 +38,9 @@ public class GpioController implements IDevicesController {
 	 */
 	@Override
 	public void openHC(String deviceName) {
-		for (IDevice gpioPin : sensorsProvider.getDs18bConfig(deviceName)
+		for (Valve valve : sensorsProvider.getDs18bConfig(deviceName)
 				.getGpioPin()) {
-			try {
-				open(gpioPin);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			swichState(valve, valve.isNormaliClosed());
 		}
 	}
 
@@ -49,13 +53,9 @@ public class GpioController implements IDevicesController {
 	 */
 	@Override
 	public void closeHC(String deviceName) {
-		for (IDevice gpioPin : sensorsProvider.getDs18bConfig(deviceName)
+		for (Valve valve : sensorsProvider.getDs18bConfig(deviceName)
 				.getGpioPin()) {
-			try {
-				close(gpioPin);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			swichState(valve, !valve.isNormaliClosed());
 		}
 	}
 
@@ -66,10 +66,8 @@ public class GpioController implements IDevicesController {
 	 */
 	@Override
 	public void boilerOn() {
-		try {
-			open(sensorsProvider.getBoilerGpioPin());
-		} catch (IOException e) {
-			e.printStackTrace();
+		for (Boiler boiler : sensorsProvider.getBoilerGpioPin()) {
+			swichState(boiler, boiler.isNormaliClosed());
 		}
 	}
 
@@ -80,10 +78,8 @@ public class GpioController implements IDevicesController {
 	 */
 	@Override
 	public void boilerOff() {
-		try {
-			close(sensorsProvider.getBoilerGpioPin());
-		} catch (IOException e) {
-			e.printStackTrace();
+		for (Boiler boiler : sensorsProvider.getBoilerGpioPin()) {
+			swichState(boiler, !boiler.isNormaliClosed());
 		}
 	}
 
@@ -94,34 +90,31 @@ public class GpioController implements IDevicesController {
 	 */
 	@Override
 	public void openHCAll() {
-		for (IDevice gpioPin : sensorsProvider.getAllKonturs()) {
-			try {
-				swichState(gpioPin, true);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (Valve valve : sensorsProvider.getAllKonturs()) {
+			swichState(valve, valve.isNormaliClosed());
 		}
 	}
 
-	private void open(IDevice pin) throws IOException {
-		swichState(pin, true);
-	}
-
-	private void close(IDevice pin) throws IOException {
-		swichState(pin, false);
-	}
-
-	private void swichState(IDevice pin, boolean state) throws IOException {
-		if ((pin.isNormaliClosed() && state)
-				|| (!pin.isNormaliClosed() && !state)) {
-			if (!PinsUtil.isEnabledPin(pin)) {
-				PinsUtil.setPinHigh(pin);
-			}
+	private void swichState(IDevice pin, boolean state) {
+		Pin ppin = board.getPin(pin.getDef());
+		DigitalOutput output = ppin.as(DigitalOutput.class);
+		if (state) {
+			output.high();
 		} else {
-			if (PinsUtil.isEnabledPin(pin)) {
-				PinsUtil.setPinLow(pin);
-			}
+			output.low();
 		}
+	}
+
+	@Override
+	public String[] getPinNames() {
+		Collection<Pin> pins = board.getPins();
+		String[] rv = new String[pins.size()];
+		int i = 0;
+		for (Pin pin : pins) {
+			rv[i] = pin.getName();
+			i++;
+		}
+		return rv;
 	}
 
 }

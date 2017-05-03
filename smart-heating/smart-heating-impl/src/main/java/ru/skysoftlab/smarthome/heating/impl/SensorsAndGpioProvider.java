@@ -12,12 +12,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import ru.skysoftlab.smarthome.heating.devices.DeviceType;
-import ru.skysoftlab.smarthome.heating.devices.IDevice;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
+import ru.skysoftlab.smarthome.heating.entitys.Boiler;
+import ru.skysoftlab.smarthome.heating.entitys.Device;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
+import ru.skysoftlab.smarthome.heating.entitys.Valve;
 
 /**
  * Провайдер доступа к настройкам датчиков.
@@ -72,16 +71,14 @@ public class SensorsAndGpioProvider implements Serializable {
 	 * 
 	 * @return
 	 */
-	public IDevice getBoilerGpioPin() {
+	public Collection<Boiler> getBoilerGpioPin() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder
-				.createQuery(GpioPin.class);
-		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		criteriaQuery.select(s).where(
-				builder.equal(s.get(GpioPin_.type), DeviceType.BOILER));
-		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
-		GpioPin gpioPin = query.getSingleResult();
-		return gpioPin;
+		CriteriaQuery<Boiler> criteriaQuery = builder
+				.createQuery(Boiler.class);
+		Root<Boiler> s = criteriaQuery.from(Boiler.class);
+		criteriaQuery.select(s);
+		TypedQuery<Boiler> query = em.createQuery(criteriaQuery);
+		return query.getResultList();
 	}
 
 	/**
@@ -89,16 +86,14 @@ public class SensorsAndGpioProvider implements Serializable {
 	 * 
 	 * @return
 	 */
-	public Collection<? extends IDevice> getAllKonturs() {
+	public Collection<Valve> getAllKonturs() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder
-				.createQuery(GpioPin.class);
-		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		criteriaQuery.select(s).where(
-				builder.equal(s.get(GpioPin_.type), DeviceType.KONTUR));
-		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
-		List<GpioPin> rv = query.getResultList();
-		return rv;
+		CriteriaQuery<Valve> criteriaQuery = builder
+				.createQuery(Valve.class);
+		Root<Valve> s = criteriaQuery.from(Valve.class);
+		criteriaQuery.select(s);
+		TypedQuery<Valve> query = em.createQuery(criteriaQuery);
+		return query.getResultList();
 	}
 
 	/**
@@ -106,14 +101,13 @@ public class SensorsAndGpioProvider implements Serializable {
 	 * 
 	 * @return
 	 */
-	public List<GpioPin> getAllGpioPins() {
+	public List<Device> getAllGpioPins() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder
-				.createQuery(GpioPin.class);
-		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
+		CriteriaQuery<Device> criteriaQuery = builder
+				.createQuery(Device.class);
+		Root<Device> s = criteriaQuery.from(Device.class);
 		criteriaQuery.select(s);
-		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
-		List<GpioPin> rv = query.getResultList();
-		return rv;
+		TypedQuery<Device> query = em.createQuery(criteriaQuery);
+		return query.getResultList();
 	}
 }

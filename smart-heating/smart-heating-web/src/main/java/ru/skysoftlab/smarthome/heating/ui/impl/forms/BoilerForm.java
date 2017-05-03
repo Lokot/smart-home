@@ -3,7 +3,7 @@ package ru.skysoftlab.smarthome.heating.ui.impl.forms;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ru.skysoftlab.smarthome.heating.entitys.Valve;
+import ru.skysoftlab.smarthome.heating.entitys.Boiler;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
 
 import com.vaadin.ui.CheckBox;
@@ -11,12 +11,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.TextField;
 
 /**
- * Форма устройств.
+ * Форма нагревателя.
  * 
  * @author Loktionov Artem
  *
  */
-public class GpioForm extends AbstractForm<Valve> {
+public class BoilerForm extends AbstractForm<Boiler> {
 
 	private static final long serialVersionUID = 2372643403143137631L;
 
@@ -27,7 +27,7 @@ public class GpioForm extends AbstractForm<Valve> {
 	@Override
 	protected Collection<? extends Component> getInputs() {
 		def = new TextField("Идентификационный номер на плате");
-		name = new TextField("Контур");
+		name = new TextField("Нагреватель");
 		normaliClosed = new CheckBox("Нормальнозакрытый");
 		Collection<Component> rv = new ArrayList<>();
 		rv.add(def);

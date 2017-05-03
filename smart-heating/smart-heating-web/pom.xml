@@ -25,6 +25,13 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+<!-- 			<dependencies> -->
+<!-- 				<dependency> -->
+<!-- 					<groupId>org.apache.geronimo.components</groupId> -->
+<!-- 					<artifactId>geronimo-connector</artifactId> -->
+<!-- 					<version>3.1.4</version> -->
+<!-- 				</dependency> -->
+<!-- 			</dependencies> -->
 			<build>
 				<plugins>
 					<!-- Для TomEE убираем валидатор. -->
@@ -48,10 +55,21 @@
 		</profile>
 		<!-- Профиль для OWFS версии. -->
 		<profile>
-			<id>owfs</id>
+			<id>onewireTest</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>ru.skysoftlab.smarthome.heating</groupId>
+					<artifactId>smart-heating-impl-test-onewire</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Профиль для OWFS версии. -->
+		<profile>
+			<id>owfs</id>
 			<dependencies>
 				<dependency>
 					<groupId>ru.skysoftlab.smarthome.heating</groupId>

@@ -13,7 +13,7 @@ import org.vaadin.teemu.switchui.Switch;
 import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
 import ru.skysoftlab.smarthome.heating.devices.DeviceType;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
+import ru.skysoftlab.smarthome.heating.entitys.Device;
 import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
 
@@ -47,15 +47,15 @@ public class GpioStates extends ReloadDataPenel {
 
 	@Override
 	public void reload() {
-		List<GpioPin> pins = sensorsProvider.getAllGpioPins();
+		List<Device> pins = sensorsProvider.getAllGpioPins();
 		if (pins.size() > 0) {
 			Collections.sort(pins, TYPE_ORDER);
 			// Create the content
 			GridLayout content = new GridLayout(2, pins.size());
 			int y = 0;
-			for (GpioPin pin : pins) {
+			for (Device pin : pins) {
 				try {
-					content.addComponent(new Label(pin.getName()), 0, y);
+					content.addComponent(new Label(pin.getUserName()), 0, y);
 					content.addComponent(createSwitch(pin), 1, y);
 					y++;
 				} catch (OverlapsException | OutOfBoundsException | IOException e) {
@@ -68,7 +68,7 @@ public class GpioStates extends ReloadDataPenel {
 		}
 	}
 
-	private Switch createSwitch(GpioPin pin) throws IOException {
+	private Switch createSwitch(Device pin) throws IOException {
 		Switch rv = new Switch();
 		// TODO заглушка, поменять на
 		// rv.setImmediate(PinsUtil.isEnabledPin(pin));
@@ -81,8 +81,8 @@ public class GpioStates extends ReloadDataPenel {
 	/**
 	 * Сравниватель.
 	 */
-	public static final Comparator<GpioPin> TYPE_ORDER = new Comparator<GpioPin>() {
-		public int compare(GpioPin e1, GpioPin e2) {
+	public static final Comparator<Device> TYPE_ORDER = new Comparator<Device>() {
+		public int compare(Device e1, Device e2) {
 			if (e1.getType().equals(e2.getType())) {
 				return 0;
 			} else if (e1.getType().equals(DeviceType.BOILER)) {

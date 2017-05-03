@@ -15,8 +15,8 @@
 		<module>smart-heating-security</module>
 		<module>smart-heating-impl-owfs</module>
 		<module>smart-heating-impl-onewireapi</module>
+		<module>smart-heating-impl-test-onewire</module>
 		<module>smart-heating-onewireapi</module>
-		<module>bulldog-gpio</module>
 	</modules>
 
 	<repositories>
@@ -38,6 +38,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.6.3</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+		<openejb.version>7.0.2</openejb.version>
 	</properties>
 
 	<dependencies>
@@ -71,7 +72,7 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>1.6.2</version>
-			<scope>provided</scope>
+<!-- 			<scope>provided</scope> -->
 		</dependency>
 	</dependencies>
 

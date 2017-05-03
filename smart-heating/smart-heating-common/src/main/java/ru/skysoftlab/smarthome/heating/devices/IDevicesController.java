@@ -39,4 +39,11 @@ public interface IDevicesController extends Serializable {
 	 */
 	public void openHCAll();
 
+	/**
+	 * Возвращает массив имен пинов на контроллере.
+	 * 
+	 * @return
+	 */
+	public String[] getPinNames();
+
 }

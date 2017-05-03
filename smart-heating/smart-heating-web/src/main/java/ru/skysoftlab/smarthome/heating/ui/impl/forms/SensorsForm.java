@@ -14,11 +14,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import ru.skysoftlab.smarthome.heating.devices.DeviceType;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin;
-import ru.skysoftlab.smarthome.heating.entitys.GpioPin_;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor_;
+import ru.skysoftlab.smarthome.heating.entitys.Valve;
+import ru.skysoftlab.smarthome.heating.entitys.Valve_;
 import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 import ru.skysoftlab.smarthome.heating.services.SensorsService;
 import ru.skysoftlab.smarthome.heating.ui.AbstractForm;
@@ -107,7 +106,7 @@ public class SensorsForm extends AbstractForm<Sensor> {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				GpioPin value = (GpioPin) gpioBox.getValue();
+				Valve value = (Valve) gpioBox.getValue();
 				// Add some items (here by the item ID as the caption)
 				gpioPin.addItems(value);
 			}
@@ -148,13 +147,12 @@ public class SensorsForm extends AbstractForm<Sensor> {
 		return rv;
 	}
 
-	private List<GpioPin> getFreeGpioPin() {
+	private List<Valve> getFreeGpioPin() {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
-		CriteriaQuery<GpioPin> criteriaQuery = builder.createQuery(GpioPin.class);
-		Root<GpioPin> s = criteriaQuery.from(GpioPin.class);
-		criteriaQuery.select(s).where(builder.equal(s.get(GpioPin_.type), DeviceType.KONTUR),
-				s.get(GpioPin_.owner).isNull());
-		TypedQuery<GpioPin> query = em.createQuery(criteriaQuery);
+		CriteriaQuery<Valve> criteriaQuery = builder.createQuery(Valve.class);
+		Root<Valve> s = criteriaQuery.from(Valve.class);
+		criteriaQuery.select(s).where(s.get(Valve_.owner).isNull());
+		TypedQuery<Valve> query = em.createQuery(criteriaQuery);
 		return query.getResultList();
 	}
 
@@ -192,8 +190,8 @@ public class SensorsForm extends AbstractForm<Sensor> {
 				try {
 					// Commit the fields from UI to DAO
 					formFieldBindings.commit();
-					HashSet<GpioPin> rr = new HashSet<>();
-					for (GpioPin component : (Collection<GpioPin>) gpioPin.getItemIds()) {
+					HashSet<Valve> rr = new HashSet<>();
+					for (Valve component : (Collection<Valve>) gpioPin.getItemIds()) {
 						component.setOwner(entity);
 						rr.add(component);
 					}

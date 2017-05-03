@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -34,9 +36,12 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	private String sensorId;
 	private String name;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
-	private Set<GpioPin> gpioPin = new HashSet<>();
+	private Set<Valve> gpioPin = new HashSet<>();
 	private Float low;
 	private Float top;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MASTER_ID")
+	private Boiler master;
 
 	public Sensor() {
 
@@ -73,16 +78,16 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	}
 
 	@Override
-	public Set<GpioPin> getGpioPin() {
+	public Set<Valve> getGpioPin() {
 		return gpioPin;
 	}
 
-	public void setGpioPin(Set<GpioPin> gpioPin) {
+	public void setGpioPin(Set<Valve> gpioPin) {
 		this.gpioPin = gpioPin;
 	}
 
 	@Transient
-	public void addGpioPin(GpioPin pin) {
+	public void addGpioPin(Valve pin) {
 		this.gpioPin.add(pin);
 		if (pin.getOwner() != this) {
 			pin.setOwner(this);
@@ -111,6 +116,15 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	@Override
 	public Float getLow() {
 		return low;
+	}
+	
+	@Override
+	public Boiler getMaster() {
+		return master;
+	}
+
+	public void setMaster(Boiler master) {
+		this.master = master;
 	}
 
 	@Override
