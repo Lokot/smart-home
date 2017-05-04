@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Maven-Launcher">
+	<property name="maven.executable" value="c:\Maven\bin\mvn.bat" />
+	<property name="project.smartHeating" value="C:\SmartHome\smart-home\smart-heating" />
+	<property name="tomee" value="C:/TomEE" />
+
+	<target name="1) Build Smart Home Heating">
+		<echo>Build Smart Home Heating</echo>
+		<!--<exec dir="${project.smartHeating}" executable="${maven.executable}">
+			<arg value="clean" />
+			<arg value="install" />
+			<arg value="-T4" />
+			<arg value="-Dmaven.test.skip=true" />
+		</exec>-->
+		<echo>Stop TomEE</echo>
+		<exec dir="${tomee}/bin" executable="shutdown.sh"/>
+		<echo>Delete WAR file</echo>
+		<delete dir="${tomee}/webapps/smart-heating"/>
+		<delete>
+			<fileset dir="${tomee}/webapps" includes="*.war" />
+		</delete>
+		<echo>Copy WAR file</echo>
+		<copy file="${project.smartHeating}/smart-heating-web/target/smart-heating-web-1.0-SNAPSHOT.war" tofile="${tomee}/webapps/smart-heating.war" />
+		<echo>Remove local logs and temps</echo>
+		<delete>
+			<fileset dir="${tomee}/logs" includes="*.*" />
+		</delete>
+		<echo>Start TomEE</echo>
+		<exec dir="${tomee}/bin" executable="start.bat"/>
+	</target>
+
+	<target name="2) Eclipse Balcon">
+		<echo>Eclipse Balcon Total</echo>
+		<exec dir="${project.balcon}" executable="${maven.executable}">
+			<arg value="eclipse:clean" />
+			<arg value="eclipse:eclipse" />
+			<arg value="-Ptotal" />
+		</exec>
+	</target>
+
+</project>

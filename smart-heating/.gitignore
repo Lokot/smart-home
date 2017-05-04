@@ -4,8 +4,6 @@
 .settings/
 .classpath
 .tern-project
-.metadata/
-.recommenders/
 
 target
 
