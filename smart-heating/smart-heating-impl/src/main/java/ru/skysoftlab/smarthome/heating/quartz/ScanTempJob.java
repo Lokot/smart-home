@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Temp;
-import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
+import ru.skysoftlab.smarthome.heating.impl.SensorsAndDevicesProvider;
 import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
 
 /**
@@ -38,7 +38,7 @@ public class ScanTempJob implements Job {
 	private UserTransaction utx;
 
 	@Inject
-	private SensorsAndGpioProvider sensorsProvider;
+	private SensorsAndDevicesProvider sensorsProvider;
 	
 	@Inject
 	private IOneWire client;

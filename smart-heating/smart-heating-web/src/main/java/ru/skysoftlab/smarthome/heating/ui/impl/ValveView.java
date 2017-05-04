@@ -12,10 +12,10 @@ import ru.skysoftlab.smarthome.heating.NavigationService.MainMenu;
 import ru.skysoftlab.smarthome.heating.annatations.MainMenuItem;
 import ru.skysoftlab.smarthome.heating.annatations.MenuItemView;
 import ru.skysoftlab.smarthome.heating.entitys.Valve;
-import ru.skysoftlab.smarthome.heating.jpa.GpioPinEntityProviderBean;
+import ru.skysoftlab.smarthome.heating.jpa.ValveEntityProviderBean;
 import ru.skysoftlab.smarthome.heating.security.RolesList;
 import ru.skysoftlab.smarthome.heating.ui.AbstractGridView;
-import ru.skysoftlab.smarthome.heating.ui.impl.forms.GpioForm;
+import ru.skysoftlab.smarthome.heating.ui.impl.forms.ValveForm;
 
 import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.cdi.CDIView;
@@ -31,17 +31,17 @@ import com.vaadin.data.Container.Indexed;
 @MainMenuItem(name = "Настройки", order = MainMenu.CONFIG)
 @MenuItemView(name = "Контура", order = ConfigMenu.VALVES)
 @RolesAllowed({ RolesList.ADMIN })
-public class GpioView extends AbstractGridView<Valve, GpioForm> {
+public class ValveView extends AbstractGridView<Valve, ValveForm> {
 
 	private static final long serialVersionUID = 6698245813955647506L;
 
 	@Inject
-	private GpioPinEntityProviderBean entityProvider;
+	private ValveEntityProviderBean entityProvider;
 	
 	@Inject
-	private GpioForm form;
+	private ValveForm form;
 
-	public GpioView() {
+	public ValveView() {
 		super(Valve.class);
 	}
 
@@ -57,7 +57,7 @@ public class GpioView extends AbstractGridView<Valve, GpioForm> {
 
 	@Override
 	protected Object[] getColumnOrder() {
-		return new String[] { "def", "userName", "normaliClosed",
+		return new String[] { "name", "def", "normaliClosed",
 				"type" };
 	}
 
@@ -75,7 +75,7 @@ public class GpioView extends AbstractGridView<Valve, GpioForm> {
 	protected Map<String, String> getColumnsNames() {
 		Map<String, String> rv = new HashMap<>();
 		rv.put("def", "Идентификационный номер на плате");
-		rv.put("userName", "Контур");
+		rv.put("name", "Контур");
 		rv.put("normaliClosed", "Нормально закрытый");
 		return rv;
 	}
@@ -86,7 +86,7 @@ public class GpioView extends AbstractGridView<Valve, GpioForm> {
 	}
 
 	@Override
-	protected GpioForm getEntityForm() {
+	protected ValveForm getEntityForm() {
 		return form;
 	}
 

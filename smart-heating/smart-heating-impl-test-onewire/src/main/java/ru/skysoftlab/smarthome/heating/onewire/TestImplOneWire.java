@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
+@Singleton
 public class TestImplOneWire implements IOneWire {
 
 	private static final long serialVersionUID = -3454045540454990306L;

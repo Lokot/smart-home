@@ -1,6 +1,7 @@
 package ru.skysoftlab.smarthome.heating.devices;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Интерфейс контроллера устройств.
@@ -25,25 +26,10 @@ public interface IDevicesController extends Serializable {
 	public void closeHC(String deviceName);
 
 	/**
-	 * Включает котел.
-	 */
-	public void boilerOn();
-
-	/**
-	 * Выключает котел.
-	 */
-	public void boilerOff();
-
-	/**
-	 * Открывает все контура отопления.
-	 */
-	public void openHCAll();
-
-	/**
 	 * Возвращает массив имен пинов на контроллере.
 	 * 
 	 * @return
 	 */
-	public String[] getPinNames();
+	public Collection<String> getPinNames();
 
 }

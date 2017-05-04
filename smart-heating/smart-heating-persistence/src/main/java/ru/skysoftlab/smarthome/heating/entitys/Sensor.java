@@ -7,8 +7,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,8 +29,6 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	private static final long serialVersionUID = 1836369034208284654L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	private String sensorId;
 	private String name;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
@@ -51,14 +47,6 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 		this.sensorId = sensorId;
 		this.low = low;
 		this.top = top;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getSensorId() {
@@ -146,7 +134,7 @@ public class Sensor implements IDs18bConfig, Serializable, Cloneable {
 	}
 
 	public String toLog() {
-		return "Sensor [id=" + id + ", sensorId=" + sensorId + ", name=" + name + ", gpioPin=" + gpioPin + ", low="
+		return "Sensor [sensorId=" + sensorId + ", name=" + name + ", gpioPin=" + gpioPin + ", low="
 				+ low + ", top=" + top + "]";
 	}
 

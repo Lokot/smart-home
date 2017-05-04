@@ -9,12 +9,13 @@ import javax.persistence.Transient;
 
 import ru.skysoftlab.smarthome.heating.devices.DeviceType;
 import ru.skysoftlab.smarthome.heating.devices.IValve;
+
 @Entity
-@DiscriminatorValue( value="KONTUR" )
+@DiscriminatorValue(value = "KONTUR")
 public class Valve extends Device implements IValve {
 
 	private static final long serialVersionUID = 3751248852660841124L;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER_ID")
 	private Sensor owner;
@@ -38,16 +39,16 @@ public class Valve extends Device implements IValve {
 		return DeviceType.KONTUR;
 	}
 
-//	@Override
-//	@Transient
-//	public boolean getSignalOpen() {
-//		return isNormaliClosed();
-//	}
-//
-//	@Override
-//	@Transient
-//	public boolean getSignalClose() {
-//		return !isNormaliClosed();
-//	}
+	// @Override
+	// @Transient
+	// public boolean getSignalOpen() {
+	// return isNormaliClosed();
+	// }
+	//
+	// @Override
+	// @Transient
+	// public boolean getSignalClose() {
+	// return !isNormaliClosed();
+	// }
 
 }

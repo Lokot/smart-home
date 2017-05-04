@@ -3,16 +3,21 @@ package ru.skysoftlab.smarthome.heating.impl;
 import io.silverspoon.bulldog.core.gpio.DigitalOutput;
 import io.silverspoon.bulldog.core.pin.Pin;
 import io.silverspoon.bulldog.core.platform.Board;
-import io.silverspoon.bulldog.core.platform.Platform;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import javax.inject.Inject;
 
-import ru.skysoftlab.smarthome.heating.devices.IDevice;
 import ru.skysoftlab.smarthome.heating.devices.IDevicesController;
 import ru.skysoftlab.smarthome.heating.entitys.Boiler;
+import ru.skysoftlab.smarthome.heating.entitys.Sensor;
 import ru.skysoftlab.smarthome.heating.entitys.Valve;
+
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 /**
  * Управляет устройствами.
@@ -23,11 +28,26 @@ import ru.skysoftlab.smarthome.heating.entitys.Valve;
 public class GpioController implements IDevicesController {
 
 	private static final long serialVersionUID = -7828970261921394602L;
+	/** Открыто. */
+	private static final boolean OPEN = true;
+	/** Закрыто. */
+	private static final boolean CLOSE = false;
 
 	@Inject
-	private SensorsAndGpioProvider sensorsProvider;
+	private SensorsAndDevicesProvider sensorsProvider;
 
-	private Board board = Platform.createBoard();
+	@Inject
+	private Board board;
+	public Map<String, Sensor> sensors = new HashMap<>();
+	public Table<Boiler, Valve, Boolean> statesNew = HashBasedTable.create();
+
+	private Sensor getSensor(String sensorId) {
+		Sensor sensor = sensors.get(sensorId);
+		if (sensor == null) {
+			sensor = sensorsProvider.getDs18bConfig(sensorId);
+		}
+		return sensor;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -37,11 +57,14 @@ public class GpioController implements IDevicesController {
 	 * .String)
 	 */
 	@Override
-	public void openHC(String deviceName) {
-		for (Valve valve : sensorsProvider.getDs18bConfig(deviceName)
-				.getGpioPin()) {
-			swichState(valve, valve.isNormaliClosed());
+	// TODO add transaction
+	public void openHC(String sensorId) {
+		Sensor sensor = getSensor(sensorId);
+		for (Valve valve : sensor.getGpioPin()) {
+			statesNew.put(sensor.getMaster(), valve, OPEN);
+			swichState(valve.getDef(), valve.isNormaliClosed());
 		}
+		checkStates();
 	}
 
 	/*
@@ -52,52 +75,36 @@ public class GpioController implements IDevicesController {
 	 * .String)
 	 */
 	@Override
-	public void closeHC(String deviceName) {
-		for (Valve valve : sensorsProvider.getDs18bConfig(deviceName)
-				.getGpioPin()) {
-			swichState(valve, !valve.isNormaliClosed());
+	// TODO add transaction
+	public void closeHC(String sensorId) {
+		Sensor sensor = getSensor(sensorId);
+		for (Valve valve : sensor.getGpioPin()) {
+			statesNew.put(sensor.getMaster(), valve, CLOSE);
+			swichState(valve.getDef(), !valve.isNormaliClosed());
+		}
+		checkStates();
+	}
+
+	private void boilerOn(Boiler boiler) {
+		swichState(boiler.getDef(), boiler.isNormaliClosed());
+	}
+
+	private void boilerOff(Boiler boiler) {
+		swichState(boiler.getDef(), !boiler.isNormaliClosed());
+	}
+
+	private void openHCAll(Boiler boiler) {
+		for (Sensor sensor : boiler.getSensors()) {
+			for (Valve valve : sensor.getGpioPin()) {
+				swichState(valve.getDef(), valve.isNormaliClosed());
+				statesNew.put(boiler, valve, OPEN);
+			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ru.skysoftlab.smarthome.heating.gpio.IGpioController#boilerOn()
-	 */
-	@Override
-	public void boilerOn() {
-		for (Boiler boiler : sensorsProvider.getBoilerGpioPin()) {
-			swichState(boiler, boiler.isNormaliClosed());
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ru.skysoftlab.smarthome.heating.gpio.IGpioController#boilerOff()
-	 */
-	@Override
-	public void boilerOff() {
-		for (Boiler boiler : sensorsProvider.getBoilerGpioPin()) {
-			swichState(boiler, !boiler.isNormaliClosed());
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ru.skysoftlab.smarthome.heating.gpio.IGpioController#toOpenAll()
-	 */
-	@Override
-	public void openHCAll() {
-		for (Valve valve : sensorsProvider.getAllKonturs()) {
-			swichState(valve, valve.isNormaliClosed());
-		}
-	}
-
-	private void swichState(IDevice pin, boolean state) {
-		Pin ppin = board.getPin(pin.getDef());
-		DigitalOutput output = ppin.as(DigitalOutput.class);
+	private void swichState(String pinName, boolean state) {
+		Pin pin = board.getPin(pinName);
+		DigitalOutput output = pin.as(DigitalOutput.class);
 		if (state) {
 			output.high();
 		} else {
@@ -105,16 +112,35 @@ public class GpioController implements IDevicesController {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ru.skysoftlab.smarthome.heating.devices.IDevicesController#getPinNames()
+	 */
 	@Override
-	public String[] getPinNames() {
+	public Collection<String> getPinNames() {
+		Collection<String> rv = new HashSet<>();
 		Collection<Pin> pins = board.getPins();
-		String[] rv = new String[pins.size()];
-		int i = 0;
 		for (Pin pin : pins) {
-			rv[i] = pin.getName();
-			i++;
+			rv.add(pin.getName());
 		}
 		return rv;
+	}
+
+	private void checkStates() {
+		for (Boiler boiler : statesNew.rowKeySet()) {
+			boolean newState = CLOSE;
+			for (Boolean valveState : statesNew.row(boiler).values()) {
+				newState |= valveState;
+			}
+			if (newState) {
+				boilerOn(boiler);
+			} else {
+				boilerOff(boiler);
+				openHCAll(boiler);
+			}
+		}
 	}
 
 }

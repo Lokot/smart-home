@@ -57,7 +57,7 @@ public class BoilersView extends AbstractGridView<Boiler, BoilerForm> {
 
 	@Override
 	protected Object[] getColumnOrder() {
-		return new String[] { "def", "userName", "normaliClosed",
+		return new String[] { "name", "def", "normaliClosed",
 				"type" };
 	}
 
@@ -70,7 +70,7 @@ public class BoilersView extends AbstractGridView<Boiler, BoilerForm> {
 	protected Map<String, String> getColumnsNames() {
 		Map<String, String> rv = new HashMap<>();
 		rv.put("def", "Идентификационный номер на плате");
-		rv.put("userName", "Нагреватель");
+		rv.put("name", "Нагреватель");
 		rv.put("normaliClosed", "Нормально закрытый");
 		return rv;
 	}

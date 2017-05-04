@@ -11,7 +11,7 @@ import org.apache.openejb.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
+import ru.skysoftlab.smarthome.heating.impl.SensorsAndDevicesProvider;
 import ru.skysoftlab.smarthome.heating.onewire.IAlarmDevScanner;
 import ru.skysoftlab.smarthome.heating.onewire.IAlarmScannerJob;
 import ru.skysoftlab.smarthome.heating.onewire.IDs18bConfig;
@@ -30,7 +30,7 @@ public class AlarmReadJob implements Job, IAlarmScannerJob {
 	private Logger LOG = LoggerFactory.getLogger(AlarmReadJob.class);
 
 	@Inject
-	private SensorsAndGpioProvider sensorsProvider;
+	private SensorsAndDevicesProvider sensorsProvider;
 
 	@Inject
 	private IAlarmDevScanner scanner;

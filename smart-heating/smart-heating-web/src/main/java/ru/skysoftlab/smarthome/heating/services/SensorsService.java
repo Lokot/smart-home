@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import ru.skysoftlab.smarthome.heating.dto.AlarmedSensorDto;
 import ru.skysoftlab.smarthome.heating.dto.TemperatureDto;
 import ru.skysoftlab.smarthome.heating.entitys.Sensor;
-import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
+import ru.skysoftlab.smarthome.heating.impl.SensorsAndDevicesProvider;
 import ru.skysoftlab.smarthome.heating.onewire.IOneWire;
 
 import com.vaadin.ui.Notification;
@@ -35,7 +35,7 @@ public class SensorsService implements Serializable {
 	private IOneWire client;
 
 	@Inject
-	private SensorsAndGpioProvider sensorsProvider;
+	private SensorsAndDevicesProvider sensorsProvider;
 
 	public Collection<AlarmedSensorDto> findAlarmed() {
 		Collection<AlarmedSensorDto> rv = new ArrayList<>();

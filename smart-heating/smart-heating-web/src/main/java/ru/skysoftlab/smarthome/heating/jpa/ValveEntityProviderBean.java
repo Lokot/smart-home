@@ -20,7 +20,7 @@ import com.vaadin.addon.jpacontainer.provider.MutableLocalEntityProvider;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GpioPinEntityProviderBean extends MutableLocalEntityProvider<Valve> {
+public class ValveEntityProviderBean extends MutableLocalEntityProvider<Valve> {
 
 	@Inject
 	private EntityManager em;
@@ -28,7 +28,7 @@ public class GpioPinEntityProviderBean extends MutableLocalEntityProvider<Valve>
 	@Resource
 	private UserTransaction utx;
 
-	public GpioPinEntityProviderBean() {
+	public ValveEntityProviderBean() {
 		super(Valve.class);
 		setTransactionsHandledByProvider(true);
 	}

@@ -23,7 +23,7 @@ public abstract class Device implements Serializable, IDevice {
 	@Id
 	private String def;
 	
-	private String userName;
+	private String name;
 	
 	private Boolean normaliClosed = false;
 
@@ -33,14 +33,6 @@ public abstract class Device implements Serializable, IDevice {
 
 	public void setDef(String def) {
 		this.def = def;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String name) {
-		this.userName = name;
 	}
 
 	public Boolean getNormaliClosed() {
@@ -59,4 +51,17 @@ public abstract class Device implements Serializable, IDevice {
 	
 	@Transient
 	public abstract DeviceType getType();
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

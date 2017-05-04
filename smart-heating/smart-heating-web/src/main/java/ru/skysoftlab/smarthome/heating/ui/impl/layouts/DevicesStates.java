@@ -14,7 +14,7 @@ import ru.skysoftlab.smarthome.heating.NavigationService;
 import ru.skysoftlab.smarthome.heating.annatations.DashBoardElementQualifier;
 import ru.skysoftlab.smarthome.heating.devices.DeviceType;
 import ru.skysoftlab.smarthome.heating.entitys.Device;
-import ru.skysoftlab.smarthome.heating.impl.SensorsAndGpioProvider;
+import ru.skysoftlab.smarthome.heating.impl.SensorsAndDevicesProvider;
 import ru.skysoftlab.smarthome.heating.ui.ReloadDataPenel;
 
 import com.vaadin.cdi.UIScoped;
@@ -31,7 +31,7 @@ import com.vaadin.ui.Label;
  */
 @UIScoped
 @DashBoardElementQualifier(view = NavigationService.STATISTIC, name = "gpio", order=0)
-public class GpioStates extends ReloadDataPenel {
+public class DevicesStates extends ReloadDataPenel {
 
 	private static final long serialVersionUID = -4244093789449867305L;
 
@@ -39,24 +39,24 @@ public class GpioStates extends ReloadDataPenel {
 	private Random randomno = new Random();
 
 	@Inject
-	private SensorsAndGpioProvider sensorsProvider;
+	private SensorsAndDevicesProvider sensorsProvider;
 
-	public GpioStates() {
-		super("Переключатели");
+	public DevicesStates() {
+		super("Устройства");
 	}
 
 	@Override
 	public void reload() {
-		List<Device> pins = sensorsProvider.getAllGpioPins();
-		if (pins.size() > 0) {
-			Collections.sort(pins, TYPE_ORDER);
+		List<Device> devices = sensorsProvider.getAllDevices();
+		if (devices.size() > 0) {
+			Collections.sort(devices, TYPE_ORDER);
 			// Create the content
-			GridLayout content = new GridLayout(2, pins.size());
+			GridLayout content = new GridLayout(2, devices.size());
 			int y = 0;
-			for (Device pin : pins) {
+			for (Device device : devices) {
 				try {
-					content.addComponent(new Label(pin.getUserName()), 0, y);
-					content.addComponent(createSwitch(pin), 1, y);
+					content.addComponent(new Label(device.getName()), 0, y);
+					content.addComponent(createSwitch(device), 1, y);
 					y++;
 				} catch (OverlapsException | OutOfBoundsException | IOException e) {
 					e.printStackTrace();

@@ -20,7 +20,7 @@ public interface IDevice {
 	 * 
 	 * @return
 	 */
-	public String getUserName();
+	public String getName();
 
 	/**
 	 * Режим работы.
