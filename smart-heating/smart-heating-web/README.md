@@ -11,7 +11,7 @@ tomee.xml add
 		Password    some_pass
 		JtaManaged true
 	</Resource>
-
+jdbc:derby://localhost:1527/contact
 	
 	Профили сборки:
 	1) tomee - по умолчанию для Tomee (без hibernate-validator-*.jar и validation-api-*.jar)
